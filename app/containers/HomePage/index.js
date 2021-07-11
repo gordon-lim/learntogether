@@ -5,14 +5,14 @@
  *
  */
 
+import { Box } from '@chakra-ui/react';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
-import messages from './messages';
+import Hero from '../../components/Hero';
 
 export default function HomePage() {
   return (
-    <h1>
-      <FormattedMessage {...messages.header} />
-    </h1>
+    <Box>
+      <Hero />
+    </Box>
   );
 }
