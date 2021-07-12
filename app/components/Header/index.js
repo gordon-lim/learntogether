@@ -325,7 +325,7 @@ DesktopSubNav.propTypes = {
 };
 MobileNavItem.propTypes = {
   label: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.any,
   href: PropTypes.string,
 };
 

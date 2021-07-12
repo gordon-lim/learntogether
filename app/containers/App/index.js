@@ -12,6 +12,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
 import AuthPage from 'containers/AuthPage/Loadable';
+import CoursePage from 'containers/CoursePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 
 import GlobalStyle from '../../global-styles';
@@ -25,6 +26,7 @@ export default function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/auth" component={AuthPage} />
+        <Route path="/courses" component={CoursePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />
