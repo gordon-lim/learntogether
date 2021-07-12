@@ -12,6 +12,7 @@ import {
   Box,
   Flex,
   Text,
+  Image,
   IconButton,
   Button,
   Stack,
@@ -19,11 +20,17 @@ import {
   Icon,
   Input,
   Link,
+  Center,
   Popover,
   PopoverTrigger,
   PopoverContent,
   useColorModeValue,
-  useBreakpointValue,
+  Avatar,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
   useDisclosure,
   InputGroup,
   InputRightElement,
@@ -35,6 +42,7 @@ import {
   ChevronRightIcon,
   SearchIcon,
 } from '@chakra-ui/icons';
+import logo from 'images/logo.png';
 
 function Header() {
   const { isOpen, onToggle } = useDisclosure();
@@ -67,49 +75,15 @@ function Header() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Text
-            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-            fontFamily="heading"
-            color={useColorModeValue('gray.800', 'white')}
-          >
-            LearnTogether
-          </Text>
+          <Link href="/#">
+            <Image height="50px" src={logo} alt="logo" />
+          </Link>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
           </Flex>
         </Flex>
-
-        <Stack
-          flex={{ base: 1, md: 0 }}
-          justify="flex-end"
-          direction="row"
-          spacing={6}
-        >
-          <Button
-            as="a"
-            fontSize="sm"
-            fontWeight={400}
-            variant="link"
-            href="/auth/signin"
-          >
-            Sign In
-          </Button>
-          <Button
-            as="a"
-            display={{ base: 'none', md: 'inline-flex' }}
-            fontSize="sm"
-            fontWeight={600}
-            color="white"
-            bg="pink.400"
-            href="/auth/signup"
-            _hover={{
-              bg: 'pink.300',
-            }}
-          >
-            Sign Up
-          </Button>
-        </Stack>
+        <LoggedOutItems />
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -127,7 +101,7 @@ const DesktopNav = () => {
   return (
     <Stack direction="row" spacing={4}>
       {NAV_ITEMS.map(navItem => (
-        <Box key={navItem.label}>
+        <Center key={navItem.label}>
           <Popover trigger="hover" placement="bottom-start">
             <PopoverTrigger>
               <Link
@@ -162,16 +136,16 @@ const DesktopNav = () => {
               </PopoverContent>
             )}
           </Popover>
-        </Box>
+        </Center>
       ))}
-      <Box>
+      <Center>
         <InputGroup>
-          <Input placeholder="Search" />
+          <Input placeholder="Search course, user..." />
           <InputRightElement>
             <IconButton aria-label="Search database" icon={<SearchIcon />} />
           </InputRightElement>
         </InputGroup>
-      </Box>
+      </Center>
     </Stack>
   );
 };
@@ -276,44 +250,70 @@ const MobileNavItem = ({ label, children, href }) => {
   );
 };
 
+const LoggedOutItems = () => (
+  <Stack
+    flex={{ base: 1, md: 0 }}
+    justify="flex-end"
+    direction="row"
+    spacing={6}
+  >
+    <Button
+      as="a"
+      fontSize="sm"
+      fontWeight={400}
+      variant="link"
+      href="/auth/signin"
+    >
+      Sign In
+    </Button>
+    <Button
+      as="a"
+      display={{ base: 'none', md: 'inline-flex' }}
+      fontSize="sm"
+      fontWeight={600}
+      color="white"
+      bg="pink.400"
+      href="/auth/signup"
+      _hover={{
+        bg: 'pink.300',
+      }}
+    >
+      Sign Up
+    </Button>
+  </Stack>
+);
+/* eslint-disable-next-line */
+const LoggedInItems = () => (
+  <Flex alignItems="center" flex={{ base: 1, md: 0 }} justify="flex-end">
+    <Menu>
+      <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
+        <Avatar
+          size="sm"
+          src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+        />
+      </MenuButton>
+      <MenuList>
+        <MenuItem>Profile</MenuItem>
+        <MenuItem>Timetable</MenuItem>
+        <MenuDivider />
+        <MenuItem>Logout</MenuItem>
+      </MenuList>
+    </Menu>
+  </Flex>
+);
 const NAV_ITEMS = [
   {
-    label: 'Inspiration',
+    label: 'Categories',
     children: [
       {
-        label: 'Explore Design Work',
-        subLabel: 'Trending Design to inspire you',
+        label: 'Psychology',
         href: '#',
       },
       {
-        label: 'New & Noteworthy',
-        subLabel: 'Up-and-coming Designers',
+        label: 'Web development',
         href: '#',
       },
     ],
-  },
-  {
-    label: 'Find Work',
-    children: [
-      {
-        label: 'Job Board',
-        subLabel: 'Find your dream design job',
-        href: '#',
-      },
-      {
-        label: 'Freelance Projects',
-        subLabel: 'An exclusive list for contract work',
-        href: '#',
-      },
-    ],
-  },
-  {
-    label: 'Learn Design',
-    href: '#',
-  },
-  {
-    label: 'Hire Designers',
-    href: '#',
   },
 ];
 
