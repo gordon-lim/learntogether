@@ -14,7 +14,13 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ChakraProvider } from '@chakra-ui/react';
 import { ConnectedRouter } from 'connected-react-router';
+import {
+  firebaseReducer,
+  ReactReduxFirebaseProvider,
+} from 'react-redux-firebase';
 import history from 'utils/history';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import 'sanitize.css/sanitize.css';
 
 // Import root app
@@ -29,6 +35,7 @@ import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import 'file-loader?name=.htaccess!./.htaccess';
 /* eslint-enable import/no-unresolved, import/extensions */
 
+import createReducer from 'reducers';
 import configureStore from './configureStore';
 
 // Import i18n messages
@@ -39,6 +46,33 @@ const initialState = {};
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+// Firebase details
+const fbConfig = {
+  apiKey: 'AIzaSyD5n7DSjhNCC5C_2icGisVVCnARhhTrFnI',
+  authDomain: 'learntogether-bd35f.firebaseapp.com',
+  projectId: 'learntogether-bd35f',
+  storageBucket: 'learntogether-bd35f.appspot.com',
+  messagingSenderId: '1022845349323',
+  appId: '1:1022845349323:web:bb4e8232e3468d5d395a4e',
+};
+
+// Initialize firebase instance
+firebase.initializeApp(fbConfig);
+
+createReducer({ firebase: firebaseReducer });
+
+// react-redux-firebase props
+const rrfProps = {
+  firebase,
+  config: {
+    userProfile: 'users',
+    // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+    // enableClaims: true // Get custom claims along with the profile
+  },
+  dispatch: store.dispatch,
+  // createFirestoreInstance // <- needed if using firestore
+};
+
 // Added chakra ui provider
 const render = messages => {
   ReactDOM.render(
@@ -46,7 +80,9 @@ const render = messages => {
       <ChakraProvider>
         <LanguageProvider messages={messages}>
           <ConnectedRouter history={history}>
-            <App />
+            <ReactReduxFirebaseProvider {...rrfProps}>
+              <App />
+            </ReactReduxFirebaseProvider>
           </ConnectedRouter>
         </LanguageProvider>
       </ChakraProvider>

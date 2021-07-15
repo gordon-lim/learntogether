@@ -4,10 +4,9 @@
  *
  */
 
-import { DEFAULT_ACTION } from './constants';
+import { REGISTER_USER } from './constants';
 
-export function defaultAction() {
-  return {
-    type: DEFAULT_ACTION,
-  };
-}
+export const registerUser = credentials => ({
+  type: REGISTER_USER,
+  credentials,
+});

@@ -1,19 +1,28 @@
-import React from 'react';
 import {
-  Flex,
   Box,
+  Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
-  Stack,
-  Link,
-  Button,
   Heading,
+  Input,
+  Link,
+  Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
-export default function SignUpCard() {
+const SignUpCard = ({ register }) => {
+  const [email, setEmail] = useState('');
+
+  const registerUser = event => {
+    event.preventDefault();
+    register({ username: email });
+  };
+
   return (
     <Flex
       minH="100vh"
@@ -26,7 +35,7 @@ export default function SignUpCard() {
           <Heading fontSize="4xl">Sign up for a new account</Heading>
           <Text fontSize="lg" color="gray.600">
             to enjoy all of our cool{' '}
-            <Link color="blue.400" href="/">
+            <Link as={RouterLink} color="blue.400" to="/">
               features
             </Link>{' '}
             ✌️
@@ -41,13 +50,13 @@ export default function SignUpCard() {
           <Stack spacing={4}>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" />
+              <Input type="email" onChange={e => setEmail(e.target.value)} />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
               <Input type="password" />
             </FormControl>
-            <FormControl id="password">
+            <FormControl id="confirm-password">
               <FormLabel>Re-enter Password</FormLabel>
               <Input type="password" />
             </FormControl>
@@ -58,6 +67,7 @@ export default function SignUpCard() {
                 _hover={{
                   bg: 'blue.500',
                 }}
+                onClick={registerUser}
               >
                 Sign up
               </Button>
@@ -67,4 +77,10 @@ export default function SignUpCard() {
       </Stack>
     </Flex>
   );
-}
+};
+
+SignUpCard.propTypes = {
+  register: PropTypes.func,
+};
+
+export default SignUpCard;
