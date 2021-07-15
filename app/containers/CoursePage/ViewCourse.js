@@ -57,6 +57,8 @@ export default function ViewCourse(props) {
 
 ViewCourse.propTypes = {
   match: PropTypes.shape({
-    params: PropTypes.string,
+    params: PropTypes.shape({
+      courseId: PropTypes.string,
+    }),
   }),
 };

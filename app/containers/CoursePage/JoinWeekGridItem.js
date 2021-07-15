@@ -9,16 +9,21 @@ import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';
 import { Box } from '@chakra-ui/react';
 
-export default function WeekGridItem({ numSlots }) {
+export default function JoinWeekGridItem({ slot, onClick }) {
+  const { numSlots } = slot;
+  const { selected } = slot;
+
   if (numSlots === 0) {
     return (
       <Box
         as="button"
+        onClick={onClick}
         width="100%"
         height={10}
         justifyContent="flex-end"
+        bg={selected ? 'orange.200' : 'gray.100'}
         _hover={{
-          bg: 'gray.100',
+          bg: 'gray.200',
         }}
       >
         - Vote -
@@ -42,6 +47,7 @@ export default function WeekGridItem({ numSlots }) {
   );
 }
 
-WeekGridItem.propTypes = {
-  numSlots: PropTypes.number,
+JoinWeekGridItem.propTypes = {
+  slot: PropTypes.object,
+  onClick: PropTypes.func,
 };

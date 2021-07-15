@@ -10,6 +10,11 @@ const selectCoursePageDomain = state => state.coursePage || initialState;
 /**
  * Other specific selectors
  */
+const makeSelectSlots = () =>
+  createSelector(
+    selectCoursePageDomain,
+    state => state.slots,
+  );
 
 /**
  * Default selector used by CoursePage
@@ -22,4 +27,4 @@ const makeSelectCoursePage = () =>
   );
 
 export default makeSelectCoursePage;
-export { selectCoursePageDomain };
+export { selectCoursePageDomain, makeSelectSlots };

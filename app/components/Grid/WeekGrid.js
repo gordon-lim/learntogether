@@ -5,9 +5,9 @@
  */
 
 import React from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 import {
   Box,
   Center,
@@ -21,25 +21,10 @@ import {
   Tr,
 } from '@chakra-ui/react';
 
-import WeekGridItem from './WeekGridItem';
+// import WeekGridItem from './WeekGridItem';
 
-export function WeekGrid() {
+export function WeekGrid({ slotItems, periodLen, numPeriodsPerDay }) {
   const numDays = 7;
-  const periodLen = 0.5; // Sample
-
-  // TODO: Find out the duration of each period of the course, eg 0.5, 1, 1.5, 2, 3
-  const numPeriodsPerDay = Math.floor(24 / periodLen);
-
-  // TODO: get data about the available timings for the course
-  const slots = [
-    new Array(numPeriodsPerDay).fill(0),
-    new Array(numPeriodsPerDay).fill(1),
-    new Array(numPeriodsPerDay).fill(2),
-    new Array(numPeriodsPerDay).fill(3),
-    new Array(numPeriodsPerDay).fill(4),
-    new Array(numPeriodsPerDay).fill(5),
-    new Array(numPeriodsPerDay).fill(6),
-  ];
 
   return (
     <Box>
@@ -73,7 +58,7 @@ export function WeekGrid() {
         </Thead>
         <Tbody>
           {[...Array(numPeriodsPerDay).keys()].map(period => (
-            <Tr key={uuid()}>
+            <Tr key={v4()}>
               <Td padding="0px">
                 <Center
                   fontWeight="bold"
@@ -84,8 +69,8 @@ export function WeekGrid() {
                 </Center>
               </Td>
               {[...Array(numDays).keys()].map(day => (
-                <Td key={uuid()} padding="0px">
-                  <WeekGridItem numSlots={slots[day][period]} />
+                <Td key={v4()} padding="0px">
+                  {slotItems[day][period]}
                 </Td>
               ))}
             </Tr>
@@ -104,4 +89,8 @@ function periodToHour(period, periodLen) {
   return hour + mins;
 }
 
-WeekGrid.propTypes = {};
+WeekGrid.propTypes = {
+  slotItems: PropTypes.array,
+  periodLen: PropTypes.number,
+  numPeriodsPerDay: PropTypes.number,
+};

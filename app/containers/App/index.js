@@ -14,6 +14,7 @@ import HomePage from 'containers/HomePage/Loadable';
 import AuthPage from 'containers/AuthPage/Loadable';
 import CoursePage from 'containers/CoursePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
+import { OAuthPage } from 'containers/OAuthPage';
 
 import GlobalStyle from '../../global-styles';
 import Header from '../../components/Header';
@@ -27,6 +28,7 @@ export default function App() {
         <Route exact path="/" component={HomePage} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/courses" component={CoursePage} />
+        <Route path="/oauth" component={OAuthPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />
