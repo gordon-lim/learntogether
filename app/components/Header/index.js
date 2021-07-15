@@ -42,7 +42,8 @@ import {
   ChevronRightIcon,
   SearchIcon,
 } from '@chakra-ui/icons';
-import logo from 'images/logo.png';
+import { Link as RouterLink } from 'react-router-dom';
+import logo from '../../images/logo.png';
 
 function Header() {
   const { isOpen, onToggle } = useDisclosure();
@@ -75,7 +76,7 @@ function Header() {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Link href="/#">
+          <Link as={RouterLink} to="/">
             <Image height="50px" src={logo} alt="logo" />
           </Link>
 
@@ -105,8 +106,9 @@ const DesktopNav = () => {
           <Popover trigger="hover" placement="bottom-start">
             <PopoverTrigger>
               <Link
+                as={RouterLink}
                 p={2}
-                href={navItem.href ?? '#'}
+                to={navItem.href ?? '#'}
                 fontSize="sm"
                 fontWeight={500}
                 color={linkColor}
@@ -152,7 +154,8 @@ const DesktopNav = () => {
 
 const DesktopSubNav = ({ label, href, subLabel }) => (
   <Link
-    href={href}
+    as={RouterLink}
+    to={href}
     role="group"
     display="block"
     p={2}
@@ -240,7 +243,7 @@ const MobileNavItem = ({ label, children, href }) => {
         >
           {children &&
             children.map(child => (
-              <Link key={child.label} py={2} href={child.href}>
+              <Link as={RouterLink} key={child.label} py={2} to={child.href}>
                 {child.label}
               </Link>
             ))}
@@ -258,22 +261,22 @@ const LoggedOutItems = () => (
     spacing={6}
   >
     <Button
-      as="a"
+      as={RouterLink}
       fontSize="sm"
       fontWeight={400}
       variant="link"
-      href="/auth/signin"
+      to="/auth/signin"
     >
       Sign In
     </Button>
     <Button
-      as="a"
+      as={RouterLink}
       display={{ base: 'none', md: 'inline-flex' }}
       fontSize="sm"
       fontWeight={600}
       color="white"
       bg="pink.400"
-      href="/auth/signup"
+      to="/auth/signup"
       _hover={{
         bg: 'pink.300',
       }}
