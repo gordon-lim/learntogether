@@ -9,10 +9,10 @@ import Slider from 'react-slick';
 import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 
-function Carousel({ CardComponent, data }) {
+function Carousel({ CardComponent, details }) {
   const sliderSettings = {
     arrows: false,
-    slidesToShow: 3,
+    slidesToShow: 1,
     responsive: [
       {
         breakpoint: 1280,
@@ -32,15 +32,15 @@ function Carousel({ CardComponent, data }) {
 
   return (
     <Slider {...sliderSettings}>
-      {data.map(item => (
-        <CardComponent data={item} key={item.key} />
+      {details.map(item => (
+        <CardComponent key={item.key} data={item} />
       ))}
     </Slider>
   );
 }
 
 Carousel.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
+  details: PropTypes.arrayOf(PropTypes.object),
   CardComponent: PropTypes.elementType,
 };
 
