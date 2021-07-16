@@ -24,7 +24,7 @@ import {
 
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { BiMailSend } from 'react-icons/bi';
-import logo from '../../images/logo.png';
+import logo from '../../images/Logo.png';
 
 const Logo = () => (
   <Image height="50px" src={logo} alt="logo" />

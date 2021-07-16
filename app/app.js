@@ -17,15 +17,16 @@ import App from 'containers/App';
 // Import Language Provider
 import LanguageProvider from 'containers/LanguageProvider';
 import 'file-loader?name=.htaccess!./.htaccess';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
 import 'sanitize.css/sanitize.css';
+import theme from 'theme';
 import history from 'utils/history';
 /* eslint-enable import/no-unresolved, import/extensions */
 import configureStore from './configureStore';
@@ -67,7 +68,7 @@ const rrfProps = {
 const render = messages => {
   ReactDOM.render(
     <Provider store={store}>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <LanguageProvider messages={messages}>
           <ConnectedRouter history={history}>
             <ReactReduxFirebaseProvider {...rrfProps}>

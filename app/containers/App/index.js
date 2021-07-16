@@ -11,6 +11,7 @@ import CoursePage from 'containers/CoursePage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { OAuthPage } from 'containers/OAuthPage';
+import { ProfilePage } from 'containers/ProfilePage';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -29,6 +30,9 @@ const App = ({ auth }) => (
       <Route exact path="/" component={HomePage} />
       <Route path="/auth" component={AuthPage}>
         {isLoaded(auth) && !isEmpty(auth) && <Redirect to="/" />}
+      </Route>
+      <Route path="/profile" component={ProfilePage}>
+        {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
       </Route>
       <Route path="/courses" component={CoursePage} />
       <Route path="/oauth" component={OAuthPage} />

@@ -11,6 +11,7 @@ import {
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
+import { Link as RouterLink } from 'react-router-dom';
 import Profile from '../../images/Profile.svg';
 
 export const LoggedInItems = ({ photoURL }) => {
@@ -27,8 +28,12 @@ export const LoggedInItems = ({ photoURL }) => {
           <Avatar size="sm" src={photoURL || Profile} />
         </MenuButton>
         <MenuList>
-          <MenuItem>Profile</MenuItem>
-          <MenuItem>Timetable</MenuItem>
+          <MenuItem as={RouterLink} to="/profile">
+            Profile
+          </MenuItem>
+          <MenuItem as={RouterLink} to="/courses">
+            Timetable
+          </MenuItem>
           <MenuDivider />
           <MenuItem onClick={logout}>Logout</MenuItem>
         </MenuList>

@@ -5,7 +5,6 @@
  */
 
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-// import styled from 'styled-components';
 import {
   Box,
   Collapse,
@@ -20,7 +19,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
-import Logo from '../../images/logo.png';
+import Logo from '../../images/Logo.png';
 import { DesktopNav } from './DesktopNav';
 import { LoggedInItems } from './LoggedInItems';
 import { LoggedOutItems } from './LoggedOutItems';
@@ -65,7 +64,6 @@ function Header({ auth }) {
             <DesktopNav />
           </Flex>
         </Flex>
-        {/* {items} */}
         {isLoaded(auth) && !isEmpty(auth) ? (
           <LoggedInItems photoURL={auth.photoURL} />
         ) : (
