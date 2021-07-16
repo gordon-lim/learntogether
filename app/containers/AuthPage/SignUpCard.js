@@ -1,36 +1,51 @@
-import React from 'react';
 import {
-  Flex,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  Stack,
-  Link,
   Button,
+  Flex,
   Heading,
-  Text,
+  Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { useFirebase } from 'react-redux-firebase';
+import { useHistory } from 'react-router-dom';
+import { validateEmail } from 'utils/validateEmail';
+import { InputField } from './InputField';
+import { mapFirebaseErrors } from './mapFirebaseErrors';
 
-export default function SignUpCard() {
+const validateFields = ({ email, password, confirmPassword }) => {
+  if (!validateEmail(email)) return { email: 'Please enter a valid email' };
+
+  if (password !== confirmPassword)
+    return { confirmPassword: 'Passwords do not match' };
+
+  if (password.length < 6)
+    return { password: 'Minimum length of 6 for passwords' };
+
+  return null;
+};
+
+const SignUpCard = () => {
+  const firebase = useFirebase();
+  const history = useHistory();
+
+  const googleLogin = async () => {
+    await firebase.login({
+      provider: 'google',
+      type: 'popup',
+    });
+  };
+
   return (
     <Flex
       minH="100vh"
-      align="center"
       justify="center"
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
       <Stack spacing={8} mx="auto" maxW="lg" py={12} px={6}>
         <Stack align="center">
           <Heading fontSize="4xl">Sign up for a new account</Heading>
-          <Text fontSize="lg" color="gray.600">
-            to enjoy all of our cool{' '}
-            <Link color="blue.400" href="/">
-              features
-            </Link>{' '}
-            ✌️
-          </Text>
         </Stack>
         <Box
           rounded="lg"
@@ -38,33 +53,73 @@ export default function SignUpCard() {
           boxShadow="lg"
           p={8}
         >
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Re-enter Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Button
-                bg="blue.400"
-                color="white"
-                _hover={{
-                  bg: 'blue.500',
-                }}
-              >
-                Sign up
-              </Button>
-            </Stack>
-          </Stack>
+          <Formik
+            initialValues={{ email: '', password: '', confirmPassword: '' }}
+            onSubmit={async (values, { setErrors }) => {
+              const error = validateFields(values);
+              if (error) {
+                setErrors(error);
+                return;
+              }
+
+              try {
+                await firebase.createUser({
+                  email: values.email,
+                  password: values.password,
+                });
+              } catch (errors) {
+                setErrors(mapFirebaseErrors(errors));
+              }
+              history.push('/');
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Stack spacing={4}>
+                  <InputField name="email" label="Email" required />
+                  <InputField
+                    name="password"
+                    type="password"
+                    label="Password"
+                    required
+                  />
+                  <InputField
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                    required
+                  />
+                  <Stack spacing={3}>
+                    <Button
+                      bg="blue.400"
+                      color="white"
+                      _hover={{
+                        bg: 'blue.500',
+                      }}
+                      type="submit"
+                      isLoading={isSubmitting}
+                    >
+                      Sign Up
+                    </Button>
+                    <Button
+                      bg="blue.400"
+                      color="white"
+                      _hover={{
+                        bg: 'blue.500',
+                      }}
+                      onClick={googleLogin}
+                    >
+                      Sign Up with Google
+                    </Button>
+                  </Stack>
+                </Stack>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Stack>
     </Flex>
   );
-}
+};
+
+export default SignUpCard;
