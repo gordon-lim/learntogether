@@ -7,7 +7,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import PropTypes from 'prop-types';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 // import styled from 'styled-components';
 
 function Carousel({ CardComponent, data }) {
@@ -22,7 +22,7 @@ function Carousel({ CardComponent, data }) {
   return (
     <Slider {...sliderSettings}>
       {data.map(item => (
-        <CardComponent data={item} key={uuid()} />
+        <CardComponent data={item} key={v4()} />
       ))}
     </Slider>
   );
