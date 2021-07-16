@@ -6,31 +6,29 @@
  */
 
 // Needed for redux-saga es6 generator support
+// Load the favicon and the .htaccess file
+/* eslint-disable import/no-unresolved, import/extensions */
+import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import '@babel/polyfill';
-
+import { ChakraProvider } from '@chakra-ui/react';
+import { ConnectedRouter } from 'connected-react-router';
+// Import root app
+import App from 'containers/App';
+// Import Language Provider
+import LanguageProvider from 'containers/LanguageProvider';
+import 'file-loader?name=.htaccess!./.htaccess';
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ChakraProvider } from '@chakra-ui/react';
-import { ConnectedRouter } from 'connected-react-router';
-import history from 'utils/history';
+import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
 import 'sanitize.css/sanitize.css';
-
-// Import root app
-import App from 'containers/App';
-
-// Import Language Provider
-import LanguageProvider from 'containers/LanguageProvider';
-
-// Load the favicon and the .htaccess file
-/* eslint-disable import/no-unresolved, import/extensions */
-import '!file-loader?name=[name].[ext]!./images/favicon.ico';
-import 'file-loader?name=.htaccess!./.htaccess';
+import history from 'utils/history';
 /* eslint-enable import/no-unresolved, import/extensions */
-
 import configureStore from './configureStore';
-
 // Import i18n messages
 import { translationMessages } from './i18n';
 
@@ -39,6 +37,32 @@ const initialState = {};
 const store = configureStore(initialState, history);
 const MOUNT_NODE = document.getElementById('app');
 
+// Firebase details
+const fbConfig = {
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+};
+
+// Initialize firebase instance & firestore
+firebase.initializeApp(fbConfig);
+
+// react-redux-firebase props
+const rrfProps = {
+  firebase,
+  config: {
+    userProfile: 'users',
+    // useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
+    // enableClaims: true // Get custom claims along with the profile
+  },
+  dispatch: store.dispatch,
+  // createFirestoreInstance, // <- needed if using firestore
+};
+
 // Added chakra ui provider
 const render = messages => {
   ReactDOM.render(
@@ -46,7 +70,9 @@ const render = messages => {
       <ChakraProvider>
         <LanguageProvider messages={messages}>
           <ConnectedRouter history={history}>
-            <App />
+            <ReactReduxFirebaseProvider {...rrfProps}>
+              <App />
+            </ReactReduxFirebaseProvider>
           </ConnectedRouter>
         </LanguageProvider>
       </ChakraProvider>

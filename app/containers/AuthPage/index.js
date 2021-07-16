@@ -5,16 +5,14 @@
  */
 
 import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
+import { Route, Switch } from 'react-router-dom';
 import { compose } from 'redux';
-
-import { useInjectSaga } from 'utils/injectSaga';
+import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectAuthPage from './selectors';
+import { useInjectSaga } from 'utils/injectSaga';
+import ForgetPasswordCard from './ForgetPasswordCard';
 import reducer from './reducer';
 import saga from './saga';
 import SignInCard from './SignInCard';
@@ -27,26 +25,26 @@ export function AuthPage() {
   return (
     <div>
       <Helmet>
-        <title>AuthPage</title>
+        <title>Authentication Page</title>
         <meta name="description" content="Description of AuthPage" />
       </Helmet>
       {/* <FormattedMessage {...messages.header} /> */}
       <Switch>
         <Route exact path="/auth/signin" component={SignInCard} />
         <Route exact path="/auth/signup" component={SignUpCard} />
-        <Redirect to="/auth/signin" />
+        <Route
+          exact
+          path="/auth/forget-password"
+          component={ForgetPasswordCard}
+        />
       </Switch>
     </div>
   );
 }
 
-AuthPage.propTypes = {
-  dispatch: PropTypes.func.isRequired, //eslint-disable-line
-};
+AuthPage.propTypes = {};
 
-const mapStateToProps = createStructuredSelector({
-  authPage: makeSelectAuthPage(),
-});
+const mapStateToProps = createStructuredSelector({});
 
 function mapDispatchToProps(dispatch) {
   return {

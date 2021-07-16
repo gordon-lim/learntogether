@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 
 const selectRouter = state => state.router;
+const selectFirebase = state => state.firebase;
 
 const makeSelectLocation = () =>
   createSelector(
@@ -8,4 +9,15 @@ const makeSelectLocation = () =>
     routerState => routerState.location,
   );
 
-export { makeSelectLocation };
+const makeSelectFirebaseAuth = () =>
+  createSelector(
+    selectFirebase,
+    substate => substate.auth,
+  );
+
+export {
+  selectRouter,
+  selectFirebase,
+  makeSelectLocation,
+  makeSelectFirebaseAuth,
+};
