@@ -5,16 +5,38 @@
  *
  */
 
-import { Box } from '@chakra-ui/react';
+import { Box, Container } from '@chakra-ui/react';
 import React from 'react';
-import UpcomingCarousel from 'components/Carousel/UpcomingCarousel';
+import Carousel from 'components/Carousel';
 import Hero from 'components/Hero';
+import CourseCard from 'components/Card/CourseCard';
 
 export default function HomePage() {
+  const data = [
+    {
+      category: 'Web Development',
+      title: 'React Course',
+      duration: '100 Hours',
+    },
+    {
+      category: 'Web Development',
+      title: 'Node Course',
+      duration: '100 Hours',
+    },
+    {
+      category: 'Web Development',
+      title: 'Django Course',
+      duration: '100 Hours',
+    },
+  ];
+
   return (
     <Box>
       <Hero />
-      <UpcomingCarousel />
+      {/* <UpcomingCarousel /> */}
+      <Container maxW="7xl" py={12}>
+        <Carousel CardComponent={CourseCard} data={data} />
+      </Container>
     </Box>
   );
 }
