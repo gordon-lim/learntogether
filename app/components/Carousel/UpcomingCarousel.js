@@ -11,9 +11,8 @@ import CourseJoinCard from 'components/CourseJoinCard';
 // import styled from 'styled-components';
 
 function UpcomingCarousel() {
-  const data = { foo: 'bar' };
-  console.log('upcoming carousel loaded');
-  return <Carousel cardComponent={CourseJoinCard} data={data} />;
+  const data = [{ foo: 'bar', key: '1' }];
+  return <Carousel CardComponent={CourseJoinCard} data={data} />;
 }
 
 UpcomingCarousel.propTypes = {};
