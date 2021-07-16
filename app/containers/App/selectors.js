@@ -15,4 +15,9 @@ const makeSelectFirebaseAuth = () =>
     substate => substate.auth,
   );
 
-export { makeSelectLocation, makeSelectFirebaseAuth };
+export {
+  selectRouter,
+  selectFirebase,
+  makeSelectLocation,
+  makeSelectFirebaseAuth,
+};

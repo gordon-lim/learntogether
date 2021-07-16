@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import ForgetPasswordCard from './ForgetPasswordCard';
 import reducer from './reducer';
 import saga from './saga';
 import SignInCard from './SignInCard';
@@ -31,6 +32,11 @@ export function AuthPage() {
       <Switch>
         <Route exact path="/auth/signin" component={SignInCard} />
         <Route exact path="/auth/signup" component={SignUpCard} />
+        <Route
+          exact
+          path="/auth/forget-password"
+          component={ForgetPasswordCard}
+        />
       </Switch>
     </div>
   );

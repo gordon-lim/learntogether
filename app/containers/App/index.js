@@ -6,17 +6,15 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  *
  */
-
 import AuthPage from 'containers/AuthPage/Loadable';
 import CoursePage from 'containers/CoursePage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import { OAuthPage } from 'containers/OAuthPage';
-import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { isLoaded } from 'react-redux-firebase';
+import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
 import Footer from '../../components/Footer';
@@ -25,7 +23,7 @@ import GlobalStyle from '../../global-styles';
 import { makeSelectFirebaseAuth } from './selectors';
 
 const App = ({ auth }) => (
-  <div>
+  <>
     <Header auth={auth} />
     <Switch>
       <Route exact path="/" component={HomePage} />
@@ -38,7 +36,7 @@ const App = ({ auth }) => (
     </Switch>
     <Footer />
     <GlobalStyle />
-  </div>
+  </>
 );
 
 App.propTypes = {
