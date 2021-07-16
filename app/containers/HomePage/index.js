@@ -7,12 +7,14 @@
 
 import { Box } from '@chakra-ui/react';
 import React from 'react';
-import Hero from '../../components/Hero';
+import UpcomingCarousel from 'components/Carousel/UpcomingCarousel';
+import Hero from 'components/Hero';
 
 export default function HomePage() {
   return (
     <Box>
       <Hero />
+      <UpcomingCarousel />
     </Box>
   );
 }
