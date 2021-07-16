@@ -2,25 +2,40 @@ import {
   Box,
   Button,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
-  Input,
   Link,
   Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { useFirebase } from 'react-redux-firebase';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { InputField } from './InputField';
+import { mapFirebaseErrors } from './mapFirebaseErrors';
 
-const SignUpCard = ({ register }) => {
-  const [email, setEmail] = useState('');
+const validateFields = ({ email, password, confirmPassword }) => {
+  if (!email.includes('@')) return { email: 'Please enter a valid email' };
 
-  const registerUser = event => {
-    event.preventDefault();
-    register({ username: email });
+  if (password !== confirmPassword)
+    return { confirmPassword: 'Passwords do not match' };
+
+  if (password.length < 6)
+    return { password: 'Minimum length of 6 for passwords' };
+
+  return null;
+};
+
+const SignUpCard = () => {
+  const firebase = useFirebase();
+  const history = useHistory();
+
+  const googleLogin = async () => {
+    await firebase.login({
+      provider: 'google',
+      type: 'popup',
+    });
   };
 
   return (
@@ -47,40 +62,69 @@ const SignUpCard = ({ register }) => {
           boxShadow="lg"
           p={8}
         >
-          <Stack spacing={4}>
-            <FormControl id="email">
-              <FormLabel>Email address</FormLabel>
-              <Input type="email" onChange={e => setEmail(e.target.value)} />
-            </FormControl>
-            <FormControl id="password">
-              <FormLabel>Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <FormControl id="confirm-password">
-              <FormLabel>Re-enter Password</FormLabel>
-              <Input type="password" />
-            </FormControl>
-            <Stack spacing={10}>
-              <Button
-                bg="blue.400"
-                color="white"
-                _hover={{
-                  bg: 'blue.500',
-                }}
-                onClick={registerUser}
-              >
-                Sign up
-              </Button>
-            </Stack>
-          </Stack>
+          <Formik
+            initialValues={{ email: '', password: '', confirmPassword: '' }}
+            onSubmit={async (values, { setErrors }) => {
+              const error = validateFields(values);
+              if (error) {
+                setErrors(error);
+                return;
+              }
+
+              try {
+                await firebase.createUser({
+                  email: values.email,
+                  password: values.password,
+                });
+              } catch (errors) {
+                setErrors(mapFirebaseErrors(errors));
+              }
+              history.push('/');
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                <Stack spacing={4}>
+                  <InputField name="email" label="Email" />
+                  <InputField
+                    name="password"
+                    type="password"
+                    label="Password"
+                  />
+                  <InputField
+                    name="confirmPassword"
+                    label="Confirm Password"
+                    type="password"
+                  />
+                  <Button
+                    bg="blue.400"
+                    color="white"
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                    type="submit"
+                    isLoading={isSubmitting}
+                  >
+                    Sign Up
+                  </Button>
+                  <Button
+                    bg="blue.400"
+                    color="white"
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                    onClick={googleLogin}
+                  >
+                    Sign Up with Google
+                  </Button>
+                </Stack>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Stack>
     </Flex>
   );
-};
-
-SignUpCard.propTypes = {
-  register: PropTypes.func,
 };
 
 export default SignUpCard;

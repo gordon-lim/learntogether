@@ -4,48 +4,49 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-
 import {
-  Box,
-  Flex,
-  Text,
-  Image,
-  IconButton,
-  Button,
-  Stack,
-  Collapse,
-  Icon,
-  Input,
-  Link,
-  Center,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  useColorModeValue,
-  Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuDivider,
-  useDisclosure,
-  InputGroup,
-  InputRightElement,
-} from '@chakra-ui/react';
-import {
-  HamburgerIcon,
-  CloseIcon,
   ChevronDownIcon,
   ChevronRightIcon,
+  CloseIcon,
+  HamburgerIcon,
   SearchIcon,
 } from '@chakra-ui/icons';
+// import styled from 'styled-components';
+import {
+  Avatar,
+  Box,
+  Button,
+  Center,
+  Collapse,
+  Flex,
+  Icon,
+  IconButton,
+  Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Link,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Stack,
+  Text,
+  useColorModeValue,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { isEmpty } from 'lodash';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { isLoaded } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import logo from '../../images/logo.png';
 
-function Header() {
+function Header({ auth }) {
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -84,7 +85,18 @@ function Header() {
             <DesktopNav />
           </Flex>
         </Flex>
-        <LoggedOutItems />
+        {/* TODO: Change to mockup */}
+        {isLoaded(auth) && !isEmpty(auth) ? (
+          <Image
+            src={auth.photoURL}
+            alt="profile"
+            width={10}
+            height={10}
+            borderRadius="50%"
+          />
+        ) : (
+          <LoggedOutItems />
+        )}
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
@@ -320,7 +332,9 @@ const NAV_ITEMS = [
   },
 ];
 
-Header.propTypes = {};
+Header.propTypes = {
+  auth: PropTypes.object,
+};
 DesktopSubNav.propTypes = {
   label: PropTypes.string,
   href: PropTypes.string,
