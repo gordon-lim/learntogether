@@ -12,7 +12,7 @@ import Hero from 'components/Hero';
 import CourseCard from 'components/Card/CourseCard';
 
 export default function HomePage() {
-  const data = [
+  const details = [
     {
       category: 'Web Development',
       title: 'React Course',
@@ -35,7 +35,7 @@ export default function HomePage() {
       <Hero />
       {/* <UpcomingCarousel /> */}
       <Container maxW="7xl" py={12}>
-        <Carousel CardComponent={CourseCard} data={data} />
+        <Carousel CardComponent={CourseCard} details={details} />
       </Container>
     </Box>
   );

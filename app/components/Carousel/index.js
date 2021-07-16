@@ -10,18 +10,30 @@ import PropTypes from 'prop-types';
 import { v4 } from 'uuid';
 // import styled from 'styled-components';
 
-function Carousel({ CardComponent, data }) {
+function Carousel({ CardComponent, details }) {
   const sliderSettings = {
-    infinite: true,
-    speed: 500,
-    arrows: true,
+    arrows: false,
     slidesToShow: 4,
-    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   return (
     <Slider {...sliderSettings}>
-      {data.map(item => (
+      {details.map(item => (
         <CardComponent data={item} key={v4()} />
       ))}
     </Slider>
@@ -29,7 +41,7 @@ function Carousel({ CardComponent, data }) {
 }
 
 Carousel.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
+  details: PropTypes.arrayOf(PropTypes.object),
   CardComponent: PropTypes.elementType,
 };
 
