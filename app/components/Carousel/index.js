@@ -13,6 +13,8 @@ import { v4 } from 'uuid';
 const sliderSettings = {
   arrows: false,
   infinite: true,
+  speed: 500,
+  slidesToScroll: 3,
   slidesToShow: 3,
   responsive: [
     {

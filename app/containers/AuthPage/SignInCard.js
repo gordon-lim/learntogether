@@ -7,11 +7,12 @@ import {
   Link,
   Stack,
   useColorModeValue,
+  useToast,
 } from '@chakra-ui/react';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { validateEmail } from 'utils/validateEmail';
 import { InputField } from './InputField';
 import { mapFirebaseErrors } from './mapFirebaseErrors';
@@ -22,13 +23,19 @@ const validateFields = ({ email }) => {
 };
 
 const SignInCard = () => {
-  const history = useHistory();
   const firebase = useFirebase();
+  const toast = useToast();
 
   const googleLogin = async () => {
     await firebase.login({
       provider: 'google',
       type: 'popup',
+    });
+    toast({
+      title: 'Welcome back!',
+      description: 'You are now logged in.',
+      status: 'success',
+      isClosable: true,
     });
   };
 
@@ -65,7 +72,12 @@ const SignInCard = () => {
               } catch (errors) {
                 setErrors(mapFirebaseErrors(errors));
               }
-              history.push('/');
+              toast({
+                title: 'Welcome back!',
+                description: 'You are now logged in.',
+                status: 'success',
+                isClosable: true,
+              });
             }}
           >
             {({ isSubmitting }) => (

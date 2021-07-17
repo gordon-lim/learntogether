@@ -4,39 +4,61 @@
  *
  */
 
-import React, { memo } from 'react';
+import {
+  Box,
+  Button,
+  Grid,
+  Heading,
+  Img,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import CourseCard from 'components/Card/CourseCard';
+import Carousel from 'components/Carousel';
+import { details } from 'containers/HomePage';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { memo } from 'react';
 import { Helmet } from 'react-helmet';
-import { createStructuredSelector } from 'reselect';
+import { connect } from 'react-redux';
 import { compose } from 'redux';
-
-import { useInjectSaga } from 'utils/injectSaga';
+import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectProfilePage from './selectors';
+import { useInjectSaga } from 'utils/injectSaga';
+import Profile from '../../images/Profile.svg';
 import reducer from './reducer';
 import saga from './saga';
 
-export function ProfilePage() {
+export function ProfilePage({ auth }) {
   useInjectReducer({ key: 'profilePage', reducer });
   useInjectSaga({ key: 'profilePage', saga });
 
   return (
-    <div>
+    <Box bgColor={useColorModeValue('white', 'gray.600')}>
       <Helmet>
         <title>ProfilePage</title>
         <meta name="description" content="Description of ProfilePage" />
       </Helmet>
-    </div>
+      <Grid templateColumns="1fr 3fr" maxW="7xl" m="0 auto" py={12} gap={3}>
+        <Box textAlign="center">
+          <Img src={auth.photoURL || Profile} alt="profile" w="100%" />
+          <Button>Follow me!</Button>
+        </Box>
+        <Box>
+          <Heading>My Courses</Heading>
+          <Carousel CardComponent={CourseCard} details={details} />
+          <Heading>Past Courses</Heading>
+          <Carousel CardComponent={CourseCard} details={details} />
+        </Box>
+      </Grid>
+    </Box>
   );
 }
 
 ProfilePage.propTypes = {
-  dispatch: PropTypes.func.isRequired, //eslint-disable-line
+  auth: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
-  profilePage: makeSelectProfilePage(),
+  // auth: makeSelectFirebaseAuth(),
 });
 
 function mapDispatchToProps(dispatch) {

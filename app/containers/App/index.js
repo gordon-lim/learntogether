@@ -18,31 +18,35 @@ import { connect } from 'react-redux';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import GlobalStyle from '../../global-styles';
 import { makeSelectFirebaseAuth } from './selectors';
 
-const App = ({ auth }) => (
-  <>
-    <Header auth={auth} />
-    <Switch>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/auth" component={AuthPage}>
-        {isLoaded(auth) && !isEmpty(auth) && <Redirect to="/" />}
-      </Route>
-      <Route path="/profile" component={ProfilePage}>
-        {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
-      </Route>
-      <Route path="/courses" component={CoursePage} />
-      <Route path="/oauth" component={OAuthPage} />
-      <Route component={NotFoundPage} />
-    </Switch>
-    <Footer />
-    <GlobalStyle />
-  </>
-);
-
+function App({ auth }) {
+  return (
+    <>
+      <Header auth={auth} />
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/auth" component={AuthPage}>
+          {isLoaded(auth) && !isEmpty(auth) && <Redirect to="/" />}
+        </Route>
+        <Route path="/profile">
+          {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
+          <ProfilePage auth={auth} />
+        </Route>
+        <Route path="/courses" component={CoursePage} />
+        <Route path="/oauth" component={OAuthPage} />
+        <Route component={NotFoundPage} />
+      </Switch>
+      <Footer />
+      <GlobalStyle />
+    </>
+  );
+}
 App.propTypes = {
   auth: PropTypes.object,
 };
