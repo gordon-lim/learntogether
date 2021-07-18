@@ -10,9 +10,9 @@ import {
 import { Form, Formik } from 'formik';
 import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
-import { validateEmail } from 'utils/validateEmail';
 import { InputField } from './InputField';
 import { mapFirebaseErrors } from './mapFirebaseErrors';
+import { validateEmail } from './utils';
 
 const validateFields = ({ email, password, confirmPassword }) => {
   if (!validateEmail(email)) return { email: 'Please enter a valid email' };

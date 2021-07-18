@@ -4,11 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
   Breadcrumb,
@@ -19,17 +15,21 @@ import {
   Container,
   Heading,
 } from '@chakra-ui/react';
-import { ChevronRightIcon } from '@chakra-ui/icons';
-
-import { useInjectSaga } from 'utils/injectSaga';
+import PropTypes from 'prop-types';
+import React, { memo } from 'react';
+import { connect } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
-import makeSelectCoursePage, { makeSelectSlots } from './selectors';
+import { useInjectSaga } from 'utils/injectSaga';
+import { WeekGrid } from '../../components/Grid/WeekGrid';
+import { selectJoinSlot } from './actions';
+import JoinWeekGridItem from './JoinWeekGridItem';
 import reducer from './reducer';
 import saga from './saga';
+import makeSelectCoursePage, { makeSelectSlots } from './selectors';
 import { slotsToGridItem } from './utils';
-import { selectJoinSlot } from './actions';
-import { WeekGrid } from '../../components/Grid/WeekGrid';
-import JoinWeekGridItem from './JoinWeekGridItem';
 
 function JoinCourse(props) {
   useInjectReducer({ key: 'coursePage', reducer });
@@ -58,23 +58,29 @@ function JoinCourse(props) {
         separator={<ChevronRightIcon color="gray.500" />}
       >
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Course</BreadcrumbLink>
+          <BreadcrumbLink as={RouterLink} to="/">
+            Course
+          </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem>
-          <BreadcrumbLink href={`/courses/${courseId}`}>
+          <BreadcrumbLink as={RouterLink} to={`/courses/${courseId}`}>
             {courseId}
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="#">Join</BreadcrumbLink>
+          <BreadcrumbLink as={RouterLink} to="#">
+            Join
+          </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 
       <Box pt={12}>
         <Heading mb={4}>Choose slots to join</Heading>
         <WeekGrid
+          scrollable
+          height="100px"
           slotItems={slotItems}
           periodLen={periodLen}
           numPeriodsPerDay={numPeriodsPerDay}

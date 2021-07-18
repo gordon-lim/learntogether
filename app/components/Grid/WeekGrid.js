@@ -23,12 +23,18 @@ import {
 
 // import WeekGridItem from './WeekGridItem';
 
-export function WeekGrid({ slotItems, periodLen, numPeriodsPerDay }) {
+export function WeekGrid({
+  slotItems,
+  periodLen,
+  numPeriodsPerDay,
+  scrollable,
+  ...props
+}) {
   const numDays = 7;
 
   return (
-    <Box>
-      <Table variant="simple">
+    <Box height={scrollable && '500px'} overflowY={scrollable && 'auto'}>
+      <Table variant="simple" {...props}>
         <TableCaption placement="top">Course Timings</TableCaption>
         <Thead>
           <Tr>
@@ -90,7 +96,8 @@ function periodToHour(period, periodLen) {
 }
 
 WeekGrid.propTypes = {
-  slotItems: PropTypes.array,
-  periodLen: PropTypes.number,
-  numPeriodsPerDay: PropTypes.number,
+  slotItems: PropTypes.array.isRequired,
+  periodLen: PropTypes.number.isRequired,
+  numPeriodsPerDay: PropTypes.number.isRequired,
+  scrollable: PropTypes.bool,
 };

@@ -13,9 +13,9 @@ import { Form, Formik } from 'formik';
 import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
-import { validateEmail } from 'utils/validateEmail';
 import { InputField } from './InputField';
 import { mapFirebaseErrors } from './mapFirebaseErrors';
+import { validateEmail } from './utils';
 
 const validateFields = ({ email }) => {
   if (!validateEmail(email)) return { email: 'Please enter a valid email' };

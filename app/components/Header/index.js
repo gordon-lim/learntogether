@@ -20,6 +20,7 @@ import React from 'react';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import Logo from '../../images/Logo.png';
+import ColourModeSwitch from './ColourModeSwitch';
 import { DesktopNav } from './DesktopNav';
 import { LoggedInItems } from './LoggedInItems';
 import { LoggedOutItems } from './LoggedOutItems';
@@ -64,6 +65,7 @@ function Header({ auth }) {
             <DesktopNav />
           </Flex>
         </Flex>
+        <ColourModeSwitch mr={3} />
         {isLoaded(auth) && !isEmpty(auth) ? (
           <LoggedInItems photoURL={auth.photoURL} />
         ) : (

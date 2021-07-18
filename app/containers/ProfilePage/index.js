@@ -39,7 +39,12 @@ export function ProfilePage({ auth }) {
       </Helmet>
       <Grid templateColumns="1fr 3fr" maxW="7xl" m="0 auto" py={12} gap={3}>
         <Box textAlign="center">
-          <Img src={auth.photoURL || Profile} alt="profile" w="100%" />
+          <Img
+            src={auth.photoURL || Profile}
+            alt="profile"
+            w="100%"
+            rounded="100%"
+          />
           <Button>Follow me!</Button>
         </Box>
         <Box>
