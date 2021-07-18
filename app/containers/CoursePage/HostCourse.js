@@ -31,7 +31,7 @@ import saga from './saga';
 import { slotsToGridItem } from './utils';
 import { selectJoinSlot } from './actions';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
-import HostWeekGridItem from './HostWeekGridItem';
+import HostWeekGridItem from '../../components/TableComponent/HostWeekGridItem';
 
 function HostCourse(props) {
   useInjectReducer({ key: 'coursePage', reducer });
