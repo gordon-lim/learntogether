@@ -17,8 +17,6 @@ export function ZoomOAuth(props) {
   // if an authorization code is available, the user has most likely been redirected from Zoom OAuth
   // if not, the user needs to be redirected to Zoom OAuth to authorize
   if (code) {
-    /**
-    
     // Step 3:
     // Request an access token using the auth code
     const AccessTokenUrl = `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${
@@ -28,6 +26,7 @@ export function ZoomOAuth(props) {
     const requestOptions = {
       method: 'POST',
       headers: {
+        'Access-Control-Allow-Origin': 'https://zoom.us',
         'Content-Type': '	application/x-www-form-urlencoded',
         Authorization: `${process.env.ZOOM_CLIENT_ID}:${
           process.env.ZOOM_CLIENT_SECRET
@@ -39,7 +38,7 @@ export function ZoomOAuth(props) {
       .then(data => {
         // Log the access token and save it to the database
         const accessToken = data.access_token;
-        const refreshToken = data.refresh_token;
+        // const refreshToken = data.refresh_token;
         // console.log(`access_token: ${accessToken}`);
         // console.log(`refresh_token: ${refreshToken}`);
 
@@ -52,13 +51,13 @@ export function ZoomOAuth(props) {
           // This helps make calls to user-specific endpoints instead of storing the userID
 
           // This would be handled by the respective components
-          return <div />;
+          return <div>{accessToken}</div>;
           // return <Redirect to={userState.redirect} />;
         }
+        return <div />;
       });
 
-      * */
-    return <div>code</div>;
+    return <div>{code}</div>;
   }
 
   // Step 2:
