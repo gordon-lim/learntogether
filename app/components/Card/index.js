@@ -6,7 +6,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Image, Badge } from '@chakra-ui/react';
+import { Box, Image, Badge, Button } from '@chakra-ui/react';
 import { v4 } from 'uuid';
 import { StarIcon } from '@chakra-ui/icons';
 // import styled from 'styled-components';
@@ -64,6 +64,14 @@ function Card({ data }) {
           </Box>
         </Box>
       </Box>
+      <Button
+        borderTopRightRadius="0px"
+        borderTopLeftRadius="0px"
+        colorScheme="red"
+        isFullWidth="true"
+      >
+        Learn now
+      </Button>
     </Box>
   );
 }
