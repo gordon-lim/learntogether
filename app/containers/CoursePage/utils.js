@@ -4,6 +4,7 @@
  *
  */
 import React from 'react';
+import { PERIOD_LEN } from './constants';
 
 /**
  * Converts the existing slots array to an array of components
@@ -24,4 +25,42 @@ export function slotsToGridItem(slots, Component, onClick, aveVotes = 0) {
       />
     )),
   );
+}
+
+/**
+ * Converts the period into its starting hour
+ *
+ * @param {integer} period
+ * @param {number} periodLen
+ * @returns The starting hour of the period
+ *
+ */
+export function periodToHour(period) {
+  const timeMins = period * PERIOD_LEN * 60;
+  const hour = String(Math.floor(timeMins / 60)).padStart(2, '0');
+  const mins = String(timeMins % 60).padStart(2, '0');
+  return hour + mins;
+}
+
+export function indToDay(dayInd) {
+  const days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat'];
+  return days[dayInd];
+}
+
+export function getAveVotes(slots, numPeriodsPerDay) {
+  const sumVotes = slots
+    .reduce((a, b) => a.concat(b))
+    .reduce((acc, obj) => acc + obj.numVots, 0);
+  const aveVotes = Math.floor(sumVotes / (numPeriodsPerDay * 7));
+  return aveVotes;
+}
+
+export function containsObject(obj, list) {
+  for (let i = 0; i < list.length; i += 1) {
+    if (list[i] === obj) {
+      return true;
+    }
+  }
+
+  return false;
 }

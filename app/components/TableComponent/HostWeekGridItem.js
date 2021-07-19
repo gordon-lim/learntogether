@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { Box } from '@chakra-ui/react';
 
 export default function HostWeekGridItem({ slot, onClick, aveVotes }) {
-  const numVotes = slot.numSlots;
+  const numVotes = slot.votes.length;
   const { selected } = slot;
 
   let bgColor = 'green.100';

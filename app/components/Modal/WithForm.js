@@ -32,17 +32,35 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
+import { v4 } from 'uuid';
 import DatePicker from 'components/DatePicker';
+import { indToDay, periodToHour } from 'containers/CoursePage/utils';
 
 function WithForm({
   isOpen,
   onCreate,
   onClose,
   timings,
+  displayName,
+  setDisplayName,
   numMeetings,
+  setNumMeetings,
+  participantLimit,
+  setParticipantLimit,
   startDate,
-  onSelectStartDate,
+  setStartDate,
 }) {
+  const onSetDisplayName = e => {
+    setDisplayName(e.target.value);
+  };
+  const onSetNumMeetings = e => {
+    setNumMeetings(e.target.value);
+  };
+  const onSetParticipantLimit = e => {
+    setParticipantLimit(e.target.value);
+  };
+  const onSelectStartDate = date => setStartDate(date);
+
   return (
     <Modal
       blockScrollOnMount={false}
@@ -57,7 +75,11 @@ function WithForm({
         <ModalBody pb={6}>
           <FormControl>
             <FormLabel>Set your display name</FormLabel>
-            <Input placeholder="Display name" />
+            <Input
+              placeholder="Display name"
+              value={displayName}
+              onChange={onSetDisplayName}
+            />
           </FormControl>
 
           <FormControl mt={4}>
@@ -71,9 +93,9 @@ function WithForm({
               </Thead>
               <Tbody>
                 {timings.map(t => (
-                  <Tr>
-                    <Td>{t.day}</Td>
-                    <Td>{t.time}</Td>
+                  <Tr key={v4()}>
+                    <Td>{indToDay(t.day)}</Td>
+                    <Td>{periodToHour(t.period)}</Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -83,7 +105,24 @@ function WithForm({
           <FormControl mt={4}>
             <FormLabel>Number of meetings</FormLabel>
             <NumberInput max={50} min={1} defaultValue={numMeetings}>
-              <NumberInputField />
+              <NumberInputField
+                value={numMeetings}
+                onChange={onSetNumMeetings}
+              />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+          </FormControl>
+
+          <FormControl mt={4}>
+            <FormLabel>Participant Limiit</FormLabel>
+            <NumberInput max={50} min={1} defaultValue={participantLimit}>
+              <NumberInputField
+                value={participantLimit}
+                onChange={onSetParticipantLimit}
+              />
               <NumberInputStepper>
                 <NumberIncrementStepper />
                 <NumberDecrementStepper />
@@ -93,8 +132,8 @@ function WithForm({
 
           <FormControl mt={4}>
             <FormLabel>Meeting Duration</FormLabel>
-            <Select placeholder="Select duration" defaultValue={2}>
-              <option value={2}>2 hours</option>
+            <Select placeholder="Select duration" defaultValue={1}>
+              <option value={1}>1 hour</option>
             </Select>
           </FormControl>
 
@@ -124,9 +163,14 @@ WithForm.propTypes = {
   onCreate: PropTypes.func,
   onClose: PropTypes.func,
   timings: PropTypes.array,
+  displayName: PropTypes.string,
+  setDisplayName: PropTypes.func,
   numMeetings: PropTypes.number,
+  setNumMeetings: PropTypes.func,
+  participantLimit: PropTypes.number,
+  setParticipantLimit: PropTypes.func,
   startDate: PropTypes.instanceOf(Date),
-  onSelectStartDate: PropTypes.func,
+  setStartDate: PropTypes.func,
 };
 
 export default WithForm;
