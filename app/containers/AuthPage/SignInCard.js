@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Center,
+  Text,
   Checkbox,
   Flex,
   Heading,
@@ -9,6 +11,7 @@ import {
   useColorModeValue,
   useToast,
 } from '@chakra-ui/react';
+import { FcGoogle } from 'react-icons/fc';
 import { Form, Formik } from 'formik';
 import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
@@ -115,15 +118,17 @@ const SignInCard = () => {
                     >
                       Sign in
                     </Button>
+
                     <Button
-                      bg="blue.400"
-                      color="white"
-                      _hover={{
-                        bg: 'blue.500',
-                      }}
                       onClick={googleLogin}
+                      w="full"
+                      maxW="md"
+                      variant="outline"
+                      leftIcon={<FcGoogle />}
                     >
-                      Sign in with Google
+                      <Center>
+                        <Text>Sign in with Google</Text>
+                      </Center>
                     </Button>
                   </Stack>
                 </Stack>
