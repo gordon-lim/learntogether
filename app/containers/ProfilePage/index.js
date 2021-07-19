@@ -29,7 +29,13 @@ export function ProfilePage({ auth }) {
         <title>ProfilePage</title>
         <meta name="description" content="Description of ProfilePage" />
       </Helmet>
-      <Grid templateColumns="1fr 3fr" maxW="7xl" m="0 auto" py={12} gap={3}>
+      <Grid
+        templateColumns="1fr minmax(300px, 3fr)"
+        maxW="7xl"
+        m="0 auto"
+        py={12}
+        gap={5}
+      >
         <Box textAlign="center">
           <Img
             src={auth.photoURL || Profile}
@@ -41,7 +47,6 @@ export function ProfilePage({ auth }) {
         </Box>
         <Box>
           <MyCoursesCarousel />
-
           <PastCoursesCarousel />
         </Box>
       </Grid>
