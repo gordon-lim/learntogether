@@ -68,19 +68,22 @@ api.get('/oauth/zoom', (req, res) => {
 
 api.get('/createMeeting', (req, res) => {
   request
-    .get('https://api.zoom.us/v2/users/me', (error, response, body) => {
-      if (error) {
-        // console.log('API Response Error: ', error);
-        res.json({
-          error,
-        });
-      } else {
-        const bodyJson = JSON.parse(body);
-        // Display response in console
-        // console.log('API call ', body);
-        res.json(bodyJson);
-      }
-    })
+    .post(
+      'https://api.zoom.us/v2/users/me/meetings',
+      (error, response, body) => {
+        if (error) {
+          // console.log('API Response Error: ', error);
+          res.json({
+            error,
+          });
+        } else {
+          const bodyJson = JSON.parse(body);
+          // Display response in console
+          // console.log('API call ', body);
+          res.json(bodyJson);
+        }
+      },
+    )
     .auth(null, null, true, req.access_token);
 });
 

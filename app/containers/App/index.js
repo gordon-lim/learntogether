@@ -10,7 +10,6 @@ import AuthPage from 'containers/AuthPage/Loadable';
 import CoursePage from 'containers/CoursePage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import { OAuthPage } from 'containers/OAuthPage';
 import { ProfilePage } from 'containers/ProfilePage';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -39,7 +38,6 @@ function App({ auth }) {
           <ProfilePage auth={auth} />
         </Route>
         <Route path="/courses" component={CoursePage} />
-        <Route path="/oauth" component={OAuthPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />

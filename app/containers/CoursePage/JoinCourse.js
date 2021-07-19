@@ -14,41 +14,90 @@ import {
   Center,
   Container,
   Heading,
+  useToast,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import { firebaseConnect, useFirebase } from 'react-redux-firebase';
+
 import JoinWeekGridItem from 'components/TableComponent/JoinWeekGridItem';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
-import { selectJoinSlot } from './actions';
+import { addAvailSlots, selectJoinSlot } from './actions';
 import reducer from './reducer';
 import saga from './saga';
-import makeSelectCoursePage, { makeSelectSlots } from './selectors';
-import { slotsToGridItem } from './utils';
+import makeSelectCoursePage, {
+  makeSelectAvailSlots,
+  makeSelectCourseId,
+  makeSelectJoinSlots,
+  makeSelectVotedJoinSlots,
+} from './selectors';
+import { PERIOD_LEN } from './constants';
 
-function JoinCourse(props) {
+function JoinCourse({
+  auth,
+  courseId,
+  availSlots,
+  joinSlots,
+  votedJoinSlots,
+  onSelectJoinSlot,
+  addAvail,
+}) {
   useInjectReducer({ key: 'coursePage', reducer });
   useInjectSaga({ key: 'coursePage', saga });
 
-  const { courseId } = props.match.params; //eslint-disable-line
-  const { slots } = props;
+  const firebase = useFirebase();
+  const toast = useToast();
 
-  // TODO: check if the user is authenticated
+  useEffect(() => {
+    for (let i = 0; i < availSlots.length; i += 1) {
+      const periods = JSON.parse(availSlots[i].value.periods);
+      for (let j = 0; j < periods.length; j += 1) {
+        const { day, period } = periods[j];
+        addAvail(day, period, availSlots[i]);
+      }
+    }
+  }, [availSlots]);
 
-  const periodLen = 2; // Sample
-  // TODO: Find out the duration of each period of the course, eg 0.5, 1, 1.5, 2, 3
-  const numPeriodsPerDay = Math.floor(24 / periodLen);
-  // TODO: get data about the available timings for the course
-  // const slots = joinSlots;
-  const slotItems = slotsToGridItem(
-    slots,
-    JoinWeekGridItem,
-    props.onSelectJoinSlot,
+  const onSaveVote = async evt => {
+    evt.preventDefault();
+
+    try {
+      for (let i = 0; i < votedJoinSlots.length; i += 1) {
+        const { day, period } = votedJoinSlots[i];
+        firebase.push('coursesVoted', {
+          dateCreated: new Date().toDateString(),
+          userId: auth.uid,
+          courseId,
+          day,
+          period,
+        });
+      }
+    } catch (errors) {
+      // console.log(errors);
+    }
+    toast({
+      title: 'Success!',
+      description: 'Votes saved.',
+      status: 'success',
+      isClosable: true,
+    });
+  };
+
+  const numPeriodsPerDay = Math.floor(24 / PERIOD_LEN);
+  const slotItems = joinSlots.map((daySlots, day) =>
+    daySlots.map(slot => (
+      <JoinWeekGridItem
+        day={day}
+        slot={slot}
+        onClick={onSelectJoinSlot(day, slot.id)}
+      />
+    )),
   );
 
   return (
@@ -82,12 +131,12 @@ function JoinCourse(props) {
           scrollable
           height="100px"
           slotItems={slotItems}
-          periodLen={periodLen}
+          periodLen={PERIOD_LEN}
           numPeriodsPerDay={numPeriodsPerDay}
         />
         <br />
         <Center>
-          <Button>Save Votes</Button>
+          <Button onClick={onSaveVote}>Save Votes</Button>
         </Center>
       </Box>
     </Container>
@@ -95,23 +144,27 @@ function JoinCourse(props) {
 }
 
 JoinCourse.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      courseId: PropTypes.string,
-    }),
-  }),
-  slots: PropTypes.array,
+  auth: PropTypes.object,
+  courseId: PropTypes.string,
+  availSlots: PropTypes.array,
+  joinSlots: PropTypes.array,
+  votedJoinSlots: PropTypes.array,
   onSelectJoinSlot: PropTypes.func,
+  addAvail: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   coursePage: makeSelectCoursePage(),
-  slots: makeSelectSlots(),
+  courseId: makeSelectCourseId(),
+  availSlots: makeSelectAvailSlots(),
+  joinSlots: makeSelectJoinSlots(),
+  votedJoinSlots: makeSelectVotedJoinSlots(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onSelectJoinSlot: (day, id) => () => dispatch(selectJoinSlot(day, id)),
+    addAvail: (day, id, slot) => dispatch(addAvailSlots(day, id, slot)),
   };
 }
 
@@ -121,6 +174,12 @@ const withConnect = connect(
 );
 
 export default compose(
+  firebaseConnect(props => [
+    {
+      path: 'coursesHosted',
+      queryParams: ['orderByChild=courseId', props.match.params.courseId],
+    },
+  ]),
   withConnect,
   memo,
 )(JoinCourse);

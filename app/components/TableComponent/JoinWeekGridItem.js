@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { Box } from '@chakra-ui/react';
 
 export default function JoinWeekGridItem({ slot, onClick }) {
-  const { numSlots } = slot;
+  const numSlots = slot.availSlots.length;
   const { selected } = slot;
 
   if (numSlots === 0) {
