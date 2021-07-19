@@ -5,9 +5,8 @@
  *
  */
 
-import { Box, Container } from '@chakra-ui/react';
-import CourseCard from 'components/Card/CourseCard';
-import Carousel from 'components/Carousel';
+import { Box } from '@chakra-ui/react';
+import UpcomingCarousel from 'components/Carousel/UpcomingCarousel';
 import Hero from 'components/Hero';
 import React from 'react';
 
@@ -33,10 +32,7 @@ export default function HomePage() {
   return (
     <Box>
       <Hero />
-      {/* <UpcomingCarousel /> */}
-      <Container maxW="7xl" py={12}>
-        <Carousel CardComponent={CourseCard} details={details} />
-      </Container>
+      <UpcomingCarousel />
     </Box>
   );
 }
