@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { Box, Image, Badge, Button } from '@chakra-ui/react';
 import { v4 } from 'uuid';
 import { StarIcon } from '@chakra-ui/icons';
+import { Link as RouterLink } from 'react-router-dom';
 // import styled from 'styled-components';
 
 function Card({ data }) {
@@ -65,6 +66,8 @@ function Card({ data }) {
         </Box>
       </Box>
       <Button
+        as={RouterLink}
+        to={`/courses/${data.id}`}
         borderTopRightRadius="0px"
         borderTopLeftRadius="0px"
         colorScheme="red"

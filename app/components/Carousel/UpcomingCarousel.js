@@ -14,6 +14,7 @@ const details = [
     imageUrl: 'https://bit.ly/3kognHo',
     imageAlt: 'Rear view of modern home with pool',
     videos: 24,
+    id: '1',
     quizzes: 5,
     title: 'Introduction to Psychology',
     formattedPrice: '$1,900.00',
