@@ -4,17 +4,9 @@
  *
  */
 
-import {
-  Box,
-  Button,
-  Grid,
-  Heading,
-  Img,
-  useColorModeValue,
-} from '@chakra-ui/react';
-import CourseCard from 'components/Card/CourseCard';
-import Carousel from 'components/Carousel';
-import { details } from 'containers/HomePage';
+import { Box, Button, Grid, Img, useColorModeValue } from '@chakra-ui/react';
+import MyCoursesCarousel from 'components/Carousel/MyCoursesCarousel';
+import PastCoursesCarousel from 'components/Carousel/PastCoursesCarousel';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import { Helmet } from 'react-helmet';
@@ -48,10 +40,9 @@ export function ProfilePage({ auth }) {
           <Button>Follow me!</Button>
         </Box>
         <Box>
-          <Heading>My Courses</Heading>
-          <Carousel CardComponent={CourseCard} details={details} />
-          <Heading>Past Courses</Heading>
-          <Carousel CardComponent={CourseCard} details={details} />
+          <MyCoursesCarousel />
+
+          <PastCoursesCarousel />
         </Box>
       </Grid>
     </Box>
