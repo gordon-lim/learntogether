@@ -18,6 +18,7 @@ const sliderSettings = {
   speed: 500,
   slidesToScroll: 3,
   slidesToShow: 3,
+  centerPadding: '100px',
   responsive: [
     {
       breakpoint: 1280,
@@ -41,6 +42,7 @@ const CardSlider = styled(Slider)`
     height: auto;
     justify-content: center;
     margin-bottom: 0.25rem;
+    display: flex !important;
   }
 `;
 
@@ -49,14 +51,10 @@ function Carousel({ CardComponent, details, sliderName }) {
 
   return (
     <Box position="relative">
-      <Box maxW="1280px" margin="auto" py={{ base: '4rem', lg: '5rem' }}>
-        <Flex
-          direction={{ base: 'column', sm: 'row' }}
-          align={{ base: 'center', sm: 'stretch' }}
-          justify="space-between"
-        >
+      <Box maxW="1280px" margin="auto" py="5rem">
+        <Flex direction="row" align="stretch" justify="space-between">
           <Heading
-            fontSize={{ base: '4xl', sm: '5xl' }}
+            fontSize="4xl"
             color="black"
             letterSpacing="0.025em"
             align="center"
@@ -68,7 +66,7 @@ function Carousel({ CardComponent, details, sliderName }) {
             <IconButton
               onClick={sliderRef ? sliderRef.slickPrev : () => undefined}
               padding="0.5rem"
-              mt={{ base: '1rem', sm: '0px' }}
+              mt="0px"
               ml="1.5rem"
               isRound="true"
               icon={<ArrowBackIcon />}
@@ -78,7 +76,7 @@ function Carousel({ CardComponent, details, sliderName }) {
             <IconButton
               onClick={sliderRef ? sliderRef.slickNext : () => undefined}
               padding="0.5rem"
-              mt={{ base: '1rem', sm: '0px' }}
+              mt="0px"
               ml="1.5rem"
               isRound="true"
               icon={<ArrowForwardIcon />}

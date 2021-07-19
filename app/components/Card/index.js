@@ -55,7 +55,7 @@ function Card({ data }) {
             .fill('')
             .map((_, i) => (
               <StarIcon
-                key={v4}
+                key={v4()}
                 color={i < data.rating ? 'red.500' : 'gray.300'}
               />
             ))}
