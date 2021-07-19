@@ -49,10 +49,14 @@ function Carousel({ CardComponent, details, sliderName }) {
 
   return (
     <Box position="relative">
-      <Box maxW="1280px" margin="auto" py="5rem">
-        <Flex direction="row" align="stretch" justify="space-between">
+      <Box maxW="1280px" margin="auto" py={{ base: '4rem', lg: '5rem' }}>
+        <Flex
+          direction={{ base: 'column', sm: 'row' }}
+          align={{ base: 'center', sm: 'stretch' }}
+          justify="space-between"
+        >
           <Heading
-            fontSize="4xl"
+            fontSize={{ base: '4xl', sm: '5xl' }}
             color="black"
             letterSpacing="0.025em"
             align="center"
@@ -64,7 +68,7 @@ function Carousel({ CardComponent, details, sliderName }) {
             <IconButton
               onClick={sliderRef ? sliderRef.slickPrev : () => undefined}
               padding="0.5rem"
-              mt="0px"
+              mt={{ base: '1rem', sm: '0px' }}
               ml="1.5rem"
               isRound="true"
               icon={<ArrowBackIcon />}
@@ -74,7 +78,7 @@ function Carousel({ CardComponent, details, sliderName }) {
             <IconButton
               onClick={sliderRef ? sliderRef.slickNext : () => undefined}
               padding="0.5rem"
-              mt="0px"
+              mt={{ base: '1rem', sm: '0px' }}
               ml="1.5rem"
               isRound="true"
               icon={<ArrowForwardIcon />}
