@@ -12,30 +12,6 @@ import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import styled from 'styled-components';
 
-const sliderSettings = {
-  arrows: false,
-  infinite: true,
-  speed: 500,
-  slidesToScroll: 3,
-  slidesToShow: 3,
-  centerPadding: '100px',
-  responsive: [
-    {
-      breakpoint: 1280,
-      settings: {
-        slidesToShow: 2,
-      },
-    },
-
-    {
-      breakpoint: 900,
-      settings: {
-        slidesToShow: 1,
-      },
-    },
-  ],
-};
-
 const CardSlider = styled(Slider)`
   margin-top: 4rem;
   .slick-slide {
@@ -46,7 +22,7 @@ const CardSlider = styled(Slider)`
   }
 `;
 
-function Carousel({ CardComponent, details, sliderName }) {
+function Carousel({ CardComponent, details, sliderName, sliderSettings }) {
   const [sliderRef, setSliderRef] = useState(null);
 
   return (
@@ -98,6 +74,7 @@ Carousel.propTypes = {
   details: PropTypes.arrayOf(PropTypes.object),
   sliderName: PropTypes.string,
   CardComponent: PropTypes.elementType,
+  sliderSettings: PropTypes.object,
 };
 
 export default Carousel;

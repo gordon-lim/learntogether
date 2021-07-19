@@ -9,7 +9,7 @@ import Carousel from 'components/Carousel';
 import Card from 'components/Card';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
-export const details = [
+const details = [
   {
     imageUrl: 'https://bit.ly/3kognHo',
     imageAlt: 'Rear view of modern home with pool',
@@ -52,9 +52,31 @@ export const details = [
   },
 ];
 
+const sliderSettings = {
+  arrows: false,
+  infinite: true,
+  speed: 500,
+  slidesToScroll: 1,
+  slidesToShow: 2,
+  centerPadding: '100px',
+  responsive: [
+    {
+      breakpoint: 900,
+      settings: {
+        slidesToShow: 1,
+      },
+    },
+  ],
+};
+
 function MyCoursesCarousel() {
   return (
-    <Carousel CardComponent={Card} details={details} sliderName="My Courses" />
+    <Carousel
+      CardComponent={Card}
+      details={details}
+      sliderName="My Courses"
+      sliderSettings={sliderSettings}
+    />
   );
 }
 
