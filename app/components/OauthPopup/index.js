@@ -66,7 +66,7 @@ const OauthPopup = ({
             clearTimer();
           }
         }
-      }, 3000);
+      }, 700);
     }
     return () => {
       if (externalWindow) externalWindow.close();
