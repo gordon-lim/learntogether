@@ -38,7 +38,7 @@ import makeSelectCoursePage, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getAveVotes } from './utils';
+import { getAveVotes, periodToHour } from './utils';
 import { addVoteSlots, selectHostSlot } from './actions';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
 import HostWeekGridItem from '../../components/TableComponent/HostWeekGridItem';
@@ -62,6 +62,7 @@ function HostCourse({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [canSchedule, setCanSchedule] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [displayName, setDisplayName] = useState('');
   const [numMeetings, setNumMeetings] = useState(14);
@@ -100,6 +101,7 @@ function HostCourse({
         userDeets.zoomTokenManager.accessToken
       ) {
         setCanSchedule(true);
+        setAccessToken(userDeets.zoomTokenManager.accessToken);
       }
     }
   }, [slotVotes, userDetails]);
@@ -145,8 +147,24 @@ function HostCourse({
     evt.preventDefault();
 
     try {
-      // Get the token from firebase
-      // Call createmeeting in the backend api
+      // Only allow one meeting per week atm
+      const dayString = startDate.toISOString().slice(0, 10);
+      const startHour = periodToHour(selectedHostSlots[0].period);
+      const startHourString = `${startHour.slice(0, 2)}:${startHour.slice(
+        2,
+        4,
+      )}:00`;
+      const days = selectedHostSlots[0].day;
+
+      // Create a zoom meeting through the backend api
+      const res = await axios.post('/api/zoom/createMeeting', {
+        accessToken,
+        topic: 'topic',
+        startTime: `${dayString}T${startHourString}`,
+        days,
+        numMeetings,
+      });
+      const joinUrl = res.data.join_url;
 
       await firebase.push('coursesHosted', {
         dateCreated: new Date().toDateString(),
@@ -157,11 +175,12 @@ function HostCourse({
         periods: JSON.stringify(selectedHostSlots),
         numMeetings,
         participantLimit,
+        zoomUrl: joinUrl,
       });
+
+      setSuccess('Hosted a new course!');
     } catch (err) {
       setError(err);
-    } finally {
-      setSuccess('Hosted a new course!');
     }
   };
 
