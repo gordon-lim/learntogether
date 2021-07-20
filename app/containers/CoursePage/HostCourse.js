@@ -57,15 +57,15 @@ function HostCourse({
   useInjectReducer({ key: 'coursePage', reducer });
   useInjectSaga({ key: 'coursePage', saga });
 
+  const firebase = useFirebase();
+  const toast = useToast();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [canSchedule, setCanSchedule] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [displayName, setDisplayName] = useState('');
   const [numMeetings, setNumMeetings] = useState(14);
   const [participantLimit, setParticipantLimit] = useState(10);
-
-  const firebase = useFirebase();
-  const toast = useToast();
 
   const setSuccess = msg =>
     toast({

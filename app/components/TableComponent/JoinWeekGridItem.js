@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 // import { connect } from 'react-redux';
 import { Box } from '@chakra-ui/react';
 
-export default function JoinWeekGridItem({ slot, onClick }) {
+export default function JoinWeekGridItem({ slot, onClick, onSelectAvailSlot }) {
   const numSlots = slot.availSlots.length;
   const { selected } = slot;
 
@@ -34,6 +34,7 @@ export default function JoinWeekGridItem({ slot, onClick }) {
   return (
     <Box
       as="button"
+      onClick={onSelectAvailSlot}
       width="100%"
       height={10}
       justifyContent="flex-end"
@@ -50,4 +51,5 @@ export default function JoinWeekGridItem({ slot, onClick }) {
 JoinWeekGridItem.propTypes = {
   slot: PropTypes.object,
   onClick: PropTypes.func,
+  onSelectAvailSlot: PropTypes.func,
 };

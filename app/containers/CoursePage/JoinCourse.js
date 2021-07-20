@@ -14,10 +14,16 @@ import {
   Center,
   Container,
   Heading,
+  Stack,
+  Table,
+  Tbody,
+  Td,
+  Tr,
+  useDisclosure,
   useToast,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { compose } from 'redux';
@@ -27,6 +33,8 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { firebaseConnect, useFirebase } from 'react-redux-firebase';
 
 import JoinWeekGridItem from 'components/TableComponent/JoinWeekGridItem';
+import ModalWithCards from 'components/Modal/ModalWithCards';
+import CardWithExtraContents from 'components/Card/CardWithExtraContents';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
 import { addAvailSlots, selectJoinSlot } from './actions';
 import reducer from './reducer';
@@ -54,22 +62,27 @@ function JoinCourse({
   const firebase = useFirebase();
   const toast = useToast();
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [slotChosen, setSlotChosen] = useState({ day: 0, period: 0 });
+  const [selectedPeriodAvailSlots, setSelectedPeriodAvailSlots] = useState([]);
+
   const setSuccess = msg =>
     toast({
       title: 'Success!',
-      description: msg,
+      description: msg.toString(),
       status: 'success',
       isClosable: true,
     });
   const setError = msg =>
     toast({
       title: 'Error!',
-      description: msg,
+      description: msg.toString(),
       status: 'error',
       isClosable: true,
     });
 
   useEffect(() => {
+    // Adds the available slots to the grid table
     for (let i = 0; i < availSlots.length; i += 1) {
       const periods = JSON.parse(availSlots[i].value.periods);
       for (let j = 0; j < periods.length; j += 1) {
@@ -77,39 +90,102 @@ function JoinCourse({
         addAvail(day, period, availSlots[i]);
       }
     }
-  }, [availSlots]);
+
+    // Filters only the available slots in the period selected by the user
+    setSelectedPeriodAvailSlots(
+      availSlots.filter(slot => {
+        // Currently limit to only allow hosting with one slot per week
+        const timings = JSON.parse(slot.value.periods);
+        if (!timings.length > 0) return false;
+        const timing = timings[0];
+        return (
+          timing.day === slotChosen.day && timing.period === slotChosen.period
+        );
+      }),
+    );
+  }, [availSlots, slotChosen]);
 
   const onSaveVote = async evt => {
     evt.preventDefault();
 
     try {
+      const results = [];
       for (let i = 0; i < votedJoinSlots.length; i += 1) {
         const { day, period } = votedJoinSlots[i];
-        firebase.push('coursesVoted', {
-          dateCreated: new Date().toDateString(),
-          userId: auth.uid,
-          courseId,
-          day,
-          period,
-        });
+        results.push(
+          firebase.push('coursesVoted', {
+            dateCreated: new Date().toDateString(),
+            userId: auth.uid,
+            courseId,
+            day,
+            period,
+          }),
+        );
       }
+      await Promise.all(results);
+      setSuccess('Voted saved.');
     } catch (err) {
       setError(err);
-    } finally {
-      setSuccess('Voted saved.');
     }
+  };
+
+  const onSelectAvailSlot = (day, period) => () => {
+    setSlotChosen({ day, period });
+    // Opens the available slots modal
+    onOpen();
+  };
+
+  const onJoinMeeting = courseHostedId => async () => {
+    firebase
+      .push('coursesJoined', {
+        dateCreated: new Date().toString(),
+        userId: auth.uid,
+        courseId,
+        courseHostedId,
+      })
+      .then(() => setSuccess('Joined course'))
+      .catch(err => setError(err));
   };
 
   const numPeriodsPerDay = Math.floor(24 / PERIOD_LEN);
   const slotItems = joinSlots.map((daySlots, day) =>
     daySlots.map(slot => (
       <JoinWeekGridItem
-        day={day}
         slot={slot}
         onClick={onSelectJoinSlot(day, slot.id)}
+        onSelectAvailSlot={onSelectAvailSlot(day, slot.id)}
       />
     )),
   );
+
+  const timingProps = selectedPeriodAvailSlots.map(availSlot => {
+    const title = new Date(availSlot.value.startDate).toDateString();
+    const hostString = `Hosted by: ${availSlot.value.hostDisplayName}`;
+    const extraContent = (
+      <Stack>
+        <Table>
+          <Tbody>
+            <Tr>
+              <Td>Number of meetings</Td>
+              <Td isNumeric>{availSlot.value.numMeetings.toString()}</Td>
+            </Tr>
+            <Tr>
+              <Td>Participant Limit</Td>
+              <Td isNumeric>{availSlot.value.participantLimit.toString()}</Td>
+            </Tr>
+          </Tbody>
+        </Table>
+        <Center>
+          <Button onClick={onJoinMeeting(availSlot.key)}>Join</Button>
+        </Center>
+      </Stack>
+    );
+    return {
+      title,
+      desc: hostString,
+      extraContent,
+    };
+  });
 
   return (
     <Container maxW="7xl" py={12}>
@@ -135,6 +211,14 @@ function JoinCourse({
           </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
+
+      <ModalWithCards
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Available Timings"
+        CardComponent={CardWithExtraContents}
+        cardProps={timingProps}
+      />
 
       <Box pt={12}>
         <Heading mb={4}>Choose slots to join</Heading>
