@@ -54,6 +54,21 @@ function JoinCourse({
   const firebase = useFirebase();
   const toast = useToast();
 
+  const setSuccess = msg =>
+    toast({
+      title: 'Success!',
+      description: msg,
+      status: 'success',
+      isClosable: true,
+    });
+  const setError = msg =>
+    toast({
+      title: 'Error!',
+      description: msg,
+      status: 'error',
+      isClosable: true,
+    });
+
   useEffect(() => {
     for (let i = 0; i < availSlots.length; i += 1) {
       const periods = JSON.parse(availSlots[i].value.periods);
@@ -78,15 +93,11 @@ function JoinCourse({
           period,
         });
       }
-    } catch (errors) {
-      // console.log(errors);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setSuccess('Voted saved.');
     }
-    toast({
-      title: 'Success!',
-      description: 'Votes saved.',
-      status: 'success',
-      isClosable: true,
-    });
   };
 
   const numPeriodsPerDay = Math.floor(24 / PERIOD_LEN);

@@ -12,16 +12,20 @@ const selectCoursePageDomain = state => state.coursePage || initialState;
  * Other specific selectors
  */
 
+const makeSelectUserDetails = () =>
+  createSelector(
+    selectFirebase,
+    subState => subState.ordered.users,
+  );
+
 const makeSelectCourseId = () => (state, ownProps) =>
   ownProps.match.params.courseId;
 
 const makeSelectAvailSlots = () =>
   createSelector(
     selectFirebase,
-    firebaseState =>
-      firebaseState.ordered.coursesHosted
-        ? firebaseState.ordered.coursesHosted
-        : [],
+    subState =>
+      subState.ordered.coursesHosted ? subState.ordered.coursesHosted : [],
   );
 
 const makeSelectJoinSlots = () =>
@@ -104,6 +108,7 @@ const makeSelectCoursePage = () =>
 export default makeSelectCoursePage;
 export {
   selectCoursePageDomain,
+  makeSelectUserDetails,
   makeSelectCourseId,
   makeSelectAvailSlots,
   makeSelectJoinSlots,

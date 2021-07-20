@@ -13,7 +13,7 @@ api.get('/', (req, res) => {
   });
 });
 
-api.get('/oauth/zoom', (req, res) => {
+api.get('/zoom/getToken', (req, res) => {
   // Step 1:
   // Check if the code parameter is in the url
   // if an authorization code is available, the user has most likely been redirected from Zoom OAuth
@@ -49,7 +49,7 @@ api.get('/oauth/zoom', (req, res) => {
           });
         } else {
           // Handle errors, something's gone wrong!
-          res.json(bodyJson);
+          res.status(401).json(bodyJson);
         }
       })
       .auth(process.env.ZOOM_CLIENT_ID, process.env.ZOOM_CLIENT_SECRET);
@@ -58,15 +58,13 @@ api.get('/oauth/zoom', (req, res) => {
   }
 
   // Step 2:
-  // If no authorization code is available, redirect to Zoom OAuth to authorize
-  res.redirect(
-    `https://zoom.us/oauth/authorize?response_type=code&client_id=${
-      process.env.ZOOM_CLIENT_ID
-    }&redirect_uri=${process.env.ZOOM_REDIRECT_URL}`,
-  );
+  // If no authorization code is available, redirect to Zoom OAuth to authorize (handled by frontend)
+  res.status(401).json({
+    error: 'Access code must be supplied',
+  });
 });
 
-api.get('/createMeeting', (req, res) => {
+api.get('/zoom/createMeeting', (req, res) => {
   request
     .post(
       'https://api.zoom.us/v2/users/me/meetings',

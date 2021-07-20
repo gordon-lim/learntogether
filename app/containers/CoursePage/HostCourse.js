@@ -26,12 +26,15 @@ import { ChevronRightIcon } from '@chakra-ui/icons';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import WithForm from 'components/Modal/WithForm';
-import { firebaseConnect, useFirebase } from 'react-redux-firebase';
+import { firebaseConnect, isLoaded, useFirebase } from 'react-redux-firebase';
+import axios from 'axios';
+import OauthPopup from 'components/OauthPopup';
 import makeSelectCoursePage, {
   makeSelectCourseId,
   makeSelectHostSlots,
   makeSelectSelectedHostSlots,
   makeSelectSlotVotes,
+  makeSelectUserDetails,
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -43,6 +46,7 @@ import { PERIOD_LEN } from './constants';
 
 function HostCourse({
   auth,
+  userDetails,
   courseId,
   slotVotes,
   hostSlots,
@@ -54,6 +58,7 @@ function HostCourse({
   useInjectSaga({ key: 'coursePage', saga });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [canSchedule, setCanSchedule] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [displayName, setDisplayName] = useState('');
   const [numMeetings, setNumMeetings] = useState(14);
@@ -62,24 +67,87 @@ function HostCourse({
   const firebase = useFirebase();
   const toast = useToast();
 
+  const setSuccess = msg =>
+    toast({
+      title: 'Success!',
+      description: msg.toString(),
+      status: 'success',
+      isClosable: true,
+    });
+  const setError = msg =>
+    toast({
+      title: 'Error!',
+      description: msg.toString(),
+      status: 'error',
+      isClosable: true,
+    });
+
   useEffect(() => {
+    // Adds the vote details from firebase to the table
     for (let i = 0; i < slotVotes.length; i += 1) {
       const { day, period } = slotVotes[i].value;
       addVote(day, period, slotVotes[i]);
     }
-  }, [slotVotes]);
 
-  // TODO: check if the user has an access token
-  // if (!auth.zoomTokenManager || !auth.zoomTokenManager.accessToken) {
-  //   window.location.href = '/api/oauth/zoom';
-  // }
+    // Checks if the user has a zoom access token present in the firebase database
+    if (isLoaded(userDetails)) {
+      const userDeets = userDetails[auth.uid].reduce(
+        (arr, obj) => ({ ...arr, [obj.key]: obj.value }),
+        {},
+      );
+      if (
+        userDeets.zoomTokenManager &&
+        userDeets.zoomTokenManager.accessToken
+      ) {
+        setCanSchedule(true);
+      }
+    }
+  }, [slotVotes, userDetails]);
+
   // TODO: check if the access token is still valid
   // TODO: if no access token redirect to oauth to get one
+
+  const zoomUrl = `https://zoom.us/oauth/authorize?response_type=code&client_id=${
+    process.env.ZOOM_CLIENT_ID
+  }&redirect_uri=${process.env.ZOOM_REDIRECT_URL}`;
+  // eslint-disable-next-line
+  const onZoomCode = async (zoomCode, params) => {
+    try {
+      await Promise.resolve(true);
+    } catch (err) {
+      setError(err);
+    } finally {
+      // Calls backend api to exchange code for the token
+      axios
+        .get('/api/zoom/getToken', {
+          params: {
+            code: zoomCode,
+          },
+        })
+        .then(res => {
+          const result = res.data;
+
+          // Store the token in firebase
+          firebase.update(`users/${auth.uid}`, {
+            zoomTokenManager: {
+              accessToken: result.access_token,
+              refreshToken: result.refresh_token,
+            },
+          });
+
+          setSuccess('Connected zoom account!');
+        })
+        .catch(err => setError(err.response.data.reason));
+    }
+  };
 
   const onCreateMeeting = async evt => {
     evt.preventDefault();
 
     try {
+      // Get the token from firebase
+      // Call createmeeting in the backend api
+
       await firebase.push('coursesHosted', {
         dateCreated: new Date().toDateString(),
         userId: auth.uid,
@@ -90,15 +158,11 @@ function HostCourse({
         numMeetings,
         participantLimit,
       });
-    } catch (errors) {
-      // console.log(errors);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setSuccess('Hosted a new course!');
     }
-    toast({
-      title: 'Success!',
-      description: 'Hosted a new course.',
-      status: 'success',
-      isClosable: true,
-    });
   };
 
   const numPeriodsPerDay = Math.floor(24 / PERIOD_LEN);
@@ -159,7 +223,26 @@ function HostCourse({
         />
         <br />
         <Center>
-          <Button onClick={onOpen}>Schedule meeting</Button>
+          {canSchedule ? (
+            <Button onClick={onOpen}>Schedule meeting</Button>
+          ) : (
+            <OauthPopup
+              url={zoomUrl}
+              onCode={onZoomCode}
+              onClose={() => null}
+              title="Zoom Oauth"
+            >
+              <Button
+                color="white"
+                bg="blue.400"
+                _hover={{
+                  bg: 'blue.300',
+                }}
+              >
+                Sign in with Zoom to Schedule a meeting
+              </Button>
+            </OauthPopup>
+          )}
         </Center>
       </Box>
     </Container>
@@ -168,6 +251,7 @@ function HostCourse({
 
 HostCourse.propTypes = {
   auth: PropTypes.object,
+  userDetails: PropTypes.object,
   courseId: PropTypes.string,
   slotVotes: PropTypes.array,
   hostSlots: PropTypes.array,
@@ -178,6 +262,7 @@ HostCourse.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   coursePage: makeSelectCoursePage(),
+  userDetails: makeSelectUserDetails(),
   courseId: makeSelectCourseId(),
   hostSlots: makeSelectHostSlots(),
   selectedHostSlots: makeSelectSelectedHostSlots(),
@@ -201,6 +286,9 @@ export default compose(
     {
       path: 'coursesVoted',
       queryParams: ['orderByChild=courseId', props.match.params.courseId],
+    },
+    {
+      path: `users/${props.auth.uid}`,
     },
   ]),
   withConnect,
