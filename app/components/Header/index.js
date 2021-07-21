@@ -19,7 +19,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
-import Logo from '../../images/Logo.png';
+
+import Logo from 'images/Logo.png';
 import ColourModeSwitch from './ColourModeSwitch';
 import { DesktopNav } from './DesktopNav';
 import { LoggedInItems } from './LoggedInItems';
