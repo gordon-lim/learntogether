@@ -1,16 +1,20 @@
-import { Switch, useColorMode } from '@chakra-ui/react';
+import { Box, Switch, Tooltip, useColorMode } from '@chakra-ui/react';
 import React from 'react';
 
 const ColourModeSwitch = props => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Switch
-      {...props}
-      onChange={toggleColorMode}
-      alignSelf="center"
-      isChecked={colorMode !== 'light'}
-    />
+    <Tooltip label="Colour Mode" aria-label="Colour Mode">
+      <Box>
+        <Switch
+          {...props}
+          onChange={toggleColorMode}
+          alignSelf="center"
+          isChecked={colorMode !== 'light'}
+        />
+      </Box>
+    </Tooltip>
   );
 };
 

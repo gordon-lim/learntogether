@@ -7,6 +7,7 @@
 import React from 'react';
 import Carousel from 'components/Carousel';
 import Card from 'components/Card';
+import { useColorModeValue } from '@chakra-ui/react';
 // import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 const details = [
@@ -84,6 +85,7 @@ function UpcomingCarousel() {
       details={details}
       sliderName="Upcoming Courses"
       sliderSettings={sliderSettings}
+      bgColor={useColorModeValue('white.400', 'gray.800')}
     />
   );
 }

@@ -4,10 +4,6 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
-import { v4 } from 'uuid';
 import {
   Box,
   Center,
@@ -20,6 +16,10 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import React from 'react';
+// import { connect } from 'react-redux';
+import { v4 } from 'uuid';
 
 // import WeekGridItem from './WeekGridItem';
 

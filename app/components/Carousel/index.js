@@ -4,13 +4,19 @@
  *
  */
 
+import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
+import {
+  Box,
+  Flex,
+  Heading,
+  IconButton,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Slider from 'react-slick';
-import PropTypes from 'prop-types';
-import { v4 } from 'uuid';
-import { Box, Flex, Heading, IconButton } from '@chakra-ui/react';
-import { ArrowForwardIcon, ArrowBackIcon } from '@chakra-ui/icons';
 import styled from 'styled-components';
+import { v4 } from 'uuid';
 
 const CardSlider = styled(Slider)`
   margin-top: 4rem;
@@ -22,22 +28,22 @@ const CardSlider = styled(Slider)`
   }
 `;
 
-function Carousel({ CardComponent, details, sliderName, sliderSettings }) {
+function Carousel({
+  CardComponent,
+  details,
+  sliderName,
+  sliderSettings,
+  ...props
+}) {
   const [sliderRef, setSliderRef] = useState(null);
 
   return (
-    <Box position="relative">
-      <Box maxW="1280px" margin="auto" py="5rem">
+    <Box position="relative" {...props}>
+      <Box maxW="1280px" margin="auto">
         <Flex direction="row" align="stretch" justify="space-between">
-          <Heading
-            fontSize="4xl"
-            color="black"
-            letterSpacing="0.025em"
-            align="center"
-          >
+          <Heading fontSize="4xl" letterSpacing="0.025em" align="center">
             {sliderName}
           </Heading>
-
           <Flex align="center">
             <IconButton
               onClick={sliderRef ? sliderRef.slickPrev : () => undefined}
@@ -45,18 +51,19 @@ function Carousel({ CardComponent, details, sliderName, sliderSettings }) {
               mt="0px"
               ml="1.5rem"
               isRound="true"
-              icon={<ArrowBackIcon />}
+              icon={<ArrowBackIcon color="white" />}
               colorScheme="red"
+              bg={useColorModeValue('red.400', 'red.500')}
             />
-
             <IconButton
               onClick={sliderRef ? sliderRef.slickNext : () => undefined}
               padding="0.5rem"
               mt="0px"
               ml="1.5rem"
               isRound="true"
-              icon={<ArrowForwardIcon />}
+              icon={<ArrowForwardIcon color="white" />}
               colorScheme="red"
+              bg={useColorModeValue('red.400', 'red.500')}
             />
           </Flex>
         </Flex>

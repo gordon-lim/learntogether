@@ -4,7 +4,13 @@ import { Box, Image, Badge } from '@chakra-ui/react';
 
 function CourseCard({ data }) {
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box
+      maxW="sm"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      boxShadow="xl"
+    >
       <Image src={data.imageUrl} alt={data.imageAlt} />
 
       <Box p="6">

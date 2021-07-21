@@ -4,17 +4,24 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Box, Image, Badge, Button } from '@chakra-ui/react';
-import { v4 } from 'uuid';
 import { StarIcon } from '@chakra-ui/icons';
+import { Badge, Box, Button, Image, useColorModeValue } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { v4 } from 'uuid';
 // import styled from 'styled-components';
 
 function Card({ data }) {
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Box
+      maxW="sm"
+      borderWidth="1px"
+      borderRadius="lg"
+      overflow="hidden"
+      boxShadow="xl"
+      bg={useColorModeValue('white', 'gray.900')}
+    >
       <Image src={data.imageUrl} alt={data.imageAlt} />
 
       <Box p="6">
@@ -46,7 +53,7 @@ function Card({ data }) {
 
         <Box>
           {data.formattedPrice}
-          <Box as="span" color="gray.600" fontSize="sm">
+          <Box as="span" color="gray.500" fontSize="sm">
             / wk
           </Box>
         </Box>
@@ -60,7 +67,7 @@ function Card({ data }) {
                 color={i < data.rating ? 'red.500' : 'gray.300'}
               />
             ))}
-          <Box as="span" ml="2" color="gray.600" fontSize="sm">
+          <Box as="span" ml="2" color="gray.500" fontSize="sm">
             {data.reviewCount} reviews
           </Box>
         </Box>
@@ -71,6 +78,8 @@ function Card({ data }) {
         borderTopRightRadius="0px"
         borderTopLeftRadius="0px"
         colorScheme="red"
+        color="white"
+        bg={useColorModeValue('red.400', 'red.500')}
         isFullWidth="true"
       >
         Learn now
