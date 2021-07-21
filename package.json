@@ -2,6 +2,7 @@
   "name": "react-boilerplate",
   "version": "4.0.0",
   "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "homepage": "https://gordon-lim.github.io/learntogether",
   "repository": {
     "type": "git",
     "url": "git://github.com/react-boilerplate/react-boilerplate.git"
@@ -22,6 +23,8 @@
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress --hide-modules --display-optimization-bailout",
     "build:clean": "rimraf ./build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "cross-env NODE_ENV=development node server",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start:production": "npm run test && npm run build && npm run start:prod",
@@ -82,6 +85,7 @@
     "fontfaceobserver": "2.1.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
+    "gh-pages": "^3.2.3",
     "history": "4.9.0",
     "hoist-non-react-statics": "3.3.0",
     "immer": "^8.0.1",
