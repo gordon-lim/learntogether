@@ -63,6 +63,7 @@ function HostCourse({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [canSchedule, setCanSchedule] = useState(false);
   const [accessToken, setAccessToken] = useState('');
+  const [refreshToken, setRefreshToken] = useState(''); // eslint-disable-line
   const [startDate, setStartDate] = useState(new Date());
   const [displayName, setDisplayName] = useState('');
   const [numMeetings, setNumMeetings] = useState(14);
@@ -102,6 +103,7 @@ function HostCourse({
       ) {
         setCanSchedule(true);
         setAccessToken(userDeets.zoomTokenManager.accessToken);
+        setRefreshToken(userDeets.zoomTokenManager.refreshToken);
       }
     }
   }, [slotVotes, userDetails]);
@@ -157,13 +159,39 @@ function HostCourse({
       const days = selectedHostSlots[0].day;
 
       // Create a zoom meeting through the backend api
-      const res = await axios.post('/api/zoom/createMeeting', {
+      const payload = {
         accessToken,
         topic: 'topic',
         startTime: `${dayString}T${startHourString}`,
         days,
         numMeetings,
-      });
+      };
+      const res = await axios
+        .post('/api/zoom/createMeeting', payload)
+        .catch(err => {
+          firebase.remove(`users/${auth.uid}/zoomTokenManager`);
+          throw new Error(err.response.data.error.message);
+          // if (err.response.data.error.message === 'Access token is expired.') {
+          //   setError('Token expired... Refreshing token');
+          //   axios
+          //     .post('/api/zoom/refreshToken', {
+          //       params: { refreshToken: refreshToken },
+          //     })
+          //     .then(result => {
+          //       setAccessToken(result.data.access_token);
+          //       setRefreshToken(result.data.refresh_token);
+          //       firebase.update(`users/${auth.uid}`, {
+          //         zoomTokenManager: {
+          //           accessToken: accessToken,
+          //           refreshToken: refreshToken,
+          //         },
+          //       });
+          //       return axios.post('/api/zoom/createMeeting', payload);
+          //     });
+          // } else {
+          //   throw new Error(err);
+          // }
+        });
       const joinUrl = res.data.join_url;
 
       await firebase.push('coursesHosted', {
@@ -243,7 +271,9 @@ function HostCourse({
         <br />
         <Center>
           {canSchedule ? (
-            <Button onClick={onOpen}>Schedule meeting</Button>
+            <Button onClick={onOpen} disabled={selectedHostSlots.length <= 0}>
+              Schedule meeting
+            </Button>
           ) : (
             <OauthPopup
               url={zoomUrl}
