@@ -31,7 +31,7 @@ export const LoggedInItems = ({ photoURL }) => {
           <MenuItem as={RouterLink} to="/profile">
             Profile
           </MenuItem>
-          <MenuItem as={RouterLink} to="/courses">
+          <MenuItem as={RouterLink} to="/timetable">
             Timetable
           </MenuItem>
           <MenuDivider />
