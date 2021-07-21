@@ -2,8 +2,9 @@
 require('dotenv/config');
 
 const express = require('express');
-const logger = require('./logger');
+const serverless = require('serverless-http');
 
+const logger = require('./logger');
 const argv = require('./argv');
 const port = require('./port');
 const api = require('./api');
@@ -36,6 +37,9 @@ app.get('*.js', (req, res, next) => {
   res.set('Content-Encoding', 'gzip');
   next();
 });
+
+// Setup app to be serverless
+module.exports.handler = serverless(app);
 
 // Start your app.
 app.listen(port, host, async err => {
