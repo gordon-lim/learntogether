@@ -64,3 +64,20 @@ export function containsObject(obj, list) {
 
   return false;
 }
+
+/**
+ * Returns the next day of the of the week with reference to the date given
+ * This will result in today if day is 1 today is Monday
+ * @param {int} day
+ * @param {Date} refDate
+ * @return {Date}
+ */
+export function getNextDayOfTheWeek(day, refDate, excludeToday = true) {
+  const resDate = new Date(refDate.getTime());
+  resDate.setDate(
+    refDate.getDate() +
+      +!!excludeToday +
+      ((day + 7 - refDate.getDay() - +!!excludeToday) % 7),
+  );
+  return resDate;
+}

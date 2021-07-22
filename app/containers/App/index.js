@@ -34,12 +34,17 @@ function App({ auth }) {
         <Route path="/auth" component={AuthPage}>
           {isLoaded(auth) && !isEmpty(auth) && <Redirect to="/" />}
         </Route>
-        <Route path="/timetable" component={TimetablePage} />
+        <Route path="/timetable">
+          {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
+          <TimetablePage auth={auth} />
+        </Route>
         <Route path="/profile">
           {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
           <ProfilePage auth={auth} />
         </Route>
-        <Route path="/courses" component={CoursePage} />
+        <Route path="/courses">
+          <CoursePage auth={auth} />
+        </Route>
         <Route component={NotFoundPage} />
       </Switch>
       <Footer />

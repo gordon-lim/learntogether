@@ -4,23 +4,18 @@
  *
  */
 
-import { makeSelectFirebaseAuth } from 'containers/App/selectors';
-import { makeSelectCoursesJoined } from 'containers/TimetablePage/selectors';
+import { isEmpty } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import { Helmet } from 'react-helmet';
-import { connect } from 'react-redux';
-import { isEmpty, isLoaded } from 'react-redux-firebase';
+import { isLoaded } from 'react-redux-firebase';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import HostCourse from './HostCourse';
 import JoinCourse from './JoinCourse';
 import reducer from './reducer';
 import saga from './saga';
-import makeSelectCoursePage from './selectors';
 import ViewCourse from './ViewCourse';
 
 export function CoursePage({ auth }) {
@@ -63,24 +58,4 @@ CoursePage.propTypes = {
   coursesJoiend: PropTypes.object,
 };
 
-const mapStateToProps = createStructuredSelector({
-  coursePage: makeSelectCoursePage(),
-  auth: makeSelectFirebaseAuth(),
-  coursesJoined: makeSelectCoursesJoined(),
-});
-
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default compose(
-  withConnect,
-  memo,
-)(CoursePage);
+export default memo(CoursePage);

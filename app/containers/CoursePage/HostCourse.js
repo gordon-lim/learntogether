@@ -39,7 +39,7 @@ import makeSelectCoursePage, {
 } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { getAveVotes, periodToHour } from './utils';
+import { getAveVotes, getNextDayOfTheWeek, periodToHour } from './utils';
 import { addVoteSlots, selectHostSlot } from './actions';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
 import HostWeekGridItem from '../../components/TableComponent/HostWeekGridItem';
@@ -146,20 +146,25 @@ function HostCourse({
 
     try {
       // Only allow one meeting per week atm
-      const dayString = startDate.toISOString().slice(0, 10);
-      const startHour = periodToHour(selectedHostSlots[0].period);
+      if (selectedHostSlots.length !== 1)
+        throw new Error('Only one slot can be selected');
+      const hostSlot = selectedHostSlots[0];
+
+      const { day, period } = hostSlot;
+      const actualStartDate = getNextDayOfTheWeek(day, startDate, false);
+      const dayString = actualStartDate.toISOString().slice(0, 10);
+      const startHour = periodToHour(period);
       const startHourString = `${startHour.slice(0, 2)}:${startHour.slice(
         2,
         4,
       )}:00`;
-      const days = selectedHostSlots[0].day;
 
       // Create a zoom meeting through the backend api
       const payload = {
         accessToken,
         topic: 'topic',
         startTime: `${dayString}T${startHourString}`,
-        days,
+        days: day,
         numMeetings,
       };
       const res = await axios
@@ -167,26 +172,6 @@ function HostCourse({
         .catch(err => {
           firebase.remove(`users/${auth.uid}/zoomTokenManager`);
           throw new Error(err.response.data.error.message);
-          // if (err.response.data.error.message === 'Access token is expired.') {
-          //   setError('Token expired... Refreshing token');
-          //   axios
-          //     .post('/api/zoom/refreshToken', {
-          //       params: { refreshToken: refreshToken },
-          //     })
-          //     .then(result => {
-          //       setAccessToken(result.data.access_token);
-          //       setRefreshToken(result.data.refresh_token);
-          //       firebase.update(`users/${auth.uid}`, {
-          //         zoomTokenManager: {
-          //           accessToken: accessToken,
-          //           refreshToken: refreshToken,
-          //         },
-          //       });
-          //       return axios.post('/api/zoom/createMeeting', payload);
-          //     });
-          // } else {
-          //   throw new Error(err);
-          // }
         });
       const joinUrl = res.data.join_url;
 
@@ -195,8 +180,8 @@ function HostCourse({
         userId: auth.uid,
         hostDisplayName: displayName,
         courseId,
-        startDate: startDate.toString(),
-        periods: JSON.stringify(selectedHostSlots),
+        startDate: actualStartDate.toString(),
+        slot: hostSlot,
         numMeetings,
         participantLimit,
         zoomUrl: joinUrl,

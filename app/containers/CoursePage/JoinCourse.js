@@ -83,22 +83,18 @@ function JoinCourse({
   useEffect(() => {
     // Adds the available slots to the grid table
     for (let i = 0; i < availSlots.length; i += 1) {
-      const periods = JSON.parse(availSlots[i].value.periods);
-      for (let j = 0; j < periods.length; j += 1) {
-        const { day, period } = periods[j];
-        addAvail(day, period, availSlots[i]);
-      }
+      const { day, period } = availSlots[i].value.slot;
+      addAvail(day, period, availSlots[i]);
     }
 
     // Filters only the available slots in the period selected by the user
     setSelectedPeriodAvailSlots(
-      availSlots.filter(slot => {
+      availSlots.filter(data => {
         // Currently limit to only allow hosting with one slot per week
-        const timings = JSON.parse(slot.value.periods);
-        if (!timings.length > 0) return false;
-        const timing = timings[0];
+        const timeSlot = data.value.slot;
         return (
-          timing.day === slotChosen.day && timing.period === slotChosen.period
+          timeSlot.day === slotChosen.day &&
+          timeSlot.period === slotChosen.period
         );
       }),
     );
