@@ -4,22 +4,20 @@
  *
  */
 
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import { Container } from '@chakra-ui/react';
-import makeSelectTimetablePage from './selectors';
+import moment from 'moment';
+import React, { memo } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
 import reducer from './reducer';
 import saga from './saga';
+import makeSelectTimetablePage, { makeSelectCoursesJoined } from './selectors';
 
 const localizer = momentLocalizer(moment);
 
@@ -35,7 +33,7 @@ export function TimetablePage() {
         <title>TimetablePage</title>
         <meta name="description" content="Description of TimetablePage" />
       </Helmet>
-      <Container maxW="7xl" py={12}>
+      <Container maxW="7xl" paddingTop="4em">
         <Calendar
           localizer={localizer}
           defaultDate={new Date()}
@@ -48,12 +46,11 @@ export function TimetablePage() {
   );
 }
 
-TimetablePage.propTypes = {
-  dispatch: PropTypes.func.isRequired, //eslint-disable-line
-};
+TimetablePage.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({
   timetablePage: makeSelectTimetablePage(),
+  coursesJoined: makeSelectCoursesJoined(),
 });
 
 function mapDispatchToProps(dispatch) {

@@ -41,7 +41,7 @@ export default function WithBackgroundImage(props) {
         px={useBreakpointValue({ base: 4, md: 8 })}
         bgGradient="linear(to-r, blackAlpha.600, transparent)"
       >
-        <Stack maxW="2xl" align="flex-start" spacing={6}>
+        <Stack maxW="2xl" align="center" spacing={6}>
           <Text
             color="white"
             fontWeight={700}

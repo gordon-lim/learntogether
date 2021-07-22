@@ -25,7 +25,13 @@ import {
 
 function Hero() {
   return (
-    <Box bgColor={useColorModeValue('white.400', 'gray.900')} mb={12}>
+    <Box
+      bgColor={useColorModeValue(
+        'rgb(237 242 247 / 0.5)',
+        'rgb(23 25 35 / 0.4)',
+      )}
+      mb={12}
+    >
       <Container maxW="7xl" pb="5rem">
         <Stack
           align="center"
@@ -49,7 +55,7 @@ function Hero() {
                   position: 'absolute',
                   bottom: 1,
                   left: 0,
-                  bg: 'red.500',
+                  bg: useColorModeValue('red.300', 'red.500'),
                   zIndex: -1,
                 }}
               >
@@ -60,10 +66,7 @@ function Hero() {
                 Learn Together!
               </Text>
             </Heading>
-            <Text
-              color={useColorModeValue('gray.800', 'gray.500')}
-              fontSize={{ md: 'lg' }}
-            >
+            <Text color="gray.500" fontSize={{ md: 'lg' }}>
               Online courses have taken the world by storm. We help you find
               like-minded individuals to learn together interactively and in
               real-time.
@@ -75,7 +78,7 @@ function Hero() {
               <Button
                 rounded="md"
                 size="lg"
-                fontWeight="normal"
+                fontWeight="semibold"
                 px={6}
                 colorScheme="red"
                 color="white"
@@ -88,7 +91,13 @@ function Hero() {
                 size="lg"
                 fontWeight="normal"
                 px={6}
-                leftIcon={<PlayIcon h={4} w={4} color="gray.300" />}
+                leftIcon={
+                  <PlayIcon
+                    h={4}
+                    w={4}
+                    color={useColorModeValue('gray.400', 'gray.300')}
+                  />
+                }
               >
                 How It Works
               </Button>
@@ -108,7 +117,7 @@ function Hero() {
               top="-20%"
               left={0}
               zIndex={-1}
-              color={useColorModeValue('red.50', 'red.500')}
+              color={useColorModeValue('red.100', 'red.500')}
             />
             <Box
               position="relative"

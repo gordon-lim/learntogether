@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
-import Logo from 'images/logo.png';
+import Logo from 'images/Logo.png';
 import ColourModeSwitch from './ColourModeSwitch';
 import { DesktopNav } from './DesktopNav';
 import { LoggedInItems } from './LoggedInItems';
@@ -32,7 +32,7 @@ function Header({ auth }) {
   return (
     <Box>
       <Flex
-        bg={useColorModeValue('white', 'gray.800')}
+        bg={useColorModeValue('white.800', 'gray.900')}
         color={useColorModeValue('gray.600', 'white')}
         minH="60px"
         py={{ base: 2 }}

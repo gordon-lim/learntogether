@@ -31,7 +31,6 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { firebaseConnect, useFirebase } from 'react-redux-firebase';
-
 import JoinWeekGridItem from 'components/TableComponent/JoinWeekGridItem';
 import ModalWithCards from 'components/Modal/ModalWithCards';
 import CardWithExtraContents from 'components/Card/CardWithExtraContents';

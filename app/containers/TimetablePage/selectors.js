@@ -1,3 +1,4 @@
+import { selectFirebase } from 'containers/App/selectors';
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
@@ -11,6 +12,11 @@ const selectTimetablePageDomain = state => state.timetablePage || initialState;
  * Other specific selectors
  */
 
+const makeSelectCoursesJoined = () =>
+  createSelector(
+    selectFirebase,
+    subState => subState.ordered.coursesJoined,
+  );
 /**
  * Default selector used by TimetablePage
  */
@@ -22,4 +28,4 @@ const makeSelectTimetablePage = () =>
   );
 
 export default makeSelectTimetablePage;
-export { selectTimetablePageDomain };
+export { selectTimetablePageDomain, makeSelectCoursesJoined };

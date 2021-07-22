@@ -4,24 +4,24 @@
  *
  */
 
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Helmet } from 'react-helmet';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
-import { isLoaded, isEmpty } from 'react-redux-firebase';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
-import makeSelectCoursePage from './selectors';
+import { makeSelectCoursesJoined } from 'containers/TimetablePage/selectors';
+import PropTypes from 'prop-types';
+import React, { memo } from 'react';
+import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import { isEmpty, isLoaded } from 'react-redux-firebase';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
+import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import HostCourse from './HostCourse';
+import JoinCourse from './JoinCourse';
 import reducer from './reducer';
 import saga from './saga';
+import makeSelectCoursePage from './selectors';
 import ViewCourse from './ViewCourse';
-import JoinCourse from './JoinCourse';
-import HostCourse from './HostCourse';
 
 export function CoursePage({ auth }) {
   useInjectReducer({ key: 'coursePage', reducer });
@@ -59,13 +59,14 @@ export function CoursePage({ auth }) {
 }
 
 CoursePage.propTypes = {
-  dispatch: PropTypes.func.isRequired, //eslint-disable-line
   auth: PropTypes.object,
+  coursesJoiend: PropTypes.object,
 };
 
 const mapStateToProps = createStructuredSelector({
   coursePage: makeSelectCoursePage(),
   auth: makeSelectFirebaseAuth(),
+  coursesJoined: makeSelectCoursesJoined(),
 });
 
 function mapDispatchToProps(dispatch) {

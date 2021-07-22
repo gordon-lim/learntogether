@@ -33,7 +33,7 @@ export default function ViewCourse(props) {
       <Container maxW="7xl" py={12}>
         <Box>
           <Heading mb={4}>About this course</Heading>
-          <Text fontSize="l">
+          <Text fontSize="md">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
             est, auctor vel condimentum eget, dignissim ut libero. Nulla commodo
             risus magna, sit amet consectetur eros porttitor quis. Nulla purus

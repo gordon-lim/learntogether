@@ -19,7 +19,7 @@ import styled from 'styled-components';
 import { v4 } from 'uuid';
 
 const CardSlider = styled(Slider)`
-  margin-top: 4rem;
+  padding-top: 4rem;
   .slick-slide {
     height: auto;
     justify-content: center;
