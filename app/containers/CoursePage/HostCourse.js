@@ -29,6 +29,7 @@ import WithForm from 'components/Modal/WithForm';
 import { firebaseConnect, isLoaded, useFirebase } from 'react-redux-firebase';
 import axios from 'axios';
 import OauthPopup from 'components/OauthPopup';
+import { ZOOM_CLIENT_ID, ZOOM_REDIRECT_URL } from 'utils/constants';
 import makeSelectCoursePage, {
   makeSelectCourseId,
   makeSelectHostSlots,
@@ -108,8 +109,6 @@ function HostCourse({
     }
   }, [slotVotes, userDetails]);
 
-  const ZOOM_CLIENT_ID = '6Ec652wBQyPQ8c435pHOA';
-  const ZOOM_REDIRECT_URL = 'AXClBoFlY21176BBzAwtoUYvVeNt9pLk';
   const zoomUrl = `https://zoom.us/oauth/authorize?response_type=code&client_id=${ZOOM_CLIENT_ID}&redirect_uri=${ZOOM_REDIRECT_URL}`;
   // eslint-disable-next-line
   const onZoomCode = async (zoomCode, params) => {
