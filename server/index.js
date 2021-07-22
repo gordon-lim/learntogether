@@ -1,5 +1,6 @@
 /* eslint consistent-return:0 import/order:0 */
-require('dotenv/config');
+require('dotenv').config();
+// require('dotenv/config');
 
 const express = require('express');
 const serverless = require('serverless-http');
