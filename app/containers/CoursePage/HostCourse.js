@@ -108,12 +108,9 @@ function HostCourse({
     }
   }, [slotVotes, userDetails]);
 
-  // TODO: check if the access token is still valid
-  // TODO: if no access token redirect to oauth to get one
-
-  const zoomUrl = `https://zoom.us/oauth/authorize?response_type=code&client_id=${
-    process.env.ZOOM_CLIENT_ID
-  }&redirect_uri=${process.env.ZOOM_REDIRECT_URL}`;
+  const ZOOM_CLIENT_ID = '6Ec652wBQyPQ8c435pHOA';
+  const ZOOM_REDIRECT_URL = 'AXClBoFlY21176BBzAwtoUYvVeNt9pLk';
+  const zoomUrl = `https://zoom.us/oauth/authorize?response_type=code&client_id=${ZOOM_CLIENT_ID}&redirect_uri=${ZOOM_REDIRECT_URL}`;
   // eslint-disable-next-line
   const onZoomCode = async (zoomCode, params) => {
     try {
