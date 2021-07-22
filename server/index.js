@@ -1,6 +1,5 @@
 /* eslint consistent-return:0 import/order:0 */
-require('dotenv').config();
-// require('dotenv/config');
+if (process.env.NODE_ENV !== 'production') require('dotenv').config(); // eslint-disable-line global-require
 
 const express = require('express');
 const serverless = require('serverless-http');
