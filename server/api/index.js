@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const api = express.Router();
-// Use the request module to make HTTP requests from Node
-const request = require('request');
 const axios = require('axios');
 
 api.use(bodyParser.urlencoded({ extended: false }));
@@ -31,11 +29,24 @@ api.get('/zoom/getToken', (req, res) => {
     const url = `https://zoom.us/oauth/token?grant_type=authorization_code&code=${
       req.query.code
     }&redirect_uri=${process.env.ZOOM_REDIRECT_URL}`;
+    const b64ClientIdSecret = Buffer.from(
+      `${process.env.ZOOM_CLIENT_ID}:${process.env.ZOOM_CLIENT_SECRET}`,
+    ).toString('base64');
 
-    request
-      .post(url, (error, response, body) => {
+    axios
+      .post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Basic ${b64ClientIdSecret}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      )
+      .then(result => {
         // Parse response to JSON
-        const bodyJson = JSON.parse(body);
+        const bodyJson = result.data;
 
         // Logs your access and refresh tokens in the browser
         // console.log(`access_token: ${body.access_token}`);
@@ -54,7 +65,7 @@ api.get('/zoom/getToken', (req, res) => {
           res.status(401).json(bodyJson);
         }
       })
-      .auth(process.env.ZOOM_CLIENT_ID, process.env.ZOOM_CLIENT_SECRET);
+      .catch(err => res.status(401).json(err.response.data));
 
     return;
   }
@@ -68,18 +79,22 @@ api.get('/zoom/getToken', (req, res) => {
 
 api.post('/zoom/refreshToken', (req, res) => {
   axios
-    .post('https://zoom.us/oauth/token', {
-      headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${process.env.ZOOM_CLIENT_ID}:${process.env.ZOOM_CLIENT_SECRET}`,
-        ).toString('base64')}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
+    .post(
+      'https://zoom.us/oauth/token',
+      {},
+      {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            `${process.env.ZOOM_CLIENT_ID}:${process.env.ZOOM_CLIENT_SECRET}`,
+          ).toString('base64')}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        params: {
+          grant_type: 'refresh_token',
+          refresh_token: req.query.refreshToken,
+        },
       },
-      params: {
-        grant_type: 'refresh_token',
-        refresh_token: req.query.refreshToken,
-      },
-    })
+    )
     .then(result => res.json(result.data))
     .catch(err => res.status(401).json(err.response.data));
 });

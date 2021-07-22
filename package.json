@@ -1,17 +1,17 @@
 {
-  "name": "react-boilerplate",
-  "version": "4.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "name": "learntogether",
+  "version": "1.0.0",
+  "description": "A social online course platform that aims to boost course completion rates with peer-to-peer accountability.",
   "homepage": "https://mazx4960.github.io/learntogether",
   "repository": {
     "type": "git",
-    "url": "git://github.com/react-boilerplate/react-boilerplate.git"
+    "url": "git://github.com/mazx4960/learntogether"
   },
   "engines": {
     "npm": ">=5",
     "node": ">=8.15.1"
   },
-  "author": "Max Stoiber",
+  "author": "Learn Together",
   "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
