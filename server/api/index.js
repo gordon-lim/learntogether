@@ -13,7 +13,6 @@ api.use((req, res, next) => {
 api.get('/', (req, res) => {
   res.json({
     message: 'api',
-    env: process.env,
   });
 });
 
