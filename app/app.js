@@ -49,15 +49,6 @@ const fbConfig = {
   messagingSenderId: '1022845349323',
   appId: '1:1022845349323:web:bb4e8232e3468d5d395a4e',
 };
-// const fbConfig = {
-//   apiKey: process.env.REACT_APP_API_KEY,
-//   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-//   databaseURL: process.env.REACT_APP_DATABASE_URL,
-//   projectId: process.env.REACT_APP_PROJECT_ID,
-//   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-//   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
-//   appId: process.env.REACT_APP_APP_ID,
-// };
 
 // Initialize firebase instance & firestore
 firebase.initializeApp(fbConfig);
