@@ -29,8 +29,8 @@ function ViewCourse({
   const rightButtonText = 'Host this course';
   const rightButtonLink = `/courses/${String(courseId)}/host`;
 
-  const GuestItems = (
-    <div>
+  const GuestItems = () => (
+    <>
       <WithBackgroundImage
         title={title}
         leftButtonText={leftButtonText}
@@ -59,11 +59,11 @@ function ViewCourse({
           </Text>
         </Box>
       </Container>
-    </div>
+    </>
   );
 
-  const JoinedItems = (
-    <div>
+  const JoinedItems = () => (
+    <>
       <WithBackgroundImage title={title} leftButtonText="Joined" />
       <Container maxW="8xl" py={12}>
         <Box>
@@ -86,11 +86,11 @@ function ViewCourse({
           </Text>
         </Box>
       </Container>{' '}
-    </div>
+    </>
   );
 
-  const HostItems = (
-    <div>
+  const HostItems = () => (
+    <>
       <WithBackgroundImage
         title={title}
         rightButtonText="Host of this course"
@@ -98,7 +98,7 @@ function ViewCourse({
       <Container maxW="8xl" py={12}>
         <CourseMaterial />
       </Container>{' '}
-    </div>
+    </>
   );
 
   let DisplayItems = GuestItems;
@@ -107,37 +107,42 @@ function ViewCourse({
   // eslint-disable-line
   // Check Joined
   if (isLoaded(auth)) {
-    firebase
-      .database()
-      .ref('coursesJoined')
-      .orderByChild('userId')
-      .equalTo(auth.uid)
-      .on('value', snapshot => {
-        snapshot.forEach(childSnapshot => {
-          const courseIdJoined = childSnapshot.child('courseId').val();
-          if (courseIdJoined === courseId) {
-            // console.log('already joined');
-            DisplayItems = JoinedItems;
-          }
+    // Is the field there?
+    const jref = firebase.database().ref('coursesJoined');
+
+    if (jref) {
+      jref
+        .orderByChild('userId')
+        .equalTo(auth.uid)
+        .on('value', snapshot => {
+          snapshot.forEach(childSnapshot => {
+            const courseIdJoined = childSnapshot.child('courseId').val();
+            if (courseIdJoined === courseId) {
+              console.log('already joined');
+              DisplayItems = JoinedItems;
+            }
+          });
         });
-      });
+    }
 
     // eslint-disable-line
     // Check Hosting
-    firebase
-      .database()
-      .ref('coursesHosted')
-      .orderByChild('userId')
-      .equalTo(auth.uid)
-      .on('value', snapshot => {
-        snapshot.forEach(childSnapshot => {
-          const courseIdHosted = childSnapshot.child('courseId').val();
-          if (courseIdHosted === courseId) {
-            // console.log('already hosted');
-            DisplayItems = HostItems;
-          }
+    const href = firebase.database().ref('coursesHosted');
+
+    if (href) {
+      href
+        .orderByChild('userId')
+        .equalTo(auth.uid)
+        .on('value', snapshot => {
+          snapshot.forEach(childSnapshot => {
+            const courseIdHosted = childSnapshot.child('courseId').val();
+            if (courseIdHosted === courseId) {
+              // console.log('already hosted');
+              DisplayItems = HostItems;
+            }
+          });
         });
-      });
+    }
   }
 
   return (
