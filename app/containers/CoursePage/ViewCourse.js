@@ -14,6 +14,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { isLoaded } from 'react-redux-firebase';
 import { createStructuredSelector } from 'reselect';
+
 function ViewCourse({
   auth,
   match: {
@@ -28,66 +29,8 @@ function ViewCourse({
   const rightButtonText = 'Host this course';
   const rightButtonLink = `/courses/${String(courseId)}/host`;
 
-  // Ensure auth is loaded
-
-  // eslint-disable-line
-  // Check Joined
-  if (isLoaded(auth)) {
-    firebase
-      .database()
-      .ref('coursesJoined')
-      .orderByChild('userId')
-      .equalTo(auth.uid)
-      .on('value', snapshot => {
-        /* 
-          snapshot.val()
-          {
-          MfGild1cIbjzDtCDr8u: {
-            courseHostedId:
-            courseId:
-            dateCreated:
-            userId:
-          }    
-          }
-          */
-        snapshot.forEach(childSnapshot => {
-          const courseIdJoined = childSnapshot.child('courseId');
-          if (courseIdJoined === courseId) {
-            console.log('already joined');
-          }
-        });
-      });
-
-    // eslint-disable-line
-    // Check Hosting
-    firebase
-      .database()
-      .ref('coursesHosted')
-      .orderByChild('userId')
-      .equalTo(auth.uid)
-      .on('value', snapshot => {
-        /* 
-      snapshot.val()
-      {
-      MfGild1cIbjzDtCDr8u: {
-        courseHostedId:
-        courseId:
-        dateCreated:
-        userId:
-      }    
-      }
-      */
-        snapshot.forEach(childSnapshot => {
-          const courseIdHosted = childSnapshot.child('courseId');
-          if (courseIdHosted === courseId) {
-            // console.log('already hosted');
-          }
-        });
-      });
-  }
-
-  return (
-    <VStack>
+  const GuestItems = (
+    <div>
       <WithBackgroundImage
         title={title}
         leftButtonText={leftButtonText}
@@ -118,7 +61,50 @@ function ViewCourse({
       </Container>
       <Container maxW="8xl" py={12}>
         <CourseMaterial />
-      </Container>
+      </Container>{' '}
+    </div>
+  );
+
+  const DisplayItems = GuestItems;
+  // Ensure auth is loaded
+
+  // eslint-disable-line
+  // Check Joined
+  if (isLoaded(auth)) {
+    firebase
+      .database()
+      .ref('coursesJoined')
+      .orderByChild('userId')
+      .equalTo(auth.uid)
+      .on('value', snapshot => {
+        snapshot.forEach(childSnapshot => {
+          const courseIdJoined = childSnapshot.child('courseId').val();
+          if (courseIdJoined === courseId) {
+            // console.log('already joined');
+          }
+        });
+      });
+
+    // eslint-disable-line
+    // Check Hosting
+    firebase
+      .database()
+      .ref('coursesHosted')
+      .orderByChild('userId')
+      .equalTo(auth.uid)
+      .on('value', snapshot => {
+        snapshot.forEach(childSnapshot => {
+          const courseIdHosted = childSnapshot.child('courseId').val();
+          if (courseIdHosted === courseId) {
+            // console.log('already hosted');
+          }
+        });
+      });
+  }
+
+  return (
+    <VStack>
+      <DisplayItems />
     </VStack>
   );
 }
