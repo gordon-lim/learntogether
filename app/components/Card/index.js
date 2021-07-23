@@ -13,7 +13,6 @@ import { v4 } from 'uuid';
 // import styled from 'styled-components';
 
 function Card({ data }) {
-  // console.log(data);
   return (
     <Box
       maxW="sm"

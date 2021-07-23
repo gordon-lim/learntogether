@@ -146,7 +146,8 @@ const withConnect = connect(
 );
 
 export default compose(
-  firebaseConnect(props => [ // eslint-disable-line
+  // eslint-disable-next-line
+  firebaseConnect(props => [
     {
       path: 'courses',
     },

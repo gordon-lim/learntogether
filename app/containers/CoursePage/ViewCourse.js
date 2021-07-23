@@ -14,7 +14,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { isLoaded } from 'react-redux-firebase';
 import { createStructuredSelector } from 'reselect';
-function ViewCourse({ auth, courseId }) {
+function ViewCourse({
+  auth,
+  match: {
+    params: { courseId },
+  },
+}) {
   // TODO: get the relevant course data based on the course id
   // const bgUrl = '';
   const title = 'React Bootcamp';
@@ -33,7 +38,7 @@ function ViewCourse({ auth, courseId }) {
       .ref('coursesJoined')
       .orderByChild('userId')
       .equalTo(auth.uid)
-      .on('value', function(snapshot) {
+      .on('value', snapshot => {
         /* 
           snapshot.val()
           {
@@ -45,7 +50,7 @@ function ViewCourse({ auth, courseId }) {
           }    
           }
           */
-        snapshot.forEach(function(childSnapshot) {
+        snapshot.forEach(childSnapshot => {
           const courseIdJoined = childSnapshot.child('courseId');
           if (courseIdJoined === courseId) {
             console.log('already joined');
@@ -60,7 +65,7 @@ function ViewCourse({ auth, courseId }) {
       .ref('coursesHosted')
       .orderByChild('userId')
       .equalTo(auth.uid)
-      .on('value', function(snapshot) {
+      .on('value', snapshot => {
         /* 
       snapshot.val()
       {
@@ -72,7 +77,7 @@ function ViewCourse({ auth, courseId }) {
       }    
       }
       */
-        snapshot.forEach(function(childSnapshot) {
+        snapshot.forEach(childSnapshot => {
           const courseIdHosted = childSnapshot.child('courseId');
           if (courseIdHosted === courseId) {
             // console.log('already hosted');
@@ -111,7 +116,7 @@ function ViewCourse({ auth, courseId }) {
           </Text>
         </Box>
       </Container>
-      <Container maxW="7xl" py={12}>
+      <Container maxW="8xl" py={12}>
         <CourseMaterial />
       </Container>
     </VStack>
@@ -120,7 +125,11 @@ function ViewCourse({ auth, courseId }) {
 
 ViewCourse.propTypes = {
   auth: PropTypes.object,
-  courseId: PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
 };
 
 const mapStateToProps = createStructuredSelector({
