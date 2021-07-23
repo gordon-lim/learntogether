@@ -34,17 +34,16 @@ function ViewCourse({ auth, courseId }) {
       .equalTo(auth.uid)
       .on('value', function(snapshot) {
         /* 
-      snapshot.val()
-      {
-      MfGild1cIbjzDtCDr8u: {
-        courseHostedId:
-        courseId:
-        dateCreated:
-        userId:
-      }    
-      }
-      */
-        console.log(snapshot.val());
+          snapshot.val()
+          {
+          MfGild1cIbjzDtCDr8u: {
+            courseHostedId:
+            courseId:
+            dateCreated:
+            userId:
+          }    
+          }
+          */
         snapshot.forEach(function(childSnapshot) {
           const courseIdJoined = childSnapshot.child('courseId');
           if (courseIdJoined === courseId) {

@@ -68,9 +68,7 @@ function Carousel({
         </Flex>
         <CardSlider ref={setSliderRef} {...sliderSettings}>
           {details &&
-            details.map(item => (
-              <CardComponent data={item.value} key={item.key} />
-            ))}
+            details.map(item => <CardComponent data={item} key={item.key} />)}
         </CardSlider>
       </Box>
     </Box>
