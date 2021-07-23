@@ -4,7 +4,7 @@
  *
  */
 import produce from 'immer';
-import { ADD_EVENT, DEFAULT_ACTION } from './constants';
+import { ADD_EVENT, CLEAR_EVENTS, DEFAULT_ACTION } from './constants';
 import { containsObject } from './utils';
 
 export const initialState = {
@@ -15,6 +15,12 @@ export const initialState = {
 const timetablePageReducer = (state = initialState, action) =>
   produce(state, (/* draft */) => {
     switch (action.type) {
+      case CLEAR_EVENTS: {
+        return {
+          ...state,
+          events: [],
+        };
+      }
       case ADD_EVENT: {
         return {
           ...state,

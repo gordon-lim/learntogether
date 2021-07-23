@@ -4,11 +4,18 @@
  *
  */
 
-import { ADD_EVENT, DEFAULT_ACTION } from './constants';
+import { ADD_EVENT, CLEAR_EVENTS, DEFAULT_ACTION } from './constants';
 
 export function defaultAction() {
   return {
     type: DEFAULT_ACTION,
+  };
+}
+
+export function clearEvents() {
+  return {
+    type: CLEAR_EVENTS,
+    payload: {},
   };
 }
 

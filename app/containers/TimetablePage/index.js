@@ -4,12 +4,13 @@
  *
  */
 
-import { Container } from '@chakra-ui/react';
+import { Container, useDisclosure, useToast } from '@chakra-ui/react';
 import { isEmpty } from '@chakra-ui/utils';
+import PlainModal from 'components/Modal/PlainModal';
 import { PERIOD_LEN } from 'containers/CoursePage/constants';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Helmet } from 'react-helmet';
@@ -19,7 +20,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { addEvent } from './actions';
+import { addEvent, clearEvents } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import makeSelectTimetablePage, {
@@ -42,10 +43,34 @@ export function TimetablePage({
   // coursesHosted,
   allCoursesHosted,
   events,
+  clearEvts,
   addEvt,
 }) {
   useInjectReducer({ key: 'timetablePage', reducer });
   useInjectSaga({ key: 'timetablePage', saga });
+
+  const toast = useToast();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalDesc, setModalDesc] = useState('');
+
+  // eslint-disable-next-line
+  const setSuccess = msg =>
+    toast({
+      title: 'Success!',
+      description: msg.toString(),
+      status: 'success',
+      isClosable: true,
+    });
+
+  const setError = msg =>
+    toast({
+      title: 'Error!',
+      description: msg.toString(),
+      status: 'error',
+      isClosable: true,
+    });
 
   function parseCoursesHosted(evt) {
     const { courseId } = evt;
@@ -65,6 +90,7 @@ export function TimetablePage({
         title,
         start: startDate,
         end: endDate,
+        description: evt.zoomUrl,
       });
       startDate = getNextDayOfTheWeek(day, startDate);
     }
@@ -73,26 +99,41 @@ export function TimetablePage({
 
   useEffect(() => {
     if (isLoaded(auth) && !isEmpty(auth)) {
-      const coursesJoined = allCoursesJoined.filter(
-        evt => evt.value.userId === auth.uid,
-      );
-      const coursesHosted = allCoursesHosted.filter(
-        evt => evt.value.userId === auth.uid,
-      );
+      try {
+        const coursesJoined = allCoursesJoined.filter(
+          evt => evt.value.userId === auth.uid,
+        );
+        const coursesHosted = allCoursesHosted.filter(
+          evt => evt.value.userId === auth.uid,
+        );
 
-      // Adds all the meetings that are hosted by the user himself
-      coursesHosted.forEach(evt => {
-        addEvt(parseCoursesHosted(evt.value));
-      });
+        clearEvts();
 
-      // Adds all the meetings that the user has joined
-      coursesJoined.forEach(evt => {
-        const { courseHostedId } = evt.value;
-        const coursesHostedEvt = getEleByKey(allCoursesHosted, courseHostedId);
-        addEvt(parseCoursesHosted(coursesHostedEvt));
-      });
+        // Adds all the meetings that are hosted by the user himself
+        coursesHosted.forEach(evt => {
+          addEvt(parseCoursesHosted(evt.value));
+        });
+
+        // Adds all the meetings that the user has joined
+        coursesJoined.forEach(evt => {
+          const { courseHostedId } = evt.value;
+          const coursesHostedEvt = getEleByKey(
+            allCoursesHosted,
+            courseHostedId,
+          );
+          addEvt(parseCoursesHosted(coursesHostedEvt));
+        });
+      } catch (err) {
+        setError(err);
+      }
     }
   }, [auth, courses, allCoursesJoined, allCoursesHosted]);
+
+  const onSelectEvent = event => {
+    setModalTitle(event.title);
+    setModalDesc(event.description);
+    onOpen();
+  };
 
   return (
     <div>
@@ -101,12 +142,19 @@ export function TimetablePage({
         <meta name="description" content="Description of Timetable Page" />
       </Helmet>
       <Container maxW="8xl" paddingTop="4em">
+        <PlainModal
+          isOpen={isOpen}
+          onClose={onClose}
+          title={modalTitle}
+          description={modalDesc}
+        />
         <Calendar
           localizer={localizer}
           defaultDate={new Date()}
           defaultView="month"
           events={events}
           style={{ height: '100vh' }}
+          onSelectEvent={onSelectEvent}
         />
       </Container>
     </div>
@@ -121,6 +169,7 @@ TimetablePage.propTypes = {
   // coursesHosted: PropTypes.array,
   allCoursesHosted: PropTypes.array,
   events: PropTypes.array,
+  clearEvts: PropTypes.func,
   addEvt: PropTypes.func,
 };
 
@@ -136,6 +185,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    clearEvts: () => dispatch(clearEvents()),
     addEvt: event => dispatch(addEvent(event)),
   };
 }
