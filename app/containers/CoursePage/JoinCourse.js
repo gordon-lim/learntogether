@@ -25,7 +25,7 @@ import {
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -55,6 +55,8 @@ function JoinCourse({
   onSelectJoinSlot,
   addAvail,
 }) {
+  const history = useHistory();
+
   useInjectReducer({ key: 'coursePage', reducer });
   useInjectSaga({ key: 'coursePage', saga });
 
@@ -138,7 +140,11 @@ function JoinCourse({
         courseId,
         courseHostedId,
       })
-      .then(() => setSuccess('Joined course'))
+      .then(() => {
+        setSuccess('Joined course');
+        // redirect to view course
+        history.push(`/courses/${courseId}`);
+      })
       .catch(err => setError(err));
   };
 
