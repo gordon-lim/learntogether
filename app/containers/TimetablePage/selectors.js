@@ -15,7 +15,7 @@ const selectTimetablePageDomain = state => state.timetablePage || initialState;
 const makeSelectCourses = () =>
   createSelector(
     selectFirebase,
-    substate => (substate.courses ? substate.courses : []),
+    substate => (substate.ordered.courses ? substate.ordered.courses : []),
   );
 
 const makeSelectCoursesJoined = () =>
@@ -23,6 +23,15 @@ const makeSelectCoursesJoined = () =>
     selectFirebase,
     substate =>
       substate.ordered.coursesJoined ? substate.ordered.coursesJoined : [],
+  );
+
+const makeSelectAllCoursesJoined = () =>
+  createSelector(
+    selectFirebase,
+    substate =>
+      substate.ordered.allCoursesJoined
+        ? substate.ordered.allCoursesJoined
+        : [],
   );
 
 const makeSelectCoursesHosted = () =>
@@ -41,6 +50,12 @@ const makeSelectAllCoursesHosted = () =>
         : [],
   );
 
+const makeSelectEvents = () =>
+  createSelector(
+    selectTimetablePageDomain,
+    substate => substate.events,
+  );
+
 /**
  * Default selector used by TimetablePage
  */
@@ -56,6 +71,8 @@ export {
   selectTimetablePageDomain,
   makeSelectCourses,
   makeSelectCoursesJoined,
+  makeSelectAllCoursesJoined,
   makeSelectCoursesHosted,
   makeSelectAllCoursesHosted,
+  makeSelectEvents,
 };

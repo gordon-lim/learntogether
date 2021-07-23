@@ -5,26 +5,30 @@
  */
 
 import { Container } from '@chakra-ui/react';
+import { isEmpty } from '@chakra-ui/utils';
 import { PERIOD_LEN } from 'containers/CoursePage/constants';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
+import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import { addEvent } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import makeSelectTimetablePage, {
   makeSelectAllCoursesHosted,
+  makeSelectAllCoursesJoined,
   makeSelectCourses,
-  makeSelectCoursesHosted,
-  makeSelectCoursesJoined,
+  // makeSelectCoursesHosted,
+  // makeSelectCoursesJoined,
+  makeSelectEvents,
 } from './selectors';
 import { getEleByKey, getNextDayOfTheWeek } from './utils';
 
@@ -33,14 +37,15 @@ const localizer = momentLocalizer(moment);
 export function TimetablePage({
   auth, // eslint-disable-line
   courses,
-  coursesJoined,
-  coursesHosted,
+  // coursesJoined,
+  allCoursesJoined,
+  // coursesHosted,
   allCoursesHosted,
+  events,
+  addEvt,
 }) {
   useInjectReducer({ key: 'timetablePage', reducer });
   useInjectSaga({ key: 'timetablePage', saga });
-
-  const [events, setEvents] = useState([]);
 
   function parseCoursesHosted(evt) {
     const { courseId } = evt;
@@ -67,18 +72,27 @@ export function TimetablePage({
   }
 
   useEffect(() => {
-    // Adds all the meetings that are hosted by the user himself
-    coursesHosted.forEach(evt => {
-      setEvents(events.concat(parseCoursesHosted(evt.value)));
-    });
+    if (isLoaded(auth) && !isEmpty(auth)) {
+      const coursesJoined = allCoursesJoined.filter(
+        evt => evt.value.userId === auth.uid,
+      );
+      const coursesHosted = allCoursesHosted.filter(
+        evt => evt.value.userId === auth.uid,
+      );
 
-    // Adds all the meetings that the user has joined
-    coursesJoined.forEach(evt => {
-      const { courseHostedId } = evt.value;
-      const coursesHostedEvt = getEleByKey(allCoursesHosted, courseHostedId);
-      setEvents(events.concat(parseCoursesHosted(coursesHostedEvt)));
-    });
-  }, []);
+      // Adds all the meetings that are hosted by the user himself
+      coursesHosted.forEach(evt => {
+        addEvt(parseCoursesHosted(evt.value));
+      });
+
+      // Adds all the meetings that the user has joined
+      coursesJoined.forEach(evt => {
+        const { courseHostedId } = evt.value;
+        const coursesHostedEvt = getEleByKey(allCoursesHosted, courseHostedId);
+        addEvt(parseCoursesHosted(coursesHostedEvt));
+      });
+    }
+  }, [auth, courses, allCoursesJoined, allCoursesHosted]);
 
   return (
     <div>
@@ -102,37 +116,55 @@ export function TimetablePage({
 TimetablePage.propTypes = {
   auth: PropTypes.object,
   courses: PropTypes.array,
-  coursesJoined: PropTypes.array,
-  coursesHosted: PropTypes.array,
+  // coursesJoined: PropTypes.array,
+  allCoursesJoined: PropTypes.array,
+  // coursesHosted: PropTypes.array,
   allCoursesHosted: PropTypes.array,
+  events: PropTypes.array,
+  addEvt: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
   timetablePage: makeSelectTimetablePage(),
   courses: makeSelectCourses(),
-  coursesJoined: makeSelectCoursesJoined(),
-  coursesHosted: makeSelectCoursesHosted(),
+  // coursesJoined: makeSelectCoursesJoined(),
+  allCoursesJoined: makeSelectAllCoursesJoined(),
+  // coursesHosted: makeSelectCoursesHosted(),
   allCoursesHosted: makeSelectAllCoursesHosted(),
+  events: makeSelectEvents(),
 });
 
-const withConnect = connect(mapStateToProps);
+function mapDispatchToProps(dispatch) {
+  return {
+    addEvt: event => dispatch(addEvent(event)),
+  };
+}
+
+const withConnect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default compose(
-  firebaseConnect(props => [
+  firebaseConnect(props => [ // eslint-disable-line
+    {
+      path: 'courses',
+    },
+    // {
+    //   path: 'coursesJoined',
+    //   queryParams: ['orderByChild=userId', props.auth.uid],
+    // },
     {
       path: 'coursesJoined',
-      queryParams: ['orderByChild=userId', props.auth.uid],
+      storeAs: 'allCoursesJoined',
     },
-    {
-      path: 'coursesHosted',
-      queryParams: ['orderByChild=userId', props.auth.uid],
-    },
+    // {
+    //   path: 'coursesHosted',
+    //   queryParams: ['orderByChild=userId', props.auth.uid],
+    // },
     {
       path: 'coursesHosted',
       storeAs: 'allCoursesHosted',
-    },
-    {
-      path: 'courses',
     },
   ]),
   withConnect,

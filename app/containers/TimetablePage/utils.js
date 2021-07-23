@@ -27,3 +27,13 @@ export function getEleByKey(arr, key) {
   }
   return {};
 }
+
+export function containsObject(obj, list) {
+  for (let i = 0; i < list.length; i += 1) {
+    if (list[i] === obj) {
+      return true;
+    }
+  }
+
+  return false;
+}
