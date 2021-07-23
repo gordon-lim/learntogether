@@ -15,6 +15,7 @@ import { firebaseConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
+import { v4 } from 'uuid';
 // import styled from 'styled-components';
 
 function Search({ courses, users }) {
@@ -40,7 +41,10 @@ function Search({ courses, users }) {
         shouldItemRender={(item, value) => item.label.includes(value)}
         getItemValue={item => item.label}
         renderItem={(item, isHighlighted) => (
-          <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+          <div
+            style={{ background: isHighlighted ? 'lightgray' : 'white' }}
+            key={v4()}
+          >
             {item.label}
           </div>
         )}
