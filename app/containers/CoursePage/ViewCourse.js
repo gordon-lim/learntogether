@@ -4,13 +4,16 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
-import firebase from 'firebase/app';
 import WithBackgroundImage from 'components/Hero/WithBackgroundImage';
-
-export default function ViewCourse({ auth, courseId }) {
+import { makeSelectFirebaseAuth } from 'containers/App/selectors';
+import firebase from 'firebase/app';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+import { isLoaded } from 'react-redux-firebase';
+import { createStructuredSelector } from 'reselect';
+function ViewCourse({ auth, courseId }) {
   // TODO: get the relevant course data based on the course id
   // const bgUrl = '';
   const title = 'React Bootcamp';
@@ -23,13 +26,14 @@ export default function ViewCourse({ auth, courseId }) {
 
   // eslint-disable-line
   // Check Joined
-  firebase
-    .database()
-    .ref('coursesJoined')
-    .orderByChild('userId')
-    .equalTo(auth.uid)
-    .on('value', function(snapshot) {
-      /* 
+  if (isLoaded(auth)) {
+    firebase
+      .database()
+      .ref('coursesJoined')
+      .orderByChild('userId')
+      .equalTo(auth.uid)
+      .on('value', function(snapshot) {
+        /* 
       snapshot.val()
       {
       MfGild1cIbjzDtCDr8u: {
@@ -40,23 +44,24 @@ export default function ViewCourse({ auth, courseId }) {
       }    
       }
       */
-      snapshot.forEach(function(childSnapshot) {
-        const courseIdJoined = childSnapshot.child('courseId');
-        if (courseIdJoined === courseId) {
-          // console.log('already joined');
-        }
+        console.log(snapshot.val());
+        snapshot.forEach(function(childSnapshot) {
+          const courseIdJoined = childSnapshot.child('courseId');
+          if (courseIdJoined === courseId) {
+            console.log('already joined');
+          }
+        });
       });
-    });
 
-  // eslint-disable-line
-  // Check Hosting
-  firebase
-    .database()
-    .ref('coursesHosted')
-    .orderByChild('userId')
-    .equalTo(auth.uid)
-    .on('value', function(snapshot) {
-      /* 
+    // eslint-disable-line
+    // Check Hosting
+    firebase
+      .database()
+      .ref('coursesHosted')
+      .orderByChild('userId')
+      .equalTo(auth.uid)
+      .on('value', function(snapshot) {
+        /* 
       snapshot.val()
       {
       MfGild1cIbjzDtCDr8u: {
@@ -67,13 +72,14 @@ export default function ViewCourse({ auth, courseId }) {
       }    
       }
       */
-      snapshot.forEach(function(childSnapshot) {
-        const courseIdHosted = childSnapshot.child('courseId');
-        if (courseIdHosted === courseId) {
-          // console.log('already hosted');
-        }
+        snapshot.forEach(function(childSnapshot) {
+          const courseIdHosted = childSnapshot.child('courseId');
+          if (courseIdHosted === courseId) {
+            // console.log('already hosted');
+          }
+        });
       });
-    });
+  }
 
   return (
     <VStack>
@@ -113,3 +119,11 @@ ViewCourse.propTypes = {
   auth: PropTypes.object,
   courseId: PropTypes.string,
 };
+
+const mapStateToProps = createStructuredSelector({
+  auth: makeSelectFirebaseAuth(),
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default withConnect(ViewCourse);

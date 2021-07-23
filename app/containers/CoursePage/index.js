@@ -32,12 +32,12 @@ export function CoursePage({ auth }) {
         <Route
           exact
           path="/courses/:courseId"
-          render={props => <ViewCourse auth={auth} {...props} />}
+          render={props => <ViewCourse {...props} />}
         />
         <Route
           exact
           path="/courses/:courseId/join"
-          render={props => <JoinCourse auth={auth} {...props} />}
+          render={props => <JoinCourse {...props} />}
         >
           {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
         </Route>

@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import WithForm from 'components/Modal/WithForm';
 import OauthPopup from 'components/OauthPopup';
+import { makeSelectFirebaseAuth } from 'containers/App/selectors';
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
@@ -295,6 +296,7 @@ HostCourse.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  auth: makeSelectFirebaseAuth(),
   coursePage: makeSelectCoursePage(),
   userDetails: makeSelectUserDetails(),
   courseId: makeSelectCourseId(),
