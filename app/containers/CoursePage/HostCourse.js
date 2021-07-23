@@ -197,31 +197,10 @@ function HostCourse({
       });
 
       // for each person who voted for this slot,
-
       // add to notifications object
-      /* 
-      notifyHosted{
-        notification1: {
-          courseId:
-          day:
-          period:
-          userId:
-        }
-        notification2: {
-          courseId:
-          day:
-          period:
-          userId:
-        }
-      }
-      */
-      /*
-      hostSlots is a 2d array day>period>key:votes>votes object
-     */
-
       hostSlots[day][period].votes.forEach(async vote => {
         const { userId } = vote.value;
-        await firebase.push('notifyHosted', {
+        await firebase.push('notifications', {
           userId,
           courseId,
           day,

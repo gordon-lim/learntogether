@@ -6,43 +6,83 @@ import {
   MenuList,
 } from '@chakra-ui/react';
 import { BellIcon } from '@chakra-ui/icons';
-// import PropTypes from 'prop-types';
-import React, { memo } from 'react';
-import { firebaseConnect } from 'react-redux-firebase';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
-import { connect } from 'formik';
 import { createStructuredSelector } from 'reselect';
-import { makeSelectNotifs } from 'containers/HomePage/selectors';
-import { propTypes } from 'react-autocomplete';
+import {
+  makeSelectCourses,
+  makeSelectFirebaseAuth,
+  makeSelectNotifs,
+} from 'containers/App/selectors';
+import { connect } from 'react-redux';
+import { indToDay, periodToHour } from 'containers/CoursePage/utils';
+import { Link } from 'react-router-dom';
+import { v4 } from 'uuid';
 
-const Notification = ({ notifs }) => (
-  <Menu>
-    <MenuButton as={IconButton} icon={<BellIcon />} />
-    <MenuList>
-      {notifs.map(notif => (
-        <MenuItem>{notif}</MenuItem>
-      ))}
-    </MenuList>
-  </Menu>
-);
+function Notification({ auth, courses, notifs }) {
+  const [myNotifs, setMyNotifs] = useState([]);
+
+  useEffect(() => {
+    if (isLoaded(auth) && isLoaded(courses) && isLoaded(notifs)) {
+      setMyNotifs(
+        notifs
+          .filter(n => n.value.userId === auth.uid)
+          .map(n => {
+            const { courseId, day, period } = n.value;
+            let courseName = courses
+              .filter(c => c.key === courseId)
+              .map(c => c.value.title);
+            courseName = courseName.length > 0 ? courseName[0] : 'undefined';
+            return {
+              title: `New ${courseName} course`,
+              msg: `A new ${courseName} course has been hosted at ${indToDay(
+                day,
+              )} ${periodToHour(period)}h`,
+              link: `/courses/${courseId}/join`,
+            };
+          }),
+      );
+    }
+  }, [auth, courses, notifs]);
+
+  return (
+    <Menu>
+      <MenuButton as={IconButton} icon={<BellIcon />} />
+      <MenuList>
+        {myNotifs.map(n => (
+          <MenuItem key={v4()} as={Link} to={n.link}>
+            {n.msg}
+          </MenuItem>
+        ))}
+      </MenuList>
+    </Menu>
+  );
+}
 
 Notification.propTypes = {
-  notifs: propTypes.array,
+  auth: PropTypes.object,
+  courses: PropTypes.array,
+  notifs: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
-  votes: makeSelectNotifs(),
+  auth: makeSelectFirebaseAuth(),
+  courses: makeSelectCourses(),
+  notifs: makeSelectNotifs(),
 });
 
 const withConnect = connect(mapStateToProps);
 
 export default compose(
-  firebaseConnect(props => [
+  firebaseConnect(() => [
     {
       path: 'coursesVoted',
-      queryParams: ['orderByChild=courseId', props.match.params.courseId],
+    },
+    {
+      path: 'notifications',
     },
   ]),
   withConnect,
-  memo,
 )(Notification);
