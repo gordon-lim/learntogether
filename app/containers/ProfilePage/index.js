@@ -11,17 +11,9 @@ import CoursesCompletedCarousel from 'components/Carousel/CoursesCompletedCarous
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-import { useInjectReducer } from 'utils/injectReducer';
-import { useInjectSaga } from 'utils/injectSaga';
 import SocialProfile from 'components/SocialProfile';
 
-import reducer from './reducer';
-import saga from './saga';
-
-export function ProfilePage() {
-  useInjectReducer({ key: 'profilePage', reducer });
-  useInjectSaga({ key: 'profilePage', saga });
-
+export default function ProfilePage() {
   return (
     <Box bgColor={useColorModeValue('white.400', 'gray.800')} pt="4em">
       <Helmet>
