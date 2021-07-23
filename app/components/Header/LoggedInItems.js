@@ -13,6 +13,7 @@ import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import Profile from '../../images/Profile.svg';
+import Notification from './Notification';
 
 export const LoggedInItems = ({ photoURL }) => {
   const firebase = useFirebase();
@@ -23,6 +24,7 @@ export const LoggedInItems = ({ photoURL }) => {
 
   return (
     <Flex alignItems="center" flex={{ base: 1, md: 0 }} justify="flex-end">
+      <Notification />
       <Menu>
         <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
           <Avatar size="sm" src={photoURL || Profile} />

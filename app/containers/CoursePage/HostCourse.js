@@ -64,7 +64,7 @@ function HostCourse({
 }) {
   useInjectReducer({ key: 'coursePage', reducer });
   useInjectSaga({ key: 'coursePage', saga });
-
+  // console.log(hostSlots);
   const firebase = useFirebase();
   const toast = useToast();
 
@@ -194,6 +194,39 @@ function HostCourse({
         numMeetings,
         participantLimit,
         zoomUrl: joinUrl,
+      });
+
+      // for each person who voted for this slot,
+
+      // add to notifications object
+      /* 
+      notifyHosted{
+        notification1: {
+          courseId:
+          day:
+          period:
+          userId:
+        }
+        notification2: {
+          courseId:
+          day:
+          period:
+          userId:
+        }
+      }
+      */
+      /*
+      hostSlots is a 2d array day>period>key:votes>votes object
+     */
+
+      hostSlots[day][period].votes.forEach(async vote => {
+        const { userId } = vote.value;
+        await firebase.push('notifyHosted', {
+          userId,
+          courseId,
+          day,
+          period,
+        });
       });
 
       setSuccess('Hosted a new course!');

@@ -6,4 +6,11 @@ const makeSelectCourses = () =>
     selectFirebase,
     substate => substate.ordered.courses,
   );
-export { makeSelectCourses };
+
+const makeSelectNotifs = () =>
+  createSelector(
+    selectFirebase,
+    substate => substate.ordered.notifyHosted,
+  );
+
+export { makeSelectCourses, makeSelectNotifs };
