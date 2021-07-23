@@ -19,7 +19,7 @@ import {
   useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react';
-import logo from 'images/logo.png';
+import logo from 'images/Logo.png';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import { BiMailSend } from 'react-icons/bi';

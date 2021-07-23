@@ -63,6 +63,9 @@ const mapStateToProps = createStructuredSelector({
 const withConnect = connect(mapStateToProps);
 
 export default compose(
-  firebaseConnect(() => [{ path: 'courses' }]),
+  firebaseConnect(props => {
+    console.log(props.firebase.auth());
+    return [{ path: 'courses' }];
+  }),
   withConnect,
 )(UpcomingCarousel);

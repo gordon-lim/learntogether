@@ -12,11 +12,12 @@ import {
   IconButton,
   Image,
   Link,
+  Spinner,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
-import Logo from 'images/logo.png';
+import Logo from 'images/Logo.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -69,10 +70,11 @@ function Header({ auth }) {
           </Flex>
         </Flex>
         <ColourModeSwitch mr={3} />
+        {!isLoaded(auth) && isEmpty(auth) && <Spinner speed="2s" />}
         {isLoaded(auth) && !isEmpty(auth) ? (
           <LoggedInItems photoURL={auth.photoURL} />
         ) : (
-          <LoggedOutItems />
+          isLoaded(auth) && <LoggedOutItems />
         )}
       </Flex>
       <Collapse in={isOpen} animateOpacity>
