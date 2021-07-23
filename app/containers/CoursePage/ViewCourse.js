@@ -11,7 +11,7 @@ import { makeSelectFirebaseAuth } from 'containers/App/selectors';
 
 import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
@@ -25,14 +25,19 @@ function ViewCourse({
     params: { courseId },
   },
 }) {
-  const courseDict = currentCourse.reduce(
-    (arr, obj) => ({ ...arr, [obj.key]: obj.value }),
-    {},
-  );
+  const [title, setTitle] = useState('');
+  useEffect(() => {
+    if (isLoaded(currentCourse)) {
+      const courseDict = currentCourse.reduce(
+        (arr, obj) => ({ ...arr, [obj.key]: obj.value }),
+        {},
+      );
+      setTitle(courseDict.title);
+    }
+  }, [currentCourse]);
+
   // TODO: get the relevant course data based on the course id
   // const bgUrl = '';
-  // const { title } = courses;
-  const { title } = courseDict;
   const leftButtonText = 'View course timings';
   const leftButtonLink = `/courses/${String(courseId)}/join`;
   const rightButtonText = 'Host this course';
