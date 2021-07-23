@@ -13,6 +13,7 @@ import { v4 } from 'uuid';
 // import styled from 'styled-components';
 
 function Card({ data }) {
+  // console.log(data);
   return (
     <Box
       maxW="sm"
@@ -22,7 +23,7 @@ function Card({ data }) {
       boxShadow="xl"
       bg={useColorModeValue('white', 'gray.900')}
     >
-      <Image src={data.imageUrl} alt={data.imageAlt} />
+      <Image src={data.value.imageUrl} alt={data.value.imageAlt} />
 
       <Box p="6">
         <Box d="flex" alignItems="baseline">
@@ -37,7 +38,7 @@ function Card({ data }) {
             textTransform="uppercase"
             ml="2"
           >
-            {data.videos} videos &bull; {data.quizzes} quizzes
+            {data.value.videos} videos &bull; {data.value.quizzes} quizzes
           </Box>
         </Box>
 
@@ -48,11 +49,11 @@ function Card({ data }) {
           lineHeight="tight"
           isTruncated
         >
-          {data.title}
+          {data.value.title}
         </Box>
 
         <Box>
-          {data.duration}{' '}
+          {data.value.duration}{' '}
           <Box as="span" color="gray.500" fontSize="md">
             hours
           </Box>
@@ -64,17 +65,17 @@ function Card({ data }) {
             .map((_, i) => (
               <StarIcon
                 key={v4()}
-                color={i < data.rating ? 'red.500' : 'gray.300'}
+                color={i < data.value.rating ? 'red.500' : 'gray.300'}
               />
             ))}
           <Box as="span" ml="2" color="gray.500" fontSize="sm">
-            {data.reviewCount} reviews
+            {data.value.reviewCount} reviews
           </Box>
         </Box>
       </Box>
       <Button
         as={RouterLink}
-        to={`/courses/${data.id}`}
+        to={`/courses/${data.key}`}
         borderTopRightRadius="0px"
         borderTopLeftRadius="0px"
         colorScheme="red"
@@ -90,15 +91,18 @@ function Card({ data }) {
 
 Card.propTypes = {
   data: PropTypes.shape({
-    courseUrl: PropTypes.string.isRequired,
-    imageAlt: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
-    quizzes: PropTypes.number.isRequired,
-    rating: PropTypes.number.isRequired,
-    reviewCount: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    videos: PropTypes.number.isRequired,
-    duration: PropTypes.number.isRequired,
+    key: PropTypes.string,
+    value: PropTypes.shape({
+      courseUrl: PropTypes.string.isRequired,
+      imageAlt: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string.isRequired,
+      quizzes: PropTypes.number.isRequired,
+      rating: PropTypes.number.isRequired,
+      reviewCount: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      videos: PropTypes.number.isRequired,
+      duration: PropTypes.number.isRequired,
+    }),
   }),
 };
 

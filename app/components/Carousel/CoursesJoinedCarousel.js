@@ -1,18 +1,21 @@
 /**
  *
- * PastCoursesCarousel
+ * MyCoursesCarousel
  *
  */
 
 import CourseCard from 'components/Card/CourseCard';
 import Carousel from 'components/Carousel';
-import { makeSelectCoursesCompleted } from 'containers/ProfilePage/selectors';
+import { makeSelectFirebaseAuth } from 'containers/App/selectors';
+import { makeSelectCourses } from 'containers/HomePage/selectors';
+import { makeSelectCoursesJoined } from 'containers/TimetablePage/selectors';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import { mergeCourseArrays } from './CoursesCompletedCarousel';
 // import styled from 'styled-components';
 
 const sliderSettings = {
@@ -32,23 +35,28 @@ const sliderSettings = {
   ],
 };
 
-function PastCoursesCarousel({ pastCourses }) {
+function CoursesJoinedCarousel({ auth, coursesJoined, courses }) {
+  const newCourses = mergeCourseArrays(courses, coursesJoined, auth.uid);
   return (
     <Carousel
       CardComponent={CourseCard}
-      details={pastCourses}
-      sliderName="Past Courses"
+      details={newCourses}
+      sliderName="My Courses"
       sliderSettings={sliderSettings}
     />
   );
 }
 
-PastCoursesCarousel.propTypes = {
-  pastCourses: PropTypes.array,
+CoursesJoinedCarousel.propTypes = {
+  auth: PropTypes.object,
+  coursesJoined: PropTypes.array,
+  courses: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
-  pastCourses: makeSelectCoursesCompleted(),
+  coursesJoined: makeSelectCoursesJoined(),
+  auth: makeSelectFirebaseAuth(),
+  courses: makeSelectCourses(),
 });
 
 const withConnect = connect(mapStateToProps);
@@ -56,8 +64,8 @@ const withConnect = connect(mapStateToProps);
 export default compose(
   firebaseConnect(() => [
     {
-      path: 'coursesCompleted',
+      path: 'coursesJoined',
     },
   ]),
   withConnect,
-)(PastCoursesCarousel);
+)(CoursesJoinedCarousel);

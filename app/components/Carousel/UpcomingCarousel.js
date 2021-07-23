@@ -5,7 +5,7 @@
  */
 
 import { useColorModeValue } from '@chakra-ui/react';
-import Card from 'components/Card/Loadable';
+import Card from 'components/Card';
 import Carousel from 'components/Carousel';
 import { makeSelectCourses } from 'containers/HomePage/selectors';
 import PropTypes from 'prop-types';

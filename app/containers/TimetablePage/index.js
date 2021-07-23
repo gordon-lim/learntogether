@@ -98,9 +98,9 @@ export function TimetablePage({
     <div>
       <Helmet>
         <title>TimetablePage</title>
-        <meta name="description" content="Description of TimetablePage" />
+        <meta name="description" content="Description of Timetable Page" />
       </Helmet>
-      <Container maxW="7xl" paddingTop="4em">
+      <Container maxW="8xl" paddingTop="4em">
         <Calendar
           localizer={localizer}
           defaultDate={new Date()}
