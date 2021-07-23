@@ -36,13 +36,14 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
-import { addAvailSlots, selectJoinSlot } from './actions';
+import { addAvailSlots, clearAvailSlots, selectJoinSlot } from './actions';
 import { PERIOD_LEN } from './constants';
 import reducer from './reducer';
 import saga from './saga';
 import makeSelectCoursePage, {
   makeSelectAvailSlots,
   makeSelectCourseId,
+  makeSelectCourseVotes,
   makeSelectJoinSlots,
   makeSelectVotedJoinSlots,
 } from './selectors';
@@ -55,6 +56,8 @@ function JoinCourse({
   votedJoinSlots,
   onSelectJoinSlot,
   addAvail,
+  clearAvail,
+  // courseVotes,
 }) {
   const history = useHistory();
 
@@ -84,6 +87,8 @@ function JoinCourse({
     });
 
   useEffect(() => {
+    clearAvail();
+
     // Adds the available slots to the grid table
     for (let i = 0; i < availSlots.length; i += 1) {
       const { day, period } = availSlots[i].value.slot;
@@ -248,6 +253,8 @@ JoinCourse.propTypes = {
   votedJoinSlots: PropTypes.array,
   onSelectJoinSlot: PropTypes.func,
   addAvail: PropTypes.func,
+  clearAvail: PropTypes.func,
+  // courseVotes: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -257,12 +264,14 @@ const mapStateToProps = createStructuredSelector({
   availSlots: makeSelectAvailSlots(),
   joinSlots: makeSelectJoinSlots(),
   votedJoinSlots: makeSelectVotedJoinSlots(),
+  courseVotes: makeSelectCourseVotes(),
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     onSelectJoinSlot: (day, id) => () => dispatch(selectJoinSlot(day, id)),
     addAvail: (day, id, slot) => dispatch(addAvailSlots(day, id, slot)),
+    clearAvail: () => dispatch(clearAvailSlots()),
   };
 }
 
@@ -275,6 +284,10 @@ export default compose(
   firebaseConnect(props => [
     {
       path: 'coursesHosted',
+      queryParams: ['orderByChild=courseId', props.match.params.courseId],
+    },
+    {
+      path: 'coursesVoted',
       queryParams: ['orderByChild=courseId', props.match.params.courseId],
     },
   ]),

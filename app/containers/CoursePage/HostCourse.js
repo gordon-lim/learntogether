@@ -38,7 +38,7 @@ import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
 import HostWeekGridItem from '../../components/TableComponent/HostWeekGridItem';
-import { addVoteSlots, selectHostSlot } from './actions';
+import { addVoteSlots, clearVoteSlots, selectHostSlot } from './actions';
 import { PERIOD_LEN } from './constants';
 import reducer from './reducer';
 import saga from './saga';
@@ -60,6 +60,7 @@ function HostCourse({
   selectedHostSlots,
   onSelectHostSlot,
   addVote,
+  clearVotes,
 }) {
   useInjectReducer({ key: 'coursePage', reducer });
   useInjectSaga({ key: 'coursePage', saga });
@@ -92,6 +93,8 @@ function HostCourse({
     });
 
   useEffect(() => {
+    clearVotes();
+
     // Adds the vote details from firebase to the table
     for (let i = 0; i < slotVotes.length; i += 1) {
       const { day, period } = slotVotes[i].value;
@@ -298,6 +301,7 @@ HostCourse.propTypes = {
   selectedHostSlots: PropTypes.array,
   onSelectHostSlot: PropTypes.func,
   addVote: PropTypes.func,
+  clearVotes: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -314,6 +318,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onSelectHostSlot: (day, id) => () => dispatch(selectHostSlot(day, id)),
     addVote: (day, id, slot) => dispatch(addVoteSlots(day, id, slot)),
+    clearVotes: () => dispatch(clearVoteSlots()),
   };
 }
 

@@ -7,6 +7,8 @@ import produce from 'immer';
 import {
   ADD_HOST_SLOT,
   ADD_JOIN_SLOT,
+  CLEAR_AVAIL_SLOTS,
+  CLEAR_VOTE_SLOTS,
   DEFAULT_ACTION,
   SELECT_HOST_SLOT,
   SELECT_JOIN_SLOT,
@@ -25,6 +27,17 @@ export const initialState = {
 const coursePageReducer = (state = initialState, action) =>
   produce(state, (/* draft */) => {
     switch (action.type) {
+      case CLEAR_AVAIL_SLOTS: {
+        return {
+          ...state,
+          joinSlots: state.joinSlots.map(daySlots =>
+            daySlots.map(slot => ({
+              ...slot,
+              availSlots: [],
+            })),
+          ),
+        };
+      }
       case ADD_JOIN_SLOT: {
         return {
           ...state,
@@ -60,6 +73,17 @@ const coursePageReducer = (state = initialState, action) =>
                 selected: !slot.selected,
               };
             }),
+          ),
+        };
+      }
+      case CLEAR_VOTE_SLOTS: {
+        return {
+          ...state,
+          hostSlots: state.hostSlots.map(daySlots =>
+            daySlots.map(slot => ({
+              ...slot,
+              votes: [],
+            })),
           ),
         };
       }

@@ -107,6 +107,12 @@ const makeSelectSelectedHostSlots = () =>
     },
   );
 
+const makeSelectCourseVotes = () =>
+  createSelector(
+    selectFirebase,
+    substate => substate.ordered.coursesVoted,
+  );
+
 /**
  * Default selector used by CoursePage
  */
@@ -130,4 +136,5 @@ export {
   makeSelectSlotVotes,
   makeSelectHostSlots,
   makeSelectSelectedHostSlots,
+  makeSelectCourseVotes,
 };

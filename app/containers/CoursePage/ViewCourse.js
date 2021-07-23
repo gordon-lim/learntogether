@@ -167,7 +167,7 @@ function ViewCourse({
 
 ViewCourse.propTypes = {
   auth: PropTypes.object,
-  currentCourse: PropTypes.object,
+  currentCourse: PropTypes.array,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
