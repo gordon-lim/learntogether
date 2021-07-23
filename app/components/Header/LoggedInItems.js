@@ -15,6 +15,7 @@ import { useFirebase } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import Profile from '../../images/Profile.svg';
 import { ChatIcon } from './ChatIcon';
+import Notification from './Notification';
 
 export const LoggedInItems = ({ photoURL }) => {
   const firebase = useFirebase();
@@ -33,6 +34,7 @@ export const LoggedInItems = ({ photoURL }) => {
           color={useColorModeValue('gray.700', 'gray.200')}
         />
       </RouterLink>
+      <Notification />
       <Menu>
         <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
           <Avatar size="sm" src={photoURL || Profile} />
