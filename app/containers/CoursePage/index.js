@@ -32,7 +32,7 @@ export function CoursePage({ auth }) {
         <Route
           exact
           path="/courses/:courseId"
-          render={props => <ViewCourse {...props} />}
+          render={props => <ViewCourse auth={auth} {...props} />}
         />
         <Route
           exact

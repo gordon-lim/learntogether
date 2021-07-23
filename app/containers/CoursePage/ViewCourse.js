@@ -7,12 +7,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
-
+import firebase from 'firebase/app';
 import WithBackgroundImage from 'components/Hero/WithBackgroundImage';
 
-export default function ViewCourse(props) {
-  const { courseId } = props.match.params; // esli
-
+export default function ViewCourse({ auth, courseId }) {
   // TODO: get the relevant course data based on the course id
   // const bgUrl = '';
   const title = 'React Bootcamp';
@@ -20,6 +18,62 @@ export default function ViewCourse(props) {
   const leftButtonLink = `/courses/${String(courseId)}/join`;
   const rightButtonText = 'Host this course';
   const rightButtonLink = `/courses/${String(courseId)}/host`;
+
+  // Ensure auth is loaded
+
+  // eslint-disable-line
+  // Check Joined
+  firebase
+    .database()
+    .ref('coursesJoined')
+    .orderByChild('userId')
+    .equalTo(auth.uid)
+    .on('value', function(snapshot) {
+      /* 
+      snapshot.val()
+      {
+      MfGild1cIbjzDtCDr8u: {
+        courseHostedId:
+        courseId:
+        dateCreated:
+        userId:
+      }    
+      }
+      */
+      snapshot.forEach(function(childSnapshot) {
+        const courseIdJoined = childSnapshot.child('courseId');
+        if (courseIdJoined === courseId) {
+          // console.log('already joined');
+        }
+      });
+    });
+
+  // eslint-disable-line
+  // Check Hosting
+  firebase
+    .database()
+    .ref('coursesHosted')
+    .orderByChild('userId')
+    .equalTo(auth.uid)
+    .on('value', function(snapshot) {
+      /* 
+      snapshot.val()
+      {
+      MfGild1cIbjzDtCDr8u: {
+        courseHostedId:
+        courseId:
+        dateCreated:
+        userId:
+      }    
+      }
+      */
+      snapshot.forEach(function(childSnapshot) {
+        const courseIdHosted = childSnapshot.child('courseId');
+        if (courseIdHosted === courseId) {
+          // console.log('already hosted');
+        }
+      });
+    });
 
   return (
     <VStack>
@@ -56,9 +110,6 @@ export default function ViewCourse(props) {
 }
 
 ViewCourse.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      courseId: PropTypes.string,
-    }),
-  }),
+  auth: PropTypes.object,
+  courseId: PropTypes.string,
 };
