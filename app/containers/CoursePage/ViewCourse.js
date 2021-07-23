@@ -59,11 +59,53 @@ function ViewCourse({
           </Text>
         </Box>
       </Container>
-      <Container maxW="8xl" py={12}>
-        <CourseMaterial />
-      </Container>{' '}
+{' '}
     </div>
   );
+  
+const JoinedItems = (
+  <div>
+    <WithBackgroundImage
+      title={title}
+      leftButtonText="Joined"
+    />
+    <Container maxW="8xl" py={12}>
+      <Box>
+        <Heading mb={4}>About this course</Heading>
+        <Text fontSize="md">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce massa
+          est, auctor vel condimentum eget, dignissim ut libero. Nulla commodo
+          risus magna, sit amet consectetur eros porttitor quis. Nulla purus
+          lacus, malesuada non condimentum quis, tristique nec lacus. Nunc a
+          porta justo. Nunc lacinia lobortis leo, ac tincidunt lectus
+          facilisis ac. Mauris nec pellentesque tellus. Etiam luctus sem erat,
+          hendrerit laoreet lacus sodales vitae. Sed diam dui, volutpat vitae
+          mollis sed, egestas in ligula. Ut risus mauris, vehicula ut
+          fringilla a, maximus ut magna. Nullam pharetra mollis cursus. Lorem
+          ipsum dolor sit amet, consectetur adipiscing elit. Fusce elit arcu,
+          consectetur quis placerat at, imperdiet nec ipsum. Integer sagittis
+          risus a porta pulvinar. Nullam rhoncus et nulla ut laoreet. In nec
+          nunc id nisi tincidunt maximus vitae vitae felis. Nulla ac iaculis
+          augue.
+        </Text>
+      </Box>
+    </Container>
+{' '}
+  </div>
+);
+
+const HostItems = (
+  <div>
+    <WithBackgroundImage
+      title={title}
+      rightButtonText = "Host of this course"
+    />
+
+    <Container maxW="8xl" py={12}>
+      <CourseMaterial />
+    </Container>{' '}
+  </div>
+);
 
   const DisplayItems = GuestItems;
   // Ensure auth is loaded
@@ -81,6 +123,7 @@ function ViewCourse({
           const courseIdJoined = childSnapshot.child('courseId').val();
           if (courseIdJoined === courseId) {
             // console.log('already joined');
+            DisplayItems = JoinedItems;
           }
         });
       });
@@ -97,6 +140,7 @@ function ViewCourse({
           const courseIdHosted = childSnapshot.child('courseId').val();
           if (courseIdHosted === courseId) {
             // console.log('already hosted');
+            DisplayItems = HostItems;
           }
         });
       });
