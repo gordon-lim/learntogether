@@ -8,22 +8,31 @@ import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
 import CourseMaterial from 'components/CourseMaterial';
 import WithBackgroundImage from 'components/Hero/WithBackgroundImage';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
+
 import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import { connect } from 'react-redux';
-import { isLoaded } from 'react-redux-firebase';
+import { firebaseConnect, isLoaded } from 'react-redux-firebase';
+import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
+import { makeSelectCurrentCourse } from './selectors';
 
 function ViewCourse({
   auth,
+  currentCourse,
   match: {
     params: { courseId },
   },
 }) {
+  const courseDict = currentCourse.reduce(
+    (arr, obj) => ({ ...arr, [obj.key]: obj.value }),
+    {},
+  );
   // TODO: get the relevant course data based on the course id
   // const bgUrl = '';
-  const title = 'React Bootcamp';
+  // const { title } = courses;
+  const { title } = courseDict;
   const leftButtonText = 'View course timings';
   const leftButtonLink = `/courses/${String(courseId)}/join`;
   const rightButtonText = 'Host this course';
@@ -118,7 +127,6 @@ function ViewCourse({
           snapshot.forEach(childSnapshot => {
             const courseIdJoined = childSnapshot.child('courseId').val();
             if (courseIdJoined === courseId) {
-              console.log('already joined');
               DisplayItems = JoinedItems;
             }
           });
@@ -154,6 +162,7 @@ function ViewCourse({
 
 ViewCourse.propTypes = {
   auth: PropTypes.object,
+  currentCourse: PropTypes.object,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
@@ -163,8 +172,18 @@ ViewCourse.propTypes = {
 
 const mapStateToProps = createStructuredSelector({
   auth: makeSelectFirebaseAuth(),
+  currentCourse: makeSelectCurrentCourse(),
 });
 
 const withConnect = connect(mapStateToProps);
 
-export default withConnect(ViewCourse);
+export default compose(
+  firebaseConnect(props => [
+    {
+      path: `courses/${props.match.params.courseId}`,
+      storeAs: 'currentCourse',
+    },
+  ]),
+  withConnect,
+  memo,
+)(ViewCourse);
