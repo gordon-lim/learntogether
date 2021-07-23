@@ -25,7 +25,7 @@ import { v4 } from 'uuid';
 import { Link as RouterLink } from 'react-router-dom';
 // import styled from 'styled-components';
 
-function Search({ courses, users }) {
+function Search({ courses, users, Icon, addFunction }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
 
@@ -53,6 +53,7 @@ function Search({ courses, users }) {
           item.label.toLowerCase().includes(value.toLowerCase())
         }
         getItemValue={item => item.label}
+        menuStyle={{ zIndex: 99, position: 'fixed' }}
         renderItem={(item, isHighlighted) => (
           <Box
             p={4}
@@ -71,13 +72,20 @@ function Search({ courses, users }) {
           <Input {...params} placeholder="Search course, user..." />
         )}
       />
-      <InputRightElement>
-        <IconButton
-          as={RouterLink}
-          to={`/search/${query}`}
-          aria-label="Search database"
-          icon={<SearchIcon />}
-        />
+      <InputRightElement position="relative">
+        {Icon ? (
+          <IconButton
+            onClick={() => addFunction(query)}
+            icon={<Icon boxSize="20px" />}
+          />
+        ) : (
+          <IconButton
+            as={RouterLink}
+            to={`/search/${query}`}
+            aria-label="Search database"
+            icon={<SearchIcon />}
+          />
+        )}
       </InputRightElement>
     </InputGroup>
   );
@@ -86,6 +94,8 @@ function Search({ courses, users }) {
 Search.propTypes = {
   courses: PropTypes.array,
   users: PropTypes.array,
+  Icon: PropTypes.elementType,
+  addFunction: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({

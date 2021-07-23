@@ -14,7 +14,13 @@ const selectChatPageDomain = state => state.chatPage || initialState;
 const makeSelectFirestoreMessages = () =>
   createSelector(
     selectFirestore,
-    substate => substate.ordered.messages,
+    substate => substate.ordered.message,
+  );
+
+const makeSelectFirestoreGroups = () =>
+  createSelector(
+    selectFirestore,
+    substate => substate.ordered.groups,
   );
 
 /**
@@ -28,4 +34,8 @@ const makeSelectChatPage = () =>
   );
 
 export default makeSelectChatPage;
-export { selectChatPageDomain, makeSelectFirestoreMessages };
+export {
+  selectChatPageDomain,
+  makeSelectFirestoreMessages,
+  makeSelectFirestoreGroups,
+};

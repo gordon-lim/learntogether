@@ -4,51 +4,85 @@
  *
  */
 
+import { PlusSquareIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Button,
   Container,
   Flex,
-  FormControl,
-  IconButton,
-  Input,
-  Stat,
-  StatLabel,
-  StatNumber,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react';
+import Search from 'components/Search';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
 import PropTypes from 'prop-types';
-import React, { memo, useRef, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { firestoreConnect, useFirestore } from 'react-redux-firebase';
+import { isEmpty, isLoaded, useFirestore } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
-import ChatBubble from './ChatBubble';
+import Chat from './Chat';
 import reducer from './reducer';
-import makeSelectChatPage, { makeSelectFirestoreMessages } from './selectors';
-import { SendIcon } from './SendIcon';
 import SideButtons from './SideButtons';
 
-export function ChatPage({ auth, messages }) {
+export function ChatPage({ auth }) {
   useInjectReducer({ key: 'chatPage', reducer });
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const firestore = useFirestore();
-  const [formValue, setFormValue] = useState('');
-  const scroll = useRef(null);
+  const [groups, setGroups] = useState([]);
+  const [curGroup, setCurGroup] = useState({});
 
-  const sendMessage = async e => {
-    e.preventDefault();
-    if (!formValue) return;
+  const groupsRef = firestore.collection('groups');
 
-    await firestore.collection('messages').add({
-      text: formValue,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-      uid: auth.uid,
+  // load all groups that user is in
+  useEffect(() => {
+    if (isLoaded(auth) && !isEmpty(auth)) {
+      groupsRef.get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const { users, ...rest } = doc.data();
+
+          const matches = users && users.filter(user => user.id === auth.uid);
+          if (matches)
+            setGroups(prevState => [...prevState, { id: doc.id, ...rest }]);
+        });
+      });
+    }
+
+    setCurGroup(groups[0]);
+  }, [auth]);
+
+  // add user to group after searching
+  const addFunction = query => {
+    const randInt = Math.floor(Math.random() * 9) + 1;
+
+    groupsRef.add({
+      imageUrl: `https://cdn2.thecatapi.com/images/5u${randInt}.jpg`,
+      name: query,
+      users: [
+        {
+          id: auth.uid,
+          profileURL: auth.photoURL,
+        },
+      ],
     });
 
-    setFormValue('');
-    scroll.current.scrollIntoView({ behavior: 'smooth' });
+    onClose();
+  };
+
+  // change user's current group based on id
+  const changeCurrentGroup = id => {
+    const newGroup = groups.filter(group => group.id === id);
+    setCurGroup(newGroup[0]);
   };
 
   return (
@@ -67,47 +101,42 @@ export function ChatPage({ auth, messages }) {
           px={8}
           borderRadius="lg"
           boxShadow="lg"
-          height="100vh"
-          maxHeight="4xl"
         >
-          <Flex height="100%">
-            <SideButtons />
-            <Flex px={6} flexDirection="column" flex={1}>
-              <Stat mt={6}>
-                <StatLabel color="gray.500">Chatting with</StatLabel>
-                <StatNumber>Dina Harrison</StatNumber>
-              </Stat>
-              {messages &&
-                messages.map(message => (
-                  <ChatBubble
-                    key={message.id}
-                    message={message.text}
-                    dateSent={new Date(message.createdAt.seconds)}
-                    // TODO: change to username?
-                    from={message.uid === auth.uid ? 'me' : message.uid}
-                  />
-                ))}
-              <div ref={scroll} />
-              {/* TODO: Formik? */}
-              <Flex>
-                <FormControl as="form" onSubmit={sendMessage}>
-                  <Flex>
-                    <Input
-                      value={formValue}
-                      onChange={e => setFormValue(e.target.value)}
-                    />
-                    <IconButton
-                      colorScheme="blue"
-                      aria-label="Send message"
-                      variant="ghost"
-                      type="submit"
-                      icon={<SendIcon color="gray.900" />}
-                    />
-                  </Flex>
-                </FormControl>
-              </Flex>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Search groups and users</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Search Icon={PlusSquareIcon} addFunction={addFunction} />
+              </ModalBody>
+
+              <ModalFooter>
+                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+          <HStack height="100vh">
+            <Flex
+              as="aside"
+              h="full"
+              w="full"
+              maxW={{ base: 'xs', xl: 'sm' }}
+              display={{ base: 'none', lg: 'flex' }}
+              flex={0}
+            >
+              <SideButtons
+                groups={groups}
+                addChatModal={onOpen}
+                changeCurrentGroup={changeCurrentGroup}
+              />
             </Flex>
-          </Flex>
+            {curGroup && groups.length !== 0 && (
+              <Chat currentGroup={curGroup} />
+            )}
+          </HStack>
         </Box>
       </Container>
     </div>
@@ -116,41 +145,15 @@ export function ChatPage({ auth, messages }) {
 
 ChatPage.propTypes = {
   auth: PropTypes.object,
-  messages: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
-  chatPage: makeSelectChatPage(),
   auth: makeSelectFirebaseAuth(),
-  messages: makeSelectFirestoreMessages(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
-
-const withConnect = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const withConnect = connect(mapStateToProps);
 
 export default compose(
-  firestoreConnect(props => [
-    {
-      collection: 'messages',
-      // orderBy: 'createdAt',
-      limit: 25,
-      where: [
-        'uid',
-        '==',
-        'FmVIaefTa5TsbVwFAcs7HWtJDMe2',
-        props.firebase.auth().currentUser &&
-          props.firebase.auth().currentUser.uid,
-      ],
-    },
-  ]),
   withConnect,
   memo,
 )(ChatPage);

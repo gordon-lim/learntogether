@@ -99,7 +99,7 @@ function ViewCourse({
             augue.
           </Text>
         </Box>
-      </Container>{' '}
+      </Container>
     </>
   );
 
@@ -111,7 +111,7 @@ function ViewCourse({
       />
       <Container maxW="8xl" py={12}>
         <CourseMaterial />
-      </Container>{' '}
+      </Container>
     </>
   );
 
@@ -167,7 +167,7 @@ function ViewCourse({
 
 ViewCourse.propTypes = {
   auth: PropTypes.object,
-  currentCourse: PropTypes.object,
+  currentCourse: PropTypes.array,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,

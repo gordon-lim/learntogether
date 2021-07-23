@@ -48,6 +48,7 @@ export default function WithBackgroundImage(props) {
             fontWeight={700}
             lineHeight={1.2}
             fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}
+            textAlign="center"
           >
             {title}
           </Text>
