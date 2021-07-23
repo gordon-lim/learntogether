@@ -1,10 +1,5 @@
-import { SearchIcon } from '@chakra-ui/icons';
 import {
   Center,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightElement,
   Link,
   Popover,
   PopoverContent,
@@ -12,6 +7,7 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
+import Search from 'components/Search';
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { DesktopSubNav } from './DesktopSubNav';
@@ -64,12 +60,7 @@ export const DesktopNav = () => {
         </Center>
       ))}
       <Center>
-        <InputGroup>
-          <Input placeholder="Search course, user..." />
-          <InputRightElement>
-            <IconButton aria-label="Search database" icon={<SearchIcon />} />
-          </InputRightElement>
-        </InputGroup>
+        <Search />
       </Center>
     </Stack>
   );

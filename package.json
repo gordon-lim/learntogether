@@ -100,6 +100,7 @@
     "ngrok": "^4.0.1",
     "prop-types": "15.7.2",
     "react": "16.8.6",
+    "react-autocomplete": "^1.8.1",
     "react-big-calendar": "^0.33.5",
     "react-datepicker": "^4.1.1",
     "react-dom": "16.8.6",
