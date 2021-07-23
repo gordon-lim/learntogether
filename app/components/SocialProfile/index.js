@@ -41,15 +41,16 @@ function SocialProfile({ auth }) {
         textAlign="center"
       >
         <Avatar
-          size="2xl"
+          height="75%"
+          width="75%"
           src={auth.photoURL || Profile}
           alt="Avatar Alt"
           mb={4}
           pos="relative"
           _after={{
             content: '""',
-            w: 8,
-            h: 8,
+            w: 10,
+            h: 10,
             bg: 'green.300',
             border: '2px solid white',
             rounded: 'full',
@@ -59,10 +60,10 @@ function SocialProfile({ auth }) {
           }}
         />
         <Heading fontSize="2xl" fontFamily="body">
-          Gordon Lim
+          {auth.displayName}
         </Heading>
         <Text fontWeight={600} color="gray.500" mb={4}>
-          @gordon-lim
+          @elephant-giraffe1
         </Text>
         <Text
           textAlign="center"
