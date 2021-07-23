@@ -17,6 +17,12 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5em;
   }
 
+  .logoText {
+    font-family: "Ubuntu";
+    font-size: 16px;
+    font-weight: 600;
+  }
+
   .chakra-ui-dark .rbc-row-bg .rbc-off-range-bg,
   .chakra-ui-dark .rbc-calendar .rbc-today {
     background: var(--chakra-colors-gray-700);

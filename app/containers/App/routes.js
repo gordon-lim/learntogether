@@ -1,4 +1,5 @@
 import AuthPage from 'containers/AuthPage/Loadable';
+import ChatPage from 'containers/ChatPage/Loadable';
 import CoursePage from 'containers/CoursePage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
@@ -31,6 +32,7 @@ const Routes = ({ auth }) => (
       <CoursePage auth={auth} />
     </Route>
     <Route path="/search" component={SearchPage} />
+    <Route path="/chat" component={ChatPage} />
     <Route component={NotFoundPage} />
   </Switch>
 );

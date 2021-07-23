@@ -10,13 +10,11 @@ import {
   Collapse,
   Flex,
   IconButton,
-  Image,
-  Link,
+  Spinner,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
-import Logo from 'images/logo.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -27,6 +25,7 @@ import ColourModeSwitch from './ColourModeSwitch';
 import { DesktopNav } from './DesktopNav';
 import { LoggedInItems } from './LoggedInItems';
 import { LoggedOutItems } from './LoggedOutItems';
+import Logo from './Logo';
 import { MobileNav } from './MobileNav';
 
 function Header({ auth }) {
@@ -60,19 +59,20 @@ function Header({ auth }) {
           />
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
-          <Link as={RouterLink} to="/">
-            <Image height="50px" src={Logo} alt="logo" />
-          </Link>
+          <Flex as={RouterLink} to="/" alignItems="center">
+            <Logo />
+          </Flex>
 
           <Flex display={{ base: 'none', md: 'flex' }} ml={10}>
             <DesktopNav />
           </Flex>
         </Flex>
         <ColourModeSwitch mr={3} />
+        {!isLoaded(auth) && isEmpty(auth) && <Spinner speed="2s" />}
         {isLoaded(auth) && !isEmpty(auth) ? (
           <LoggedInItems photoURL={auth.photoURL} />
         ) : (
-          <LoggedOutItems />
+          isLoaded(auth) && <LoggedOutItems />
         )}
       </Flex>
       <Collapse in={isOpen} animateOpacity>

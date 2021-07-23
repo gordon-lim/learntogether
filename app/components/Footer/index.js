@@ -9,8 +9,8 @@ import {
   Box,
   chakra,
   Container,
+  Flex,
   IconButton,
-  Image,
   Input,
   Link,
   SimpleGrid,
@@ -19,14 +19,12 @@ import {
   useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react';
-import logo from 'images/logo.png';
+import Logo from 'components/Header/Logo';
 import PropTypes from 'prop-types';
 import React, { memo } from 'react';
 import { BiMailSend } from 'react-icons/bi';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
-
-const Logo = () => <Image height="50px" src={logo} alt="logo" />;
 
 const SocialButton = ({ children, label, to }) => (
   <chakra.button
@@ -69,9 +67,9 @@ function Footer() {
           spacing={8}
         >
           <Stack spacing={6}>
-            <Box>
-              <Logo color={useColorModeValue('gray.700', 'white')} />
-            </Box>
+            <Flex alignItems="center">
+              <Logo />
+            </Flex>
             <Text fontSize="sm">© 2021 LearnTogether. All rights reserved</Text>
             <Stack direction="row" spacing={6}>
               <SocialButton label="Twitter" as={RouterLink} to="/">

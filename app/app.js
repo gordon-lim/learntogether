@@ -11,6 +11,7 @@
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import '@babel/polyfill';
 import { ChakraProvider } from '@chakra-ui/react';
+import '@fontsource/ubuntu';
 import { ConnectedRouter } from 'connected-react-router';
 // Import root app
 import App from 'containers/App';
@@ -20,11 +21,13 @@ import 'file-loader?name=.htaccess!./.htaccess';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
+import 'firebase/firestore';
 // Import all the third party stuff
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance } from 'redux-firestore';
 import 'sanitize.css/sanitize.css';
 import theme from 'theme';
 import history from 'utils/history';
@@ -52,17 +55,18 @@ const fbConfig = {
 
 // Initialize firebase instance & firestore
 firebase.initializeApp(fbConfig);
+firebase.firestore();
+// firebase.functions() // <- needed if using httpsCallable
 
 // react-redux-firebase props
 const rrfProps = {
   firebase,
   config: {
     userProfile: 'users',
-    // useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
     // enableClaims: true // Get custom claims along with the profile
   },
   dispatch: store.dispatch,
-  // createFirestoreInstance, // <- needed if using firestore
+  createFirestoreInstance, // <- needed if using firestore
 };
 
 // Added chakra ui provider
