@@ -13,9 +13,16 @@ import {
   AccordionIcon,
   Box,
   Heading,
+  AspectRatio,
   List,
   ListItem,
   ListIcon,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { MdSettings, MdCheckCircle } from 'react-icons/md';
 
@@ -23,6 +30,7 @@ import { MdSettings, MdCheckCircle } from 'react-icons/md';
 // import styled from 'styled-components';
 
 function CourseMaterial() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box>
       <Heading mb={4}>Course Materials</Heading>
@@ -37,21 +45,47 @@ function CourseMaterial() {
             </AccordionButton>
           </h2>
           <AccordionPanel pb={4}>
-            <h3>Welcome to Introduction to Psychology</h3>
+            <h2>The Brain</h2>
             <List spacing={3} mt={4} ml={5}>
+              <ListItem onClick={onOpen}>
+                <ListIcon as={MdCheckCircle} color="green.500" />
+                Video: The astonishing hypothesis
+              </ListItem>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <AspectRatio maxW="2480px">
+                      <iframe
+                        title="The astonishing hypothesis"
+                        src="https://d3c33hcgiwev3.cloudfront.net/8-zVxdPGEeisEhKURr0pTg.processed/full/240p/index.webm?Expires=1627084800&Signature=V00WQtE~KzaXiHvbgJG4jDj78eyOu2-cF0jls1Ar31hagpXnMVgBlJ8OiroRzW3v4Pa5uW2K08qUfS3jSD4jcQUsdeaTMgEUA8EPIOi6z3sAUqSIb-FeT3HWMp1MX1pe4uGZcifwGeayNv3StsYw5YTc3Q~1rqlX~iqf-5KWH1k_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A"
+                        allowFullScreen
+                      />
+                    </AspectRatio>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
               <ListItem>
                 <ListIcon as={MdCheckCircle} color="green.500" />
-                Videos
-                <b> 40min</b>
+                Video: Dualism
               </ListItem>
               <ListItem>
                 <ListIcon as={MdCheckCircle} color="green.500" />
-                Readings
+                Video: Neurons
+              </ListItem>
+              <ListItem>
+                <ListIcon as={MdCheckCircle} color="green.500" />
+                Video: Parts of the brain
+              </ListItem>
+              <ListItem>
+                <ListIcon as={MdCheckCircle} color="green.500" />
+                Video: Our two brains
               </ListItem>
               {/* You can also use custom icons from react-icons */}
               <ListItem>
                 <ListIcon as={MdSettings} color="green.500" />
-                Kahoots <b> 20min </b>
+                Kahoot: Foundations
               </ListItem>
             </List>
           </AccordionPanel>
