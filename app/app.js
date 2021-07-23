@@ -11,6 +11,7 @@
 import '!file-loader?name=[name].[ext]!./images/favicon.ico';
 import '@babel/polyfill';
 import { ChakraProvider } from '@chakra-ui/react';
+import '@fontsource/ubuntu';
 import { ConnectedRouter } from 'connected-react-router';
 // Import root app
 import App from 'containers/App';

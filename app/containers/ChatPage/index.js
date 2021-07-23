@@ -28,6 +28,7 @@ import ChatBubble from './ChatBubble';
 import reducer from './reducer';
 import makeSelectChatPage, { makeSelectFirestoreMessages } from './selectors';
 import { SendIcon } from './SendIcon';
+import SideButtons from './SideButtons';
 
 export function ChatPage({ auth, messages }) {
   useInjectReducer({ key: 'chatPage', reducer });
@@ -61,13 +62,17 @@ export function ChatPage({ auth, messages }) {
           width={{ lg: '60%' }}
           m="0 auto"
           border="1px"
-          p={7}
+          paddingTop={4}
+          paddingBottom={10}
+          px={8}
           borderRadius="lg"
           boxShadow="lg"
           height="100vh"
+          maxHeight="4xl"
         >
-          <Flex height="100%" flexDirection="column">
-            <Flex px={6} overflowY="auto" flexDirection="column" flex={1}>
+          <Flex height="100%">
+            <SideButtons />
+            <Flex px={6} flexDirection="column" flex={1}>
               <Stat mt={6}>
                 <StatLabel color="gray.500">Chatting with</StatLabel>
                 <StatNumber>Dina Harrison</StatNumber>
