@@ -184,7 +184,7 @@ function JoinCourse({
   });
 
   return (
-    <Container maxW="7xl" py={12}>
+    <Container maxW="8xl" py={12}>
       <Breadcrumb
         spacing="8px"
         separator={<ChevronRightIcon color="gray.500" />}

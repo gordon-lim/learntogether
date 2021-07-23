@@ -89,7 +89,7 @@ function ViewCourse({ auth, courseId }) {
         rightButtonText={rightButtonText}
         rightButtonLink={rightButtonLink}
       />
-      <Container maxW="7xl" py={12}>
+      <Container maxW="8xl" py={12}>
         <Box>
           <Heading mb={4}>About this course</Heading>
           <Text fontSize="md">

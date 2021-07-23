@@ -32,7 +32,7 @@ function Hero() {
       )}
       mb={12}
     >
-      <Container maxW="7xl" pb="5rem">
+      <Container maxW="8xl" pb="5rem">
         <Stack
           align="center"
           spacing={{ base: 8, md: 10 }}

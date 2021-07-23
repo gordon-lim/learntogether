@@ -12,8 +12,8 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
-import MyCoursesCarousel from 'components/Carousel/MyCoursesCarousel';
-import PastCoursesCarousel from 'components/Carousel/PastCoursesCarousel';
+import CoursesJoinedCarousel from 'components/Carousel/CoursesJoinedCarousel';
+import CoursesCompletedCarousel from 'components/Carousel/CoursesCompletedCarousel';
 import PropTypes from 'prop-types';
 import React, { memo, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -40,7 +40,7 @@ export function ProfilePage({ auth }) {
       </Helmet>
       <Grid
         templateColumns="1fr minmax(300px, 3fr)"
-        maxW="7xl"
+        maxW="8xl"
         m="0 auto"
         gap={5}
       >
@@ -51,14 +51,15 @@ export function ProfilePage({ auth }) {
             w="100%"
             rounded="100%"
             mb={9}
+            mt={8}
           />
           <Button onClick={() => setFollowed(true)} isDisabled={followed}>
             {followed ? 'Followed!' : 'Follow me!'}
           </Button>
         </Box>
         <Stack spacing={10}>
-          <MyCoursesCarousel />
-          <PastCoursesCarousel />
+          <CoursesJoinedCarousel />
+          <CoursesCompletedCarousel />
         </Stack>
       </Grid>
     </Box>
