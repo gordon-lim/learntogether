@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
 
 import WithBackgroundImage from 'components/Hero/WithBackgroundImage';
+import CourseMaterial from 'components/CourseMaterial';
 
 export default function ViewCourse(props) {
   const { courseId } = props.match.params; // esli
@@ -50,6 +51,9 @@ export default function ViewCourse(props) {
             augue.
           </Text>
         </Box>
+      </Container>
+      <Container maxW="7xl" py={12}>
+        <CourseMaterial />
       </Container>
     </VStack>
   );
