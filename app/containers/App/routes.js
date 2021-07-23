@@ -3,6 +3,7 @@ import CoursePage from 'containers/CoursePage/Loadable';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import ProfilePage from 'containers/ProfilePage/Loadable';
+import SearchPage from 'containers/SearchPage/Loadable';
 import TimetablePage from 'containers/TimetablePage/Loadable';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -29,6 +30,7 @@ const Routes = ({ auth }) => (
     <Route path="/courses">
       <CoursePage auth={auth} />
     </Route>
+    <Route path="/search" component={SearchPage} />
     <Route component={NotFoundPage} />
   </Switch>
 );

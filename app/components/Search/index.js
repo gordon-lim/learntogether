@@ -6,6 +6,7 @@
 
 import { SearchIcon } from '@chakra-ui/icons';
 import {
+  Box,
   IconButton,
   Input,
   InputGroup,
@@ -21,6 +22,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import { v4 } from 'uuid';
+import { Link as RouterLink } from 'react-router-dom';
 // import styled from 'styled-components';
 
 function Search({ courses, users }) {
@@ -47,15 +49,20 @@ function Search({ courses, users }) {
       <Autocomplete
         placeholder="Search course, user..."
         items={results}
-        shouldItemRender={(item, value) => item.label.includes(value)}
+        shouldItemRender={(item, value) =>
+          item.label.toLowerCase().includes(value.toLowerCase())
+        }
         getItemValue={item => item.label}
         renderItem={(item, isHighlighted) => (
-          <div
-            style={{ background: isHighlighted ? 'lightgray' : 'white' }}
+          <Box
+            p={4}
+            shadow="md"
+            borderWidth="1px"
+            bgColor={isHighlighted ? 'lightgray' : 'white'}
             key={v4()}
           >
             {item.label}
-          </div>
+          </Box>
         )}
         value={query}
         onChange={e => setQuery(e.target.value)}
@@ -65,7 +72,12 @@ function Search({ courses, users }) {
         )}
       />
       <InputRightElement>
-        <IconButton aria-label="Search database" icon={<SearchIcon />} />
+        <IconButton
+          as={RouterLink}
+          to={`/search/${query}`}
+          aria-label="Search database"
+          icon={<SearchIcon />}
+        />
       </InputRightElement>
     </InputGroup>
   );
