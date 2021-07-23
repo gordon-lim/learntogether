@@ -4,16 +4,29 @@
  *
  */
 import produce from 'immer';
-import { DEFAULT_ACTION } from './constants';
+import { ADD_EVENT, DEFAULT_ACTION } from './constants';
+import { containsObject } from './utils';
 
-export const initialState = {};
+export const initialState = {
+  events: [],
+};
 
 /* eslint-disable default-case, no-param-reassign */
 const timetablePageReducer = (state = initialState, action) =>
   produce(state, (/* draft */) => {
     switch (action.type) {
+      case ADD_EVENT: {
+        return {
+          ...state,
+          events: containsObject(action.payload.event, state.events)
+            ? state.events
+            : state.events.concat(action.payload.event),
+        };
+      }
       case DEFAULT_ACTION:
-        break;
+        return { ...state };
+      default:
+        return { ...state };
     }
   });
 
