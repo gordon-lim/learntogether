@@ -5,7 +5,12 @@
  */
 
 import { SearchIcon } from '@chakra-ui/icons';
-import { IconButton, InputGroup, InputRightElement } from '@chakra-ui/react';
+import {
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from '@chakra-ui/react';
 import { makeSelectUserDetails } from 'containers/CoursePage/selectors';
 import { makeSelectCourses } from 'containers/HomePage/selectors';
 import React, { useEffect, useState } from 'react';
@@ -29,7 +34,11 @@ function Search({ courses, users }) {
     res = res.concat(
       courses.map(c => ({ courseId: c.key, label: c.value.title })),
     );
-    res = res.concat(users.map(u => ({ userId: u.key, label: u.value.email })));
+    res = res.concat(
+      users
+        .filter(u => u.value.displayName)
+        .map(u => ({ userId: u.key, label: u.value.displayName })),
+    );
     setResults(res);
   }, [courses, users]);
 
@@ -51,6 +60,9 @@ function Search({ courses, users }) {
         value={query}
         onChange={e => setQuery(e.target.value)}
         onSelect={val => setQuery(val)}
+        renderInput={params => (
+          <Input {...params} placeholder="Search course, user..." />
+        )}
       />
       <InputRightElement>
         <IconButton aria-label="Search database" icon={<SearchIcon />} />
