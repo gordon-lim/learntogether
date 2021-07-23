@@ -4,39 +4,39 @@
  *
  */
 
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import {
   Box,
   chakra,
   Container,
+  IconButton,
+  Image,
+  Input,
   Link,
   SimpleGrid,
   Stack,
   Text,
-  VisuallyHidden,
-  Input,
-  IconButton,
   useColorModeValue,
-  Image,
+  VisuallyHidden,
 } from '@chakra-ui/react';
-
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
-import { BiMailSend } from 'react-icons/bi';
 import logo from 'images/logo.png';
+import PropTypes from 'prop-types';
+import React, { memo } from 'react';
+import { BiMailSend } from 'react-icons/bi';
+import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Logo = () => <Image height="50px" src={logo} alt="logo" />;
 
-const SocialButton = ({ children, label, href }) => (
+const SocialButton = ({ children, label, to }) => (
   <chakra.button
     bg={useColorModeValue('blackAlpha.100', 'whiteAlpha.100')}
     rounded="full"
     w={8}
     h={8}
     cursor="pointer"
-    as="a"
-    href={href}
+    as={RouterLink}
+    to={to}
     display="inline-flex"
     alignItems="center"
     justifyContent="center"
@@ -74,32 +74,52 @@ function Footer() {
             </Box>
             <Text fontSize="sm">© 2021 LearnTogether. All rights reserved</Text>
             <Stack direction="row" spacing={6}>
-              <SocialButton label="Twitter" href="/">
+              <SocialButton label="Twitter" as={RouterLink} to="/">
                 <FaTwitter />
               </SocialButton>
-              <SocialButton label="YouTube" href="/">
+              <SocialButton label="YouTube" as={RouterLink} to="/">
                 <FaYoutube />
               </SocialButton>
-              <SocialButton label="Instagram" href="/">
+              <SocialButton label="Instagram" as={RouterLink} to="/">
                 <FaInstagram />
               </SocialButton>
             </Stack>
           </Stack>
           <Stack align="flex-start">
-            <ListHeader>Company</ListHeader>
-            <Link href="/">About us</Link>
-            <Link href="/">Blog</Link>
-            <Link href="/">Contact us</Link>
-            <Link href="/">Pricing</Link>
-            <Link href="/">Testimonials</Link>
+            <ListHeader>Courses</ListHeader>
+            <Link as={RouterLink} to="/">
+              Courses
+            </Link>
+            <Link as={RouterLink} to="/">
+              Blog
+            </Link>
+            <Link as={RouterLink} to="/">
+              Contact us
+            </Link>
+            <Link as={RouterLink} to="/">
+              Pricing
+            </Link>
+            <Link as={RouterLink} to="/">
+              Testimonials
+            </Link>
           </Stack>
           <Stack align="flex-start">
             <ListHeader>Support</ListHeader>
-            <Link href="/">Help Center</Link>
-            <Link href="/">Terms of Service</Link>
-            <Link href="/">Legal</Link>
-            <Link href="/">Privacy Policy</Link>
-            <Link href="/">Satus</Link>
+            <Link as={RouterLink} to="/">
+              Help Center
+            </Link>
+            <Link as={RouterLink} to="/">
+              Terms of Service
+            </Link>
+            <Link as={RouterLink} to="/">
+              Legal
+            </Link>
+            <Link as={RouterLink} to="/">
+              Privacy Policy
+            </Link>
+            <Link as={RouterLink} to="/">
+              Satus
+            </Link>
           </Stack>
           <Stack align="flex-start">
             <ListHeader>Stay up to date</ListHeader>
@@ -133,7 +153,7 @@ Footer.propTypes = {};
 SocialButton.propTypes = {
   children: PropTypes.node,
   label: PropTypes.string,
-  href: PropTypes.string,
+  to: PropTypes.string,
 };
 ListHeader.propTypes = {
   children: PropTypes.node,

@@ -1,3 +1,4 @@
+import { selectFirebase } from 'containers/App/selectors';
 import { createSelector } from 'reselect';
 import { initialState } from './reducer';
 
@@ -21,5 +22,11 @@ const makeSelectProfilePage = () =>
     substate => substate,
   );
 
+const makeSelectCoursesCompleted = () =>
+  createSelector(
+    selectFirebase,
+    substate => substate.ordered.coursesCompleted,
+  );
+
 export default makeSelectProfilePage;
-export { selectProfilePageDomain };
+export { selectProfilePageDomain, makeSelectCoursesCompleted };

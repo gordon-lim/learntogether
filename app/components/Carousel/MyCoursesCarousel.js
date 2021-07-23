@@ -4,45 +4,16 @@
  *
  */
 
-import React from 'react';
-import Carousel from 'components/Carousel';
 import CourseCard from 'components/Card/CourseCard';
-// import PropTypes from 'prop-types';
+import Carousel from 'components/Carousel';
+import { makeSelectCoursesJoined } from 'containers/TimetablePage/selectors';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { connect } from 'react-redux';
+import { firebaseConnect } from 'react-redux-firebase';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 // import styled from 'styled-components';
-const details = [
-  {
-    imageUrl: 'https://bit.ly/3kognHo',
-    imageAlt: 'Rear view of modern home with pool',
-    title: 'Introduction to Psychology',
-    startDate: '5 Nov 2021',
-    endDate: '24 Dec 2021',
-    timing: 'MonWedFri 9.00pm-10.00pm EST',
-  },
-  {
-    imageUrl: 'https://bit.ly/3kognHo',
-    imageAlt: 'Rear view of modern home with pool',
-    title: 'Using Python to make your first Telegram bot',
-    startDate: '5 Nov 2021',
-    endDate: '24 Dec 2021',
-    timing: 'WedFri 9.00pm-10.00pm EST',
-  },
-  {
-    imageUrl: 'https://bit.ly/3kognHo',
-    imageAlt: 'Rear view of modern home with pool',
-    title: 'How to incorportae UI/UX concepts into your designs',
-    startDate: '5 Nov 2021',
-    endDate: '24 Dec 2021',
-    timing: 'MonTue 9.00pm-10.00pm EST',
-  },
-  {
-    imageUrl: 'https://bit.ly/3kognHo',
-    imageAlt: 'Rear view of modern home with pool',
-    title: 'Web development with React',
-    startDate: '5 Nov 2021',
-    endDate: '24 Dec 2021',
-    timing: 'MonFri 9.00pm-10.00pm EST',
-  },
-];
 
 const sliderSettings = {
   arrows: false,
@@ -61,17 +32,33 @@ const sliderSettings = {
   ],
 };
 
-function MyCoursesCarousel() {
+function MyCoursesCarousel({ courses }) {
+  // console.log(details);
   return (
     <Carousel
       CardComponent={CourseCard}
-      details={details}
+      details={courses}
       sliderName="My Courses"
       sliderSettings={sliderSettings}
     />
   );
 }
 
-MyCoursesCarousel.propTypes = {};
+MyCoursesCarousel.propTypes = {
+  courses: PropTypes.array,
+};
 
-export default MyCoursesCarousel;
+const mapStateToProps = createStructuredSelector({
+  courses: makeSelectCoursesJoined(),
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default compose(
+  firebaseConnect(() => [
+    {
+      path: 'coursesJoined',
+    },
+  ]),
+  withConnect,
+)(MyCoursesCarousel);

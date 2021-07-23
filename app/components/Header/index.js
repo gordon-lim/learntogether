@@ -15,11 +15,14 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
+import { makeSelectFirebaseAuth } from 'containers/App/selectors';
+import Logo from 'images/logo.png';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { connect } from 'react-redux';
 import { isEmpty, isLoaded } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
-import Logo from 'images/logo.png';
+import { createStructuredSelector } from 'reselect';
 import ColourModeSwitch from './ColourModeSwitch';
 import { DesktopNav } from './DesktopNav';
 import { LoggedInItems } from './LoggedInItems';
@@ -83,4 +86,10 @@ Header.propTypes = {
   auth: PropTypes.object,
 };
 
-export default Header;
+const mapStateToProps = createStructuredSelector({
+  auth: makeSelectFirebaseAuth(),
+});
+
+const withConnect = connect(mapStateToProps);
+
+export default withConnect(Header);

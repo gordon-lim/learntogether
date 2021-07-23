@@ -15,7 +15,7 @@ const selectCoursePageDomain = state => state.coursePage || initialState;
 const makeSelectUserDetails = () =>
   createSelector(
     selectFirebase,
-    subState => subState.ordered.users,
+    substate => substate.ordered.users,
   );
 
 const makeSelectCourseId = () => (state, ownProps) =>
@@ -24,28 +24,28 @@ const makeSelectCourseId = () => (state, ownProps) =>
 const makeSelectAvailSlots = () =>
   createSelector(
     selectFirebase,
-    subState =>
-      subState.ordered.coursesHosted ? subState.ordered.coursesHosted : [],
+    substate =>
+      substate.ordered.coursesHosted ? substate.ordered.coursesHosted : [],
   );
 
 const makeSelectJoinSlots = () =>
   createSelector(
     selectCoursePageDomain,
-    subState => (subState.joinSlots ? subState.joinSlots : []),
+    substate => (substate.joinSlots ? substate.joinSlots : []),
   );
 
 const makeSelectVotedJoinSlots = () =>
   createSelector(
     selectCoursePageDomain,
-    subState => {
+    substate => {
       const periods = [];
-      for (let day = 0; day < subState.joinSlots.length; day += 1) {
+      for (let day = 0; day < substate.joinSlots.length; day += 1) {
         for (
           let period = 0;
-          period < subState.joinSlots[day].length;
+          period < substate.joinSlots[day].length;
           period += 1
         ) {
-          if (subState.joinSlots[day][period].selected) {
+          if (substate.joinSlots[day][period].selected) {
             periods.push({
               day,
               period,
@@ -69,21 +69,21 @@ const makeSelectSlotVotes = () =>
 const makeSelectHostSlots = () =>
   createSelector(
     selectCoursePageDomain,
-    subState => (subState.hostSlots ? subState.hostSlots : []),
+    substate => (substate.hostSlots ? substate.hostSlots : []),
   );
 
 const makeSelectSelectedHostSlots = () =>
   createSelector(
     selectCoursePageDomain,
-    subState => {
+    substate => {
       const periods = [];
-      for (let day = 0; day < subState.hostSlots.length; day += 1) {
+      for (let day = 0; day < substate.hostSlots.length; day += 1) {
         for (
           let period = 0;
-          period < subState.hostSlots[day].length;
+          period < substate.hostSlots[day].length;
           period += 1
         ) {
-          if (subState.hostSlots[day][period].selected) {
+          if (substate.hostSlots[day][period].selected) {
             periods.push({
               day,
               period,

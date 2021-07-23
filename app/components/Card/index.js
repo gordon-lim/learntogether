@@ -52,9 +52,9 @@ function Card({ data }) {
         </Box>
 
         <Box>
-          {data.formattedPrice}
-          <Box as="span" color="gray.500" fontSize="sm">
-            / wk
+          {data.duration}{' '}
+          <Box as="span" color="gray.500" fontSize="md">
+            hours
           </Box>
         </Box>
 
@@ -89,7 +89,17 @@ function Card({ data }) {
 }
 
 Card.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.shape({
+    courseUrl: PropTypes.string.isRequired,
+    imageAlt: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
+    quizzes: PropTypes.number.isRequired,
+    rating: PropTypes.number.isRequired,
+    reviewCount: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    videos: PropTypes.number.isRequired,
+    duration: PropTypes.number.isRequired,
+  }),
 };
 
 export default Card;

@@ -4,11 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { compose } from 'redux';
+import { ChevronRightIcon } from '@chakra-ui/icons';
 import {
   Box,
   Breadcrumb,
@@ -21,15 +17,25 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import { ChevronRightIcon } from '@chakra-ui/icons';
-
-import { useInjectSaga } from 'utils/injectSaga';
-import { useInjectReducer } from 'utils/injectReducer';
-import WithForm from 'components/Modal/WithForm';
-import { firebaseConnect, isLoaded, useFirebase } from 'react-redux-firebase';
 import axios from 'axios';
+import WithForm from 'components/Modal/WithForm';
 import OauthPopup from 'components/OauthPopup';
+import PropTypes from 'prop-types';
+import React, { memo, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { firebaseConnect, isLoaded, useFirebase } from 'react-redux-firebase';
+import { Link as RouterLink } from 'react-router-dom';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { ZOOM_CLIENT_ID, ZOOM_REDIRECT_URL } from 'utils/constants';
+import { useInjectReducer } from 'utils/injectReducer';
+import { useInjectSaga } from 'utils/injectSaga';
+import { WeekGrid } from '../../components/Grid/WeekGrid';
+import HostWeekGridItem from '../../components/TableComponent/HostWeekGridItem';
+import { addVoteSlots, selectHostSlot } from './actions';
+import { PERIOD_LEN } from './constants';
+import reducer from './reducer';
+import saga from './saga';
 import makeSelectCoursePage, {
   makeSelectCourseId,
   makeSelectHostSlots,
@@ -37,13 +43,7 @@ import makeSelectCoursePage, {
   makeSelectSlotVotes,
   makeSelectUserDetails,
 } from './selectors';
-import reducer from './reducer';
-import saga from './saga';
 import { getAveVotes, getNextDayOfTheWeek, periodToHour } from './utils';
-import { addVoteSlots, selectHostSlot } from './actions';
-import { WeekGrid } from '../../components/Grid/WeekGrid';
-import HostWeekGridItem from '../../components/TableComponent/HostWeekGridItem';
-import { PERIOD_LEN } from './constants';
 
 function HostCourse({
   auth,
@@ -212,17 +212,21 @@ function HostCourse({
         separator={<ChevronRightIcon color="gray.500" />}
       >
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Course</BreadcrumbLink>
+          <BreadcrumbLink as={RouterLink} to="/">
+            Course
+          </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem>
-          <BreadcrumbLink href={`/courses/${courseId}`}>
+          <BreadcrumbLink as={RouterLink} to={`/courses/${courseId}`}>
             {courseId}
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="#">Host</BreadcrumbLink>
+          <BreadcrumbLink as={RouterLink} to="#">
+            Host
+          </BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
 

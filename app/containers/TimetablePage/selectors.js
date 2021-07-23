@@ -15,29 +15,29 @@ const selectTimetablePageDomain = state => state.timetablePage || initialState;
 const makeSelectCourses = () =>
   createSelector(
     selectFirebase,
-    subState => (subState.courses ? subState.courses : []),
+    substate => (substate.courses ? substate.courses : []),
   );
 
 const makeSelectCoursesJoined = () =>
   createSelector(
     selectFirebase,
-    subState =>
-      subState.ordered.coursesJoined ? subState.ordered.coursesJoined : [],
+    substate =>
+      substate.ordered.coursesJoined ? substate.ordered.coursesJoined : [],
   );
 
 const makeSelectCoursesHosted = () =>
   createSelector(
     selectFirebase,
-    subState =>
-      subState.ordered.coursesHosted ? subState.ordered.coursesHosted : [],
+    substate =>
+      substate.ordered.coursesHosted ? substate.ordered.coursesHosted : [],
   );
 
 const makeSelectAllCoursesHosted = () =>
   createSelector(
     selectFirebase,
-    subState =>
-      subState.ordered.allCoursesHosted
-        ? subState.ordered.allCoursesHosted
+    substate =>
+      substate.ordered.allCoursesHosted
+        ? substate.ordered.allCoursesHosted
         : [],
   );
 

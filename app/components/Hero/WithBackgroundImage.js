@@ -4,18 +4,19 @@
  *
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
-// import styled from 'styled-components';
-
 import {
-  Stack,
-  Flex,
   Button,
+  Flex,
+  Stack,
   Text,
-  VStack,
   useBreakpointValue,
+  useColorModeValue,
+  VStack,
 } from '@chakra-ui/react';
+import PropTypes from 'prop-types';
+import React from 'react';
+// import styled from 'styled-components';
+import { Link as RouterLink } from 'react-router-dom';
 
 export default function WithBackgroundImage(props) {
   // const bgUrl = '';
@@ -52,20 +53,20 @@ export default function WithBackgroundImage(props) {
           </Text>
           <Stack direction="row">
             <Button
-              as="a"
-              href={leftButtonLink}
-              bg="blue.400"
-              rounded="full"
+              as={RouterLink}
+              to={leftButtonLink}
+              rounded="md"
+              colorScheme="red"
               color="white"
-              _hover={{ bg: 'blue.500' }}
+              bg={useColorModeValue('red.300', 'red.400')}
             >
               {leftButtonText}
             </Button>
             <Button
-              as="a"
-              href={rightButtonLink}
+              as={RouterLink}
+              to={rightButtonLink}
               bg="whiteAlpha.300"
-              rounded="full"
+              rounded="md"
               color="white"
               _hover={{ bg: 'whiteAlpha.500' }}
             >

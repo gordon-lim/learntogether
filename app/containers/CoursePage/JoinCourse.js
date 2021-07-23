@@ -118,7 +118,7 @@ function JoinCourse({
         );
       }
       await Promise.all(results);
-      setSuccess('Voted saved.');
+      setSuccess('Vote saved.');
     } catch (err) {
       setError(err);
     }

@@ -16,7 +16,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 import styled from 'styled-components';
-import { v4 } from 'uuid';
 
 const CardSlider = styled(Slider)`
   padding-top: 4rem;
@@ -68,9 +67,10 @@ function Carousel({
           </Flex>
         </Flex>
         <CardSlider ref={setSliderRef} {...sliderSettings}>
-          {details.map(item => (
-            <CardComponent data={item} key={v4()} />
-          ))}
+          {details &&
+            details.map(item => (
+              <CardComponent data={item.value} key={item.key} />
+            ))}
         </CardSlider>
       </Box>
     </Box>
