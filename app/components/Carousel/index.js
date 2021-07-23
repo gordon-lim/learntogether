@@ -7,6 +7,7 @@
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Container,
   Flex,
   Heading,
   IconButton,
@@ -38,7 +39,7 @@ function Carousel({
 
   return (
     <Box position="relative" {...props}>
-      <Box maxW="1280px" margin="auto">
+      <Container maxW="8xl" margin="auto">
         <Flex direction="row" align="stretch" justify="space-between">
           <Heading fontSize="4xl" letterSpacing="0.025em" align="center">
             {sliderName}
@@ -68,11 +69,9 @@ function Carousel({
         </Flex>
         <CardSlider ref={setSliderRef} {...sliderSettings}>
           {details &&
-            details.map(item => (
-              <CardComponent data={item.value} key={item.key} />
-            ))}
+            details.map(item => <CardComponent data={item} key={item.key} />)}
         </CardSlider>
-      </Box>
+      </Container>
     </Box>
   );
 }

@@ -22,20 +22,22 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
+import CardWithExtraContents from 'components/Card/CardWithExtraContents';
+import ModalWithCards from 'components/Modal/ModalWithCards';
+import JoinWeekGridItem from 'components/TableComponent/JoinWeekGridItem';
+import { makeSelectFirebaseAuth } from 'containers/App/selectors';
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { firebaseConnect, useFirebase } from 'react-redux-firebase';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import { firebaseConnect, useFirebase } from 'react-redux-firebase';
-import JoinWeekGridItem from 'components/TableComponent/JoinWeekGridItem';
-import ModalWithCards from 'components/Modal/ModalWithCards';
-import CardWithExtraContents from 'components/Card/CardWithExtraContents';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
 import { addAvailSlots, selectJoinSlot } from './actions';
+import { PERIOD_LEN } from './constants';
 import reducer from './reducer';
 import saga from './saga';
 import makeSelectCoursePage, {
@@ -44,7 +46,6 @@ import makeSelectCoursePage, {
   makeSelectJoinSlots,
   makeSelectVotedJoinSlots,
 } from './selectors';
-import { PERIOD_LEN } from './constants';
 
 function JoinCourse({
   auth,
@@ -189,7 +190,7 @@ function JoinCourse({
   });
 
   return (
-    <Container maxW="7xl" py={12}>
+    <Container maxW="8xl" py={12}>
       <Breadcrumb
         spacing="8px"
         separator={<ChevronRightIcon color="gray.500" />}
@@ -250,6 +251,7 @@ JoinCourse.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  auth: makeSelectFirebaseAuth(),
   coursePage: makeSelectCoursePage(),
   courseId: makeSelectCourseId(),
   availSlots: makeSelectAvailSlots(),

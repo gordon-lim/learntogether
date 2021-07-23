@@ -37,7 +37,7 @@ export function CoursePage({ auth }) {
         <Route
           exact
           path="/courses/:courseId/join"
-          render={props => <JoinCourse auth={auth} {...props} />}
+          render={props => <JoinCourse {...props} />}
         >
           {isLoaded(auth) && isEmpty(auth) && <Redirect to="/auth/signin" />}
         </Route>

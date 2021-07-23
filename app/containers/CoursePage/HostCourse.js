@@ -20,6 +20,7 @@ import {
 import axios from 'axios';
 import WithForm from 'components/Modal/WithForm';
 import OauthPopup from 'components/OauthPopup';
+import { makeSelectFirebaseAuth } from 'containers/App/selectors';
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
@@ -206,7 +207,7 @@ function HostCourse({
   );
 
   return (
-    <Container maxW="7xl" py={12}>
+    <Container maxW="8xl" py={12}>
       <Breadcrumb
         spacing="8px"
         separator={<ChevronRightIcon color="gray.500" />}
@@ -295,6 +296,7 @@ HostCourse.propTypes = {
 };
 
 const mapStateToProps = createStructuredSelector({
+  auth: makeSelectFirebaseAuth(),
   coursePage: makeSelectCoursePage(),
   userDetails: makeSelectUserDetails(),
   courseId: makeSelectCourseId(),
