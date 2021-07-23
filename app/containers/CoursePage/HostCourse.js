@@ -24,7 +24,12 @@ import { makeSelectFirebaseAuth } from 'containers/App/selectors';
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { firebaseConnect, isLoaded, useFirebase } from 'react-redux-firebase';
+import {
+  firebaseConnect,
+  isEmpty,
+  isLoaded,
+  useFirebase,
+} from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
@@ -39,10 +44,10 @@ import reducer from './reducer';
 import saga from './saga';
 import makeSelectCoursePage, {
   makeSelectCourseId,
+  makeSelectCurrentUserDetails,
   makeSelectHostSlots,
   makeSelectSelectedHostSlots,
   makeSelectSlotVotes,
-  makeSelectUserDetails,
 } from './selectors';
 import { getAveVotes, getNextDayOfTheWeek, periodToHour } from './utils';
 
@@ -94,8 +99,8 @@ function HostCourse({
     }
 
     // Checks if the user has a zoom access token present in the firebase database
-    if (isLoaded(userDetails)) {
-      const userDeets = userDetails[auth.uid].reduce(
+    if (isLoaded(userDetails) && !isEmpty(userDetails)) {
+      const userDeets = userDetails.reduce(
         (arr, obj) => ({ ...arr, [obj.key]: obj.value }),
         {},
       );
@@ -286,7 +291,7 @@ function HostCourse({
 
 HostCourse.propTypes = {
   auth: PropTypes.object,
-  userDetails: PropTypes.object,
+  userDetails: PropTypes.array,
   courseId: PropTypes.string,
   slotVotes: PropTypes.array,
   hostSlots: PropTypes.array,
@@ -298,7 +303,7 @@ HostCourse.propTypes = {
 const mapStateToProps = createStructuredSelector({
   auth: makeSelectFirebaseAuth(),
   coursePage: makeSelectCoursePage(),
-  userDetails: makeSelectUserDetails(),
+  userDetails: makeSelectCurrentUserDetails(),
   courseId: makeSelectCourseId(),
   hostSlots: makeSelectHostSlots(),
   selectedHostSlots: makeSelectSelectedHostSlots(),
@@ -325,6 +330,7 @@ export default compose(
     },
     {
       path: `users/${props.auth.uid}`,
+      storeAs: 'currentUser',
     },
   ]),
   withConnect,

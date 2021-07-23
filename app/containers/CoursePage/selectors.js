@@ -18,6 +18,12 @@ const makeSelectUserDetails = () =>
     substate => substate.ordered.users,
   );
 
+const makeSelectCurrentUserDetails = () =>
+  createSelector(
+    selectFirebase,
+    substate => substate.ordered.currentUser,
+  );
+
 const makeSelectCourseId = () => (state, ownProps) =>
   ownProps.match.params.courseId;
 
@@ -109,6 +115,7 @@ export default makeSelectCoursePage;
 export {
   selectCoursePageDomain,
   makeSelectUserDetails,
+  makeSelectCurrentUserDetails,
   makeSelectCourseId,
   makeSelectAvailSlots,
   makeSelectJoinSlots,
