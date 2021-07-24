@@ -179,10 +179,6 @@ function JoinCourse({
         <Table>
           <Tbody>
             <Tr>
-              <Td>CourseId</Td>
-              <Td>{availSlot.value.courseId.toString()}</Td>
-            </Tr>
-            <Tr>
               <Td>Number of meetings</Td>
               <Td isNumeric>{availSlot.value.numMeetings.toString()}</Td>
             </Tr>
