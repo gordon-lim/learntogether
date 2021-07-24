@@ -85,7 +85,12 @@ function CourseMaterial() {
               {/* You can also use custom icons from react-icons */}
               <ListItem>
                 <ListIcon as={MdSettings} color="green.500" />
-                Kahoot: Foundations
+                <a
+                  href="https://play.kahoot.it/v2/?quizId=6272fcbd-0472-4090-94e7-cc9caf9cc700"
+                  target="_blank"
+                >
+                  Kahoot: Foundations
+                </a>
               </ListItem>
             </List>
           </AccordionPanel>
