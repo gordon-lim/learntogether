@@ -1,4 +1,11 @@
-import { Avatar, Box, Flex, Text, VStack } from '@chakra-ui/react';
+import {
+  Avatar,
+  Box,
+  Flex,
+  Text,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -11,11 +18,14 @@ const ChatBubble = ({ message, dateSent, from, avatarUrl }) => {
   const hours = dateSent && dateSent.getUTCHours();
   const minutes = dateSent && dateSent.getMinutes();
 
+  const meColours = useColorModeValue('blue.50', 'gray.700');
+  const otherColours = useColorModeValue('gray.100', 'gray.600');
+
   return (
     <VStack alignItems={alignment} alignSelf={alignment}>
       <Flex alignItems="flex-end" flexFlow={!isMe && 'row-reverse'}>
         <Box
-          bg={isMe ? 'blue.50' : 'gray.100'}
+          bg={isMe ? meColours : otherColours}
           px={6}
           py={4}
           mr={isMe && 2}

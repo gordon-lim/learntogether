@@ -93,7 +93,7 @@ export function ChatPage({ auth }) {
       </Helmet>
       <Container maxW="8xl" pt="4em">
         <Box
-          width={{ lg: '60%' }}
+          width={{ lg: '75%' }}
           m="0 auto"
           border="1px"
           paddingTop={4}
@@ -134,7 +134,7 @@ export function ChatPage({ auth }) {
               />
             </Flex>
             {curGroup && groups.length !== 0 && (
-              <Chat currentGroup={curGroup} />
+              <Chat currentGroupId={curGroup.id} />
             )}
           </HStack>
         </Box>

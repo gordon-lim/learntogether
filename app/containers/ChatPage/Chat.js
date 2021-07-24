@@ -8,32 +8,32 @@ import {
   StatNumber,
 } from '@chakra-ui/react';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
+import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
 import { connect } from 'react-redux';
-import { useFirestore, useFirestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, isLoaded, useFirestore } from 'react-redux-firebase';
+import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import ChatBubble from './ChatBubble';
-import { makeSelectFirestoreMessages } from './selectors';
+import {
+  makeSelectFirestoreCurrentGroup,
+  makeSelectFirestoreMessages,
+} from './selectors';
 import { SendIcon } from './SendIcon';
 
-const Chat = ({ messages, auth, currentGroup }) => {
+const Chat = ({ messages, auth, currentGroup, currentGroupId }) => {
   const scroll = useRef(null);
   const [formValue, setFormValue] = useState('');
+  const [chatUsers, setChatUsers] = useState([]);
   const firestore = useFirestore();
 
-  const groupRef = firestore.collection('groups').doc(currentGroup.id); // TODO: Add profile pic
+  const groupRef = firestore.collection('groups').doc(currentGroupId);
   const messageRef = groupRef.collection('messages');
 
-  useFirestoreConnect([
-    {
-      collection: 'groups',
-      doc: currentGroup.id,
-      subcollections: [{ collection: 'messages' }],
-      storeAs: 'message',
-      orderBy: 'createdAt',
-    },
-  ]);
+  useState(() => {
+    if (isLoaded(currentGroup)) setChatUsers(currentGroup[0].users);
+  }, [currentGroupId]);
 
   const sendMessage = async e => {
     e.preventDefault();
@@ -41,7 +41,7 @@ const Chat = ({ messages, auth, currentGroup }) => {
 
     await messageRef.add({
       text: formValue,
-      createdAt: new Date(),
+      createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
       uid: auth.uid,
     });
 
@@ -53,7 +53,7 @@ const Chat = ({ messages, auth, currentGroup }) => {
     <Flex px={6} flexDirection="column" flex={1} h="full">
       <Stat my={6}>
         <StatLabel color="gray.500">Chatting in</StatLabel>
-        <StatNumber>{currentGroup.name}</StatNumber>
+        <StatNumber>{currentGroup && currentGroup.name}</StatNumber>
       </Stat>
       <Flex
         overflowY="auto"
@@ -68,19 +68,25 @@ const Chat = ({ messages, auth, currentGroup }) => {
         }}
       >
         {messages &&
-          messages.map(message => (
-            <ChatBubble
-              key={message.id}
-              message={message.text}
-              dateSent={new Date(message.createdAt.seconds)}
-              // TODO: change to username?
-              from={message.uid === auth.uid ? 'me' : message.uid}
-              avatarUrl={auth.photoURL}
-            />
-          ))}
+          messages.map(message => {
+            let user = {};
+            chatUsers.forEach(chatUser => {
+              if (chatUser.id === message.uid) {
+                user = chatUser;
+              }
+            });
+            return (
+              <ChatBubble
+                key={message.id}
+                message={message.text}
+                dateSent={new Date(message.createdAt.seconds * 1000)}
+                from={message.uid === auth.uid ? 'me' : 'others'}
+                avatarUrl={user.profileURL}
+              />
+            );
+          })}
       </Flex>
       <div ref={scroll} />
-      {/* TODO: Formik? */}
       <FormControl as="form" onSubmit={sendMessage}>
         <Flex>
           <Input
@@ -103,14 +109,32 @@ const Chat = ({ messages, auth, currentGroup }) => {
 Chat.propTypes = {
   auth: PropTypes.object,
   messages: PropTypes.array,
-  currentGroup: PropTypes.object,
+  currentGroupId: PropTypes.string,
+  currentGroup: PropTypes.array,
 };
 
 const mapStateToProps = createStructuredSelector({
   auth: makeSelectFirebaseAuth(),
   messages: makeSelectFirestoreMessages(),
+  currentGroup: makeSelectFirestoreCurrentGroup(),
 });
 
 const withConnect = connect(mapStateToProps);
 
-export default withConnect(Chat);
+export default compose(
+  firestoreConnect(props => [
+    {
+      collection: 'groups',
+      doc: props.currentGroupId,
+      subcollections: [{ collection: 'messages' }],
+      storeAs: 'message',
+      orderBy: 'createdAt',
+    },
+    {
+      collection: 'groups',
+      doc: props.currentGroupId,
+      storeAs: 'currentGroup',
+    },
+  ]),
+  withConnect,
+)(Chat);

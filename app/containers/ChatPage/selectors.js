@@ -23,6 +23,12 @@ const makeSelectFirestoreGroups = () =>
     substate => substate.ordered.groups,
   );
 
+const makeSelectFirestoreCurrentGroup = () =>
+  createSelector(
+    selectFirestore,
+    substate => substate.ordered.currentGroup,
+  );
+
 /**
  * Default selector used by ChatPage
  */
@@ -38,4 +44,5 @@ export {
   selectChatPageDomain,
   makeSelectFirestoreMessages,
   makeSelectFirestoreGroups,
+  makeSelectFirestoreCurrentGroup,
 };
