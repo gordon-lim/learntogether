@@ -179,6 +179,10 @@ function JoinCourse({
         <Table>
           <Tbody>
             <Tr>
+              <Td>CourseId</Td>
+              <Td>{availSlot.value.courseId.toString()}</Td>
+            </Tr>
+            <Tr>
               <Td>Number of meetings</Td>
               <Td isNumeric>{availSlot.value.numMeetings.toString()}</Td>
             </Tr>
@@ -291,10 +295,12 @@ export default compose(
     {
       path: 'coursesHosted',
       queryParams: ['orderByChild=courseId', props.match.params.courseId],
+      storeAs: 'currentCoursesHosted',
     },
     {
       path: 'coursesVoted',
       queryParams: ['orderByChild=courseId', props.match.params.courseId],
+      storeAs: 'currentCoursesVoted',
     },
   ]),
   withConnect,

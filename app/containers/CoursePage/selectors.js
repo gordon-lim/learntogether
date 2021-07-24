@@ -37,7 +37,9 @@ const makeSelectAvailSlots = () =>
   createSelector(
     selectFirebase,
     substate =>
-      substate.ordered.coursesHosted ? substate.ordered.coursesHosted : [],
+      substate.ordered.currentCoursesHosted
+        ? substate.ordered.currentCoursesHosted
+        : [],
   );
 
 const makeSelectJoinSlots = () =>
@@ -110,7 +112,7 @@ const makeSelectSelectedHostSlots = () =>
 const makeSelectCourseVotes = () =>
   createSelector(
     selectFirebase,
-    substate => substate.ordered.coursesVoted,
+    substate => substate.ordered.currentCoursesVoted,
   );
 
 /**

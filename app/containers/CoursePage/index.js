@@ -55,7 +55,6 @@ export function CoursePage({ auth }) {
 
 CoursePage.propTypes = {
   auth: PropTypes.object,
-  coursesJoiend: PropTypes.object,
 };
 
 export default memo(CoursePage);
