@@ -75,7 +75,7 @@ export function TimetablePage({
   function parseCoursesHosted(evt) {
     const { courseId } = evt;
     const course = getEleByKey(courses, courseId);
-    const title = course.name || 'Course';
+    const title = course.title || 'Course';
     const { day, period } = evt.slot;
     const startHour = period * PERIOD_LEN;
     const { numMeetings } = evt;
