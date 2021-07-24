@@ -76,6 +76,7 @@ function HostCourse({
   const [displayName, setDisplayName] = useState('');
   const [numMeetings, setNumMeetings] = useState(14);
   const [participantLimit, setParticipantLimit] = useState(10);
+  const [filteredSlotVotes, setFilteredSlotVotes] = useState([]);
 
   const setSuccess = msg =>
     toast({
@@ -95,10 +96,12 @@ function HostCourse({
   useEffect(() => {
     clearVotes();
 
+    setFilteredSlotVotes(slotVotes.filter(v => v.value.courseId === courseId));
+
     // Adds the vote details from firebase to the table
-    for (let i = 0; i < slotVotes.length; i += 1) {
-      const { day, period } = slotVotes[i].value;
-      addVote(day, period, slotVotes[i]);
+    for (let i = 0; i < filteredSlotVotes.length; i += 1) {
+      const { day, period } = filteredSlotVotes[i].value;
+      addVote(day, period, filteredSlotVotes[i]);
     }
 
     // Checks if the user has a zoom access token present in the firebase database

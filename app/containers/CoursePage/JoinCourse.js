@@ -71,6 +71,7 @@ function JoinCourse({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [slotChosen, setSlotChosen] = useState({ day: 0, period: 0 });
   const [selectedPeriodAvailSlots, setSelectedPeriodAvailSlots] = useState([]);
+  const [filteredAvailSlots, setFilteredAvailSlots] = useState([]);
 
   const setSuccess = msg =>
     toast({
@@ -90,15 +91,19 @@ function JoinCourse({
   useEffect(() => {
     clearAvail();
 
+    setFilteredAvailSlots(
+      availSlots.filter(s => s.value.courseId === courseId),
+    );
+
     // Adds the available slots to the grid table
-    for (let i = 0; i < availSlots.length; i += 1) {
-      const { day, period } = availSlots[i].value.slot;
-      addAvail(day, period, availSlots[i]);
+    for (let i = 0; i < filteredAvailSlots.length; i += 1) {
+      const { day, period } = filteredAvailSlots[i].value.slot;
+      addAvail(day, period, filteredAvailSlots[i]);
     }
 
     // Filters only the available slots in the period selected by the user
     setSelectedPeriodAvailSlots(
-      availSlots.filter(data => {
+      filteredAvailSlots.filter(data => {
         // Currently limit to only allow hosting with one slot per week
         const timeSlot = data.value.slot;
         return (
