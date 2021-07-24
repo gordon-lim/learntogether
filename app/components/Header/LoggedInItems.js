@@ -7,12 +7,14 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useFirebase } from 'react-redux-firebase';
 import { Link as RouterLink } from 'react-router-dom';
 import Profile from '../../images/Profile.svg';
+import { ChatIcon } from './ChatIcon';
 import Notification from './Notification';
 
 export const LoggedInItems = ({ photoURL }) => {
@@ -24,6 +26,14 @@ export const LoggedInItems = ({ photoURL }) => {
 
   return (
     <Flex alignItems="center" flex={{ base: 1, md: 0 }} justify="flex-end">
+      <RouterLink to="/chat">
+        <ChatIcon
+          width="1.6rem"
+          height="1.6rem"
+          mr={2}
+          color={useColorModeValue('gray.700', 'gray.200')}
+        />
+      </RouterLink>
       <Notification />
       <Menu>
         <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">

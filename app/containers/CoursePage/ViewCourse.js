@@ -99,7 +99,7 @@ function ViewCourse({
             augue.
           </Text>
         </Box>
-      </Container>{' '}
+      </Container>
     </>
   );
 
@@ -111,7 +111,7 @@ function ViewCourse({
       />
       <Container maxW="8xl" py={12}>
         <CourseMaterial />
-      </Container>{' '}
+      </Container>
     </>
   );
 
