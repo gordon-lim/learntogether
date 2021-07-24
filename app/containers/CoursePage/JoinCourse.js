@@ -35,6 +35,7 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
+import axios from 'axios';
 import { WeekGrid } from '../../components/Grid/WeekGrid';
 import { addAvailSlots, clearAvailSlots, selectJoinSlot } from './actions';
 import { PERIOD_LEN } from './constants';
@@ -148,6 +149,11 @@ function JoinCourse({
       })
       .then(() => {
         setSuccess('Joined course');
+        axios.get('/api/sendEmail', {
+          params: {
+            receiverEmail: auth.email,
+          },
+        });
         // redirect to view course
         history.push(`/courses/${courseId}`);
       })
