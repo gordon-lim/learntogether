@@ -91,7 +91,7 @@ export function ChatPage({ auth }) {
         <title>ChatPage</title>
         <meta name="description" content="Description of ChatPage" />
       </Helmet>
-      <Container maxW="8xl">
+      <Container maxW="8xl" pt="4em">
         <Box
           width={{ lg: '60%' }}
           m="0 auto"

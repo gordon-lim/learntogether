@@ -63,16 +63,18 @@ export default function WithBackgroundImage(props) {
             >
               {leftButtonText}
             </Button>
-            <Button
-              as={RouterLink}
-              to={rightButtonLink}
-              bg="whiteAlpha.300"
-              rounded="md"
-              color="white"
-              _hover={{ bg: 'whiteAlpha.500' }}
-            >
-              {rightButtonText}
-            </Button>
+            {rightButtonText && (
+              <Button
+                as={RouterLink}
+                to={rightButtonLink}
+                bg="whiteAlpha.300"
+                rounded="md"
+                color="white"
+                _hover={{ bg: 'whiteAlpha.500' }}
+              >
+                {rightButtonText}
+              </Button>
+            )}
           </Stack>
         </Stack>
       </VStack>

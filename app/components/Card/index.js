@@ -22,7 +22,13 @@ function Card({ data }) {
       boxShadow="xl"
       bg={useColorModeValue('white', 'gray.900')}
     >
-      <Image src={data.value.imageUrl} alt={data.value.imageAlt} />
+      <Image
+        src={data.value.imageUrl}
+        alt={data.value.imageAlt}
+        maxHeight="220px"
+        width="100%"
+        objectFit="cover"
+      />
 
       <Box p="6">
         <Box d="flex" alignItems="baseline">
@@ -92,15 +98,15 @@ Card.propTypes = {
   data: PropTypes.shape({
     key: PropTypes.string,
     value: PropTypes.shape({
-      courseUrl: PropTypes.string.isRequired,
-      imageAlt: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-      quizzes: PropTypes.number.isRequired,
-      rating: PropTypes.number.isRequired,
-      reviewCount: PropTypes.number.isRequired,
-      title: PropTypes.string.isRequired,
-      videos: PropTypes.number.isRequired,
-      duration: PropTypes.number.isRequired,
+      courseUrl: PropTypes.string,
+      imageAlt: PropTypes.string,
+      imageUrl: PropTypes.string,
+      quizzes: PropTypes.number,
+      rating: PropTypes.number,
+      reviewCount: PropTypes.number,
+      title: PropTypes.string,
+      videos: PropTypes.number,
+      duration: PropTypes.number,
     }),
   }),
 };

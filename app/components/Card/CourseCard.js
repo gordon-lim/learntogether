@@ -57,11 +57,11 @@ function CourseCard({ data }) {
 CourseCard.propTypes = {
   data: PropTypes.shape({
     value: PropTypes.shape({
-      imageAlt: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      startDate: PropTypes.string.isRequired,
-      endDate: PropTypes.string.isRequired,
+      imageAlt: PropTypes.string,
+      imageUrl: PropTypes.string,
+      title: PropTypes.string,
+      startDate: PropTypes.string,
+      endDate: PropTypes.string,
     }),
   }),
 };

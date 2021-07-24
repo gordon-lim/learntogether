@@ -39,6 +39,7 @@ function SocialProfile({ auth }) {
         rounded="lg"
         p={6}
         textAlign="center"
+        alignItems="flex-start"
       >
         <Avatar
           height="75%"
@@ -109,6 +110,7 @@ function SocialProfile({ auth }) {
             flex={1}
             fontSize="sm"
             rounded="full"
+            boxShadow="lg"
             _focus={{
               bg: 'gray.200',
             }}
@@ -122,7 +124,7 @@ function SocialProfile({ auth }) {
             fontSize="sm"
             rounded="full"
             bg="red.400"
-            boxShadow="0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
+            boxShadow="lg"
             _hover={{
               bg: 'red.500',
             }}

@@ -1,24 +1,25 @@
+import { BellIcon } from '@chakra-ui/icons';
 import {
-  IconButton,
-  MenuButton,
   Menu,
+  MenuButton,
   MenuItem,
   MenuList,
+  Tooltip,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import { BellIcon } from '@chakra-ui/icons';
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
-import { firebaseConnect, isLoaded } from 'react-redux-firebase';
-import { compose } from 'redux';
-import { createStructuredSelector } from 'reselect';
 import {
   makeSelectCourses,
   makeSelectFirebaseAuth,
   makeSelectNotifs,
 } from 'containers/App/selectors';
-import { connect } from 'react-redux';
 import { indToDay, periodToHour } from 'containers/CoursePage/utils';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { firebaseConnect, isLoaded } from 'react-redux-firebase';
 import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { createStructuredSelector } from 'reselect';
 import { v4 } from 'uuid';
 
 function Notification({ auth, courses, notifs }) {
@@ -49,7 +50,14 @@ function Notification({ auth, courses, notifs }) {
 
   return (
     <Menu>
-      <MenuButton as={IconButton} icon={<BellIcon />} />
+      <Tooltip label="Notifications">
+        <MenuButton
+          as={BellIcon}
+          boxSize="30px"
+          mr={2}
+          color={useColorModeValue('gray.700', 'gray.200')}
+        />
+      </Tooltip>
       <MenuList>
         {myNotifs.map(n => (
           <MenuItem key={v4()} as={Link} to={n.link}>

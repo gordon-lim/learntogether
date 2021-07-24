@@ -4,11 +4,22 @@
  *
  */
 
-import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Heading,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import CourseMaterial from 'components/CourseMaterial';
 import WithBackgroundImage from 'components/Hero/WithBackgroundImage';
 import { makeSelectFirebaseAuth } from 'containers/App/selectors';
-
+import {
+  makeSelectCoursesHosted,
+  makeSelectCoursesJoined,
+} from 'containers/TimetablePage/selectors';
 import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
@@ -21,11 +32,14 @@ import { makeSelectCurrentCourse } from './selectors';
 function ViewCourse({
   auth,
   currentCourse,
+  coursesJoined,
+  coursesHosted,
   match: {
     params: { courseId },
   },
 }) {
   const [title, setTitle] = useState('');
+  const [zoomLink, setZoomLink] = useState('');
   useEffect(() => {
     if (isLoaded(currentCourse)) {
       const courseDict = currentCourse.reduce(
@@ -33,6 +47,20 @@ function ViewCourse({
         {},
       );
       setTitle(courseDict.title);
+
+      let courseHostedId = '';
+      coursesJoined.forEach(courseJoined => {
+        if (courseJoined.value.courseId === courseId) {
+          // eslint-disable-next-line prefer-destructuring
+          courseHostedId = courseJoined.value.courseHostedId;
+        }
+      });
+
+      coursesHosted.forEach(courseHosted => {
+        if (courseHosted.key === courseHostedId) {
+          setZoomLink(courseHosted.value.zoomUrl);
+        }
+      });
     }
   }, [currentCourse]);
 
@@ -78,7 +106,12 @@ function ViewCourse({
 
   const JoinedItems = () => (
     <>
-      <WithBackgroundImage title={title} leftButtonText="Joined" />
+      <WithBackgroundImage
+        title={title}
+        leftButtonText="Joined"
+        leftButtonLink="#"
+        rightButtonLink="#"
+      />
       <Container maxW="8xl" py={12}>
         <Box>
           <Heading mb={4}>About this course</Heading>
@@ -99,6 +132,11 @@ function ViewCourse({
             augue.
           </Text>
         </Box>
+        <Flex justifyContent="center" mt={4}>
+          <Button as="a" href={zoomLink} colorScheme="blue">
+            Click here to join the meeting
+          </Button>
+        </Flex>
       </Container>
     </>
   );
@@ -168,6 +206,8 @@ function ViewCourse({
 ViewCourse.propTypes = {
   auth: PropTypes.object,
   currentCourse: PropTypes.array,
+  coursesJoined: PropTypes.array,
+  coursesHosted: PropTypes.array,
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
@@ -178,6 +218,8 @@ ViewCourse.propTypes = {
 const mapStateToProps = createStructuredSelector({
   auth: makeSelectFirebaseAuth(),
   currentCourse: makeSelectCurrentCourse(),
+  coursesJoined: makeSelectCoursesJoined(),
+  coursesHosted: makeSelectCoursesHosted(),
 });
 
 const withConnect = connect(mapStateToProps);
@@ -187,6 +229,12 @@ export default compose(
     {
       path: `courses/${props.match.params.courseId}`,
       storeAs: 'currentCourse',
+    },
+    {
+      path: 'coursesJoined',
+    },
+    {
+      path: 'coursesHosted',
     },
   ]),
   withConnect,

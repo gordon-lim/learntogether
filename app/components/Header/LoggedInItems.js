@@ -7,6 +7,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Tooltip,
   useColorModeValue,
 } from '@chakra-ui/react';
 import PropTypes from 'prop-types';
@@ -26,14 +27,16 @@ export const LoggedInItems = ({ photoURL }) => {
 
   return (
     <Flex alignItems="center" flex={{ base: 1, md: 0 }} justify="flex-end">
-      <RouterLink to="/chat">
-        <ChatIcon
-          width="1.6rem"
-          height="1.6rem"
-          mr={2}
-          color={useColorModeValue('gray.700', 'gray.200')}
-        />
-      </RouterLink>
+      <Tooltip label="Chat">
+        <RouterLink to="/chat">
+          <ChatIcon
+            width="1.6rem"
+            height="1.6rem"
+            mr={2}
+            color={useColorModeValue('gray.700', 'gray.200')}
+          />
+        </RouterLink>
+      </Tooltip>
       <Notification />
       <Menu>
         <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
