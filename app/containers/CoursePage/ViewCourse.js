@@ -24,7 +24,7 @@ import firebase from 'firebase/app';
 import PropTypes from 'prop-types';
 import React, { memo, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { firebaseConnect, isLoaded } from 'react-redux-firebase';
+import { firebaseConnect, isEmpty, isLoaded } from 'react-redux-firebase';
 import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { makeSelectCurrentCourse } from './selectors';
@@ -162,7 +162,7 @@ function ViewCourse({
     // Is the field there?
     const jref = firebase.database().ref('coursesJoined');
 
-    if (jref) {
+    if (jref && !isEmpty(auth)) {
       jref
         .orderByChild('userId')
         .equalTo(auth.uid)
@@ -180,7 +180,7 @@ function ViewCourse({
     // Check Hosting
     const href = firebase.database().ref('coursesHosted');
 
-    if (href) {
+    if (href && !isEmpty(auth)) {
       href
         .orderByChild('userId')
         .equalTo(auth.uid)
