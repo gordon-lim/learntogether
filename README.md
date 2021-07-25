@@ -16,72 +16,43 @@
 
 <br />
 
-## Features
+## Who are we
 
-<dl>
-  <dt>Quick scaffolding</dt>
-  <dd>Create components, containers, routes, selectors and sagas - and their tests - right from the CLI!</dd>
+LearnTogether is a social online course platform that aims to boost course completion rates with peer-to-peer accountability.
 
-  <dt>Instant feedback</dt>
-  <dd>Enjoy the best DX (Developer eXperience) and code your app at the speed of thought! Your saved changes to the CSS and JS are reflected instantaneously without refreshing the page. Preserve application state even when you update something in the underlying code!</dd>
+## Problem Statement
+We have chosen the Education theme. Online courses today have minimal accountability. You take these classes alone. You can stop at anytime as you please. You could watch 4 weeks of content in a day and none the rest of the week or watch just one video a month. Needless to say, both are not productive towards learning.
 
-  <dt>Predictable state management</dt>
-  <dd>Unidirectional data flow allows for change logging and time travel debugging.</dd>
+## Our Hack
+Our idea is for students to take online courses together in which the same group of students commit to take scheduled weekly classes concurrently. Much like you would if you were in school but there isn’t a live teacher. And our hack facilities the organization of these meetings and matches people with the intention of completing the same courses. 
 
-  <dt>Next generation JavaScript</dt>
-  <dd>Use template strings, object destructuring, arrow functions, JSX syntax and more.</dd>
+### Making learning effective
+With peer-to-peer accountability, students are more likely to complete courses and hence education is more effective.
 
-  <dt>Next generation CSS</dt>
-  <dd>Write composable CSS that's co-located with your components for complete modularity. Unique generated class names keep the specificity low while eliminating style clashes. Ship only the styles that are on the page for the best performance.</dd>
+### Making learning more exciting
+Students are not alone when taking classes on our platform. They can make friends and discuss problems faced on class content. This makes learning more exciting.
 
-  <dt>Industry-standard routing</dt>
-  <dd>It's natural to want to add pages (e.g. `/about`) to your application, and routing makes this possible.</dd>
+### Making learning more safe
+For some, the lack of an authoritative figure, like a teacher, creates a safer environment for them to voice out their concerns and queries. 
 
-  <dt>Industry-standard i18n internationalization support</dt>
-  <dd>Scalable apps need to support multiple languages, easily add and support multiple languages with `react-intl`.</dd>
+## Inspiration
+Zoom fitness classes where groups of stranger gather to meet up on Zoom to exercise. "...it definitely was not the same as being in a group workout but it's the closest thing I've experienced to it since my last IRL studio workout in February. Just the idea that I wasn't the only person doing the workout live made me feel like I was in a real class and gave that extra push and sense of community I'd been missing."
 
-  <dt>Offline-first</dt>
-  <dd>The next frontier in performant web apps: availability without a network connection from the instant your users load the app.</dd>
+## Motivation
+As an additional motivation, we believe that online learning as a remote social activity is more than ever relevant in a covid 19 climate where outdoor social gatherings are still restricted and people are finding it otherwise difficult to socialize.
 
-  <dt>Static code analysis</dt>
-  <dd>Focus on writing new features without worrying about formatting or code quality. With the right editor setup, your code will automatically be formatted and linted as you work.</dd>
+## Working Details
+There will be 2 roles on our platform: the participant and host. The host will be responsible for creating the Zoom meetings via our platform, streaming the class content as provided and conducting Kahoot quizzes. Participants join and commit to take a course at a scheduled timing every week or may vote for a more preferable timing to take the class. To-be-hosts can pick time slots based on which one has the most votes i.e will have the highest turn out.
 
-  <dt>SEO</dt>
-  <dd>We support SEO (document head tags management) for search engines that support indexing of JavaScript content. (eg. Google)</dd>
-</dl>
-
-But wait... there's more!
-
-- _The best test setup:_ Automatically guarantee code quality and non-breaking
-  changes. (Seen a react app with 100% test coverage before?)
-- _Native web app:_ Your app's new home? The home screen of your users' phones.
-- _The fastest fonts:_ Say goodbye to vacant text.
-- _Stay fast_: Profile your app's performance from the comfort of your command
-  line!
-- _Catch problems:_ AppVeyor and TravisCI setups included by default, so your
-  tests get run automatically on Windows and Unix.
-
-There’s also a <a href="https://vimeo.com/168648012">fantastic video</a> on how to structure your React.js apps with scalability in mind. It provides rationale for the majority of boilerplate's design decisions.
-
-<sub><i>Keywords: React.js, Redux, Hot Reloading, ESNext, Babel, react-router, Offline First, ServiceWorker, `styled-components`, redux-saga, FontFaceObserver</i></sub>
+## Our Vision
+Our vision is to be the new and enhanced alternative way to taking online course. We want to onboard content providers like Universities to offer their classes on our platform because they see that our way is better.
 
 ## Quick start
 
 1.  Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
 2.  Clone this repo using `git clone --depth=1 https://github.com/react-boilerplate/react-boilerplate.git <YOUR_PROJECT_NAME>`
 3.  Move to the appropriate directory: `cd <YOUR_PROJECT_NAME>`.<br />
-4.  Run `npm run setup` in order to install dependencies and clean the git repo.<br />
-    _At this point you can run `npm start` to see the example app at `http://localhost:3000`._
-5.  Run `npm run clean` to delete the example app.
+4.  Run `npm start` and the it will be live on `https://localhost:3000`
 
-## Documentation
-
-- [**The Hitchhiker's Guide to `react-boilerplate`**](docs/general/introduction.md): An introduction for newcomers to this boilerplate.
-- [Overview](docs/general): A short overview of the included tools
-- [**Commands**](docs/general/commands.md): Getting the most out of this boilerplate
-- [Testing](docs/testing): How to work with the built-in test harness
-- [Styling](docs/css): How to work with the CSS tooling
-- [Your app](docs/js): Supercharging your app with Routing, Redux, simple
-  asynchronicity helpers, etc.
-- [**Troubleshooting**](docs/general/gotchas.md): Solutions to common problems faced by developers.
+Try out our website here https://learntogether2021.herokuapp.com/
 
