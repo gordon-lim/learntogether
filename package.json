@@ -169,7 +169,7 @@
     "jest-cli": "24.7.1",
     "jest-dom": "4.0.0",
     "jest-styled-components": "6.3.1",
-    "lint-staged": "8.1.5",
+    "lint-staged": "11.1.1",
     "node-plop": "^0.26.2",
     "null-loader": "0.1.1",
     "offline-plugin": "5.0.6",
