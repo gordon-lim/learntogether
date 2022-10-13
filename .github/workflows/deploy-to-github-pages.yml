@@ -27,7 +27,7 @@ jobs:
           ZOOM_REDIRECT_URL: ${{ secrets.ZOOM_REDIRECT_URL }}
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: build # The folder the action should deploy.
